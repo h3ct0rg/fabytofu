@@ -31,7 +31,11 @@ export class Menu {
     const g = this.game;
     switch (this.screen) {
       case 'main':
-        return [{ label: 'JUGAR', go: () => this.goto('slots') }, { label: 'CONFIGURAR', go: () => this.goto('config') }];
+        return [
+          { label: 'JUGAR', go: () => this.goto('slots') },
+          { label: 'CONFIGURAR', go: () => this.goto('config') },
+          { label: 'COMPARTIR', go: () => this.share() },
+        ];
       case 'slots':
         return [
           ...Array.from({ length: SLOTS }, (_, i) => ({ slot: i, go: () => this.pickSlot(i) })),
@@ -71,6 +75,38 @@ export class Menu {
     }
   }
 
+  // Comparte el juego: en el celular abre el menú de compartir del sistema (WhatsApp, etc.);
+  // en la PC, si el navegador no lo permite, copia el enlace al portapapeles.
+  async share() {
+    const g = this.game;
+    g.audio.play('select');
+    const url = location.origin + location.pathname;
+    const data = {
+      title: 'Faby & Tofu',
+      text: 'Solo quería sacar a pasear a Tofu… y terminó peleando por todo el Parque Lincoln. ¡Juega gratis! 🐶👊',
+      url,
+    };
+    try {
+      if (navigator.share) {
+        // Si se puede, también va la imagen del juego.
+        try {
+          const blob = await (await fetch('og-image.jpg')).blob();
+          const file = new File([blob], 'faby-y-tofu.jpg', { type: 'image/jpeg' });
+          if (navigator.canShare?.({ files: [file] })) data.files = [file];
+        } catch { /* sin imagen */ }
+        await navigator.share(data);
+        this.toast = '¡GRACIAS POR COMPARTIR!';
+      } else {
+        await navigator.clipboard.writeText(`${data.text} ${url}`);
+        this.toast = '¡ENLACE COPIADO! PEGALO DONDE QUIERAS';
+      }
+    } catch (err) {
+      if (err?.name === 'AbortError') return; // la persona cerró el menú de compartir
+      this.toast = url;
+    }
+    this.toastTime = 3;
+  }
+
   pickSlot(i) {
     this.slotSel = i;
     this.goto('slot');
@@ -78,6 +114,7 @@ export class Menu {
 
   update(dt, input) {
     this.t += dt;
+    if (this.toastTime > 0) this.toastTime -= dt;
     this.parade += dt;
     const opts = this.options();
     // En las ranuras (que van en fila) también se navega con izquierda/derecha.
@@ -134,6 +171,14 @@ export class Menu {
     const players = st?.players ?? '—';
     const online = st?.online ?? '—';
     if (g.audio.muted) text(ctx, 'SONIDO SILENCIADO (M)', VIEW_W - 16, 26, 8, '#ff3040', 'right');
+    if (this.toastTime > 0) {
+      ctx.fillStyle = 'rgba(20, 12, 40, 0.9)';
+      ctx.fillRect(VIEW_W / 2 - 300, 400, 600, 40);
+      ctx.strokeStyle = '#7df9ff';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(VIEW_W / 2 - 299, 401, 598, 38);
+      text(ctx, this.toast, VIEW_W / 2, 426, 10, '#7df9ff', 'center');
+    }
     // Arriba a la izquierda: abajo quedan los botones táctiles en el celular.
     ctx.fillStyle = 'rgba(20, 12, 40, 0.7)';
     ctx.fillRect(10, 10, 186, 40);

@@ -16,6 +16,8 @@ Luego abrir http://localhost:8137. La rocola con todas las pistas y efectos est�
 
 - Inicio: **JUGAR** (3 ranuras de partida guardada) y **CONFIGURAR** (volumen de música y efectos, dificultad, temblor de pantalla).
 - El avance se guarda automáticamente al ganar cada pelea (punto de control) en el almacenamiento local del navegador.
+- **COMPARTIR** abre el menú de compartir del celular (WhatsApp, etc.) con la imagen del juego; en la PC copia el enlace.
+- Vista previa del enlace (imagen + descripción) con etiquetas Open Graph; la imagen `og-image.jpg` se regenera con `python tools/make_share_card.py`. En Docker, nginx completa la dirección del sitio (`__SITE_URL__`).
 - La pantalla de inicio muestra cuántas personas jugaron y cuántas están jugando ahora (Firebase Realtime Database, ruta `fabytofu/` de `spud-survival-default-rtdb`).
 
 ## Controles
