@@ -58,7 +58,6 @@ const game = {
     game.slot = slot;
     game.save = data;
     audio.play('select');
-    game.stats.registerPlayer();
     // Una partida nueva ocupa la ranura desde el primer momento.
     if (!(data?.zone > 0)) game.saveProgress({ zone: 0, score: 0, lives: 3, done: false });
     game.stage.reset(data);

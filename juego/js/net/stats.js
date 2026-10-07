@@ -28,6 +28,8 @@ export class OnlineStats {
   start() {
     this.beat();
     this.timer = setInterval(() => this.beat(), HEARTBEAT);
+    // Cada dispositivo que abre el juego cuenta como jugador (una sola vez por navegador).
+    this.registerPlayer().then(() => this.refresh());
     // Al cerrar la pestaña, nos quitamos de la lista de "jugando ahora".
     window.addEventListener('pagehide', () => {
       fetch(`${DB}/online/${this.session}.json`, { method: 'DELETE', keepalive: true }).catch(() => {});
@@ -54,6 +56,8 @@ export class OnlineStats {
   }
 
   async refresh() {
+    if (this.loading) return;
+    this.loading = true;
     try {
       const [players, online] = await Promise.all([req('stats/players'), req('online')]);
       this.players = players ?? 0;
@@ -64,5 +68,6 @@ export class OnlineStats {
       const stale = Object.fromEntries(entries.filter(([, t]) => now - t > STALE).map(([k]) => [k, null]));
       if (Object.keys(stale).length) req('online', { method: 'PATCH', body: JSON.stringify(stale) }).catch(() => {});
     } catch { /* sin conexión: se muestran guiones */ }
+    this.loading = false;
   }
 }

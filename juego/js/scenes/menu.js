@@ -114,6 +114,12 @@ export class Menu {
 
   update(dt, input) {
     this.t += dt;
+    // Contador en tiempo real: se actualiza cada 10 s mientras se ve la pantalla de inicio.
+    this.statsTimer = (this.statsTimer ?? 0) - dt;
+    if (this.statsTimer <= 0) {
+      this.statsTimer = 10;
+      this.game.stats?.refresh();
+    }
     if (this.toastTime > 0) this.toastTime -= dt;
     this.parade += dt;
     const opts = this.options();
