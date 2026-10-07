@@ -1,0 +1,8 @@
+[
+  {"name": "carry_idle", "base": "assets/pilot/tofu/carry_comp.png", "frames": 4,
+   "action": "standing idle while hugging the small dog against her chest with both arms wrapped around it, gentle breathing, the dog wags its tail, staying in place"},
+  {"name": "carry_walk", "base": "assets/pilot/tofu/carry_comp.png", "frames": 8,
+   "action": "walk cycle in place facing right while carrying the small dog in her arms against her chest, both arms wrapped around the dog, steady steps, loopable"},
+  {"name": "carry_kick", "base": "assets/pilot/tofu/carry_comp.png", "frames": 4,
+   "action": "keeps hugging the small dog with both arms and does a quick front kick to the right with her leg fully extended at waist height, then returns to standing"}
+]

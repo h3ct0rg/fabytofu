@@ -1,0 +1,10 @@
+[
+ {"name":"idle","base":"assets/pilot/pug/pug_base_112.png","frames":4,"action":"grumpy idle, heavy breathing, chest puffing, staying in place, no visual effects"},
+ {"name":"run","base":"assets/pilot/pug/pug_base_112.png","frames":8,"action":"fast angry charge run cycle in place facing right, short legs pumping, head lowered, staying in the same spot, loopable, no visual effects"},
+ {"name":"bark","base":"assets/pilot/pug/pug_base_112.png","frames":4,"action":"huge loud bark to the right, braces legs, mouth opening extremely wide, body recoiling with the force, no visual effects"},
+ {"name":"bite","base":"assets/pilot/pug/pug_base_112L.png","frames":4,"action":"lunges forward to the right and bites, jaws snapping shut, then pulls back, no visual effects"},
+ {"name":"dirt","base":"assets/pilot/pug/pug_base_112.png","frames":6,"action":"turns his back and furiously kicks dirt backward with his hind legs like a dog digging, no visual effects"},
+ {"name":"hurt","base":"assets/pilot/pug/pug_base_112.png","frames":4,"action":"gets hit, flinches backward to the left with eyes squeezed shut, then recovers, no visual effects"},
+ {"name":"ko","base":"assets/pilot/pug/pug_base_112.png","frames":6,"action":"knocked out: wobbles dizzily, then flops over onto his side lying on the ground with dizzy eyes, no visual effects"},
+ {"name":"tie","base":"assets/pilot/pug/pug_base_112.png","frames":4,"action":"sits up on his hind legs and smugly adjusts his necktie with one front paw, then drops back down, no visual effects"}
+]

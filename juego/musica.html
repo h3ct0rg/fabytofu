@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faby & Tofu · Rocola</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    body { margin: 0; padding: 24px; background: #140c28; color: #fff; font: 12px/1.8 "Press Start 2P", monospace; }
+    h1 { color: #ff2fa8; font-size: 18px; }
+    h2 { color: #7df9ff; font-size: 12px; margin-top: 28px; }
+    button { font: inherit; font-size: 10px; margin: 4px; padding: 10px 12px; border: 2px solid #ff2fa8; background: #2a1b3d; color: #fff; cursor: pointer; }
+    button:hover { background: #ff2fa8; }
+    .stop { border-color: #ffd23f; }
+    p { color: #bbb; font-size: 9px; }
+  </style>
+</head>
+<body>
+  <h1>FABY & TOFU · ROCOLA</h1>
+  <p>Música y efectos sintetizados en vivo con WebAudio (sin archivos de audio).</p>
+  <h2>MÚSICA</h2>
+  <div id="songs"></div>
+  <button class="stop" id="stop">■ DETENER</button>
+  <h2>EFECTOS</h2>
+  <div id="sfx"></div>
+  <script type="module">
+    import { AudioEngine } from './js/engine/audio.js';
+    import { SONGS } from './js/data/music.js';
+    const audio = new AudioEngine();
+    audio.songs = SONGS;
+    audio.muted = false;
+    const labels = { title: 'Título', level: 'Nivel · Parque Lincoln', boss: 'Jefe · Corli', ending: 'Final', victory: 'Victoria (jingle)', gameover: 'Game over (jingle)' };
+    for (const name of Object.keys(SONGS)) {
+      const b = document.createElement('button');
+      b.textContent = '▶ ' + (labels[name] ?? name);
+      b.onclick = () => { audio.unlock(); audio.stopMusic(); audio.playMusic(name); };
+      document.getElementById('songs').append(b);
+    }
+    document.getElementById('stop').onclick = () => audio.stopMusic();
+    const fx = ['swing', 'hit', 'hitStrong', 'hurt', 'jump', 'land', 'fall', 'special', 'pickup', 'throw', 'break', 'eat', 'heart',
+      'bark', 'dogBark', 'growl', 'bigBark', 'whistle', 'zoom', 'go', 'alert', 'select', 'lifeLost', 'stomp'];
+    for (const name of fx) {
+      const b = document.createElement('button');
+      b.textContent = name;
+      b.onclick = () => { audio.unlock(); audio.play(name); };
+      document.getElementById('sfx').append(b);
+    }
+  </script>
+</body>
+</html>

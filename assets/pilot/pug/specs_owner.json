@@ -1,0 +1,6 @@
+[
+ {"name":"owner_a","tool":"create_image_pixen","width":160,"height":220,"no_background":true,
+  "description":"pixel art beat em up character sprite, side view facing right, full body: a huge muscular angry man, the pug owner, bald head, thick black mustache, navy blue tracksuit with white stripes, gold chain, white sneakers, fists clenched, furious shouting face, 16-bit arcade style, single color black outline"},
+ {"name":"owner_b","tool":"create_image_pixen","width":160,"height":220,"no_background":true,
+  "description":"pixel art 16-bit arcade boss sprite, side view facing right, full body: giant burly man with a shaved head and big mustache, navy tracksuit with white side stripes, gold necklace, chunky white sneakers, both fists raised, red angry face yelling, single color black outline"}
+]

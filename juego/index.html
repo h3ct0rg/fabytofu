@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Faby & Tofu</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+  <link rel="apple-touch-icon" href="favicon-180.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <canvas id="game" aria-label="Faby & Tofu"></canvas>
+
+  <!-- Controles táctiles: se muestran solo en pantallas táctiles -->
+  <div id="touch" hidden>
+    <div class="stick"><div class="knob"></div></div>
+    <div class="buttons">
+      <button class="btn btn-a" data-action="attack"><span class="ico">👊</span><span class="lbl">GOLPE</span></button>
+      <button class="btn btn-b" data-action="jump"><span class="ico">⤴</span><span class="lbl">SALTO</span></button>
+      <button class="btn btn-s" data-action="special"><span class="ico">★</span><span class="lbl">ESPECIAL</span></button>
+      <button class="btn btn-x" data-action="grab"><span class="ico">✋</span><span class="lbl">TOMAR</span></button>
+      <button class="btn btn-t" data-action="call"><img src="favicon-64.png" alt=""><span class="lbl">TOFU</span></button>
+    </div>
+    <button class="btn btn-pause" data-action="pause">II</button>
+    <button class="btn btn-mute" data-action="mute">♪</button>
+  </div>
+
+  <!-- Aviso para girar el teléfono -->
+  <div id="rotate">
+    <div class="phone"><img src="favicon-64.png" alt=""></div>
+    <div class="rotate-arrow">↻</div>
+    <div>
+      <div class="title">GIRA TU TELEFONO</div>
+      <div>Faby & Tofu se juega en horizontal</div>
+      <small>El juego te espera en pausa</small>
+    </div>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

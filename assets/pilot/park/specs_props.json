@@ -1,0 +1,14 @@
+[
+  {"name": "lamp", "width": 80, "height": 160, "no_background": true,
+   "description": "pixel art game prop, side view: a tall dark gray iron park street lamp post with a double head, two round warm glass lamps on curved arms, decorative base, crisp pixels, vibrant, transparent background"},
+  {"name": "bench", "width": 96, "height": 64, "no_background": true,
+   "description": "pixel art game prop, side view facing the viewer: a classic park bench with warm brown wooden slats and black cast iron legs and armrests, crisp pixels, vibrant, transparent background"},
+  {"name": "flag", "width": 96, "height": 160, "no_background": true,
+   "description": "pixel art game prop, side view: a tall white flagpole with the flag of Bolivia (three horizontal stripes red, yellow and green) waving in the wind, on a small stone base, crisp pixels, vibrant, transparent background"},
+  {"name": "trashcan", "width": 48, "height": 64, "no_background": true,
+   "description": "pixel art game prop for a beat em up: a green metal park trash can with a lid, standing upright, slightly dented, crisp pixels, vibrant, transparent background"},
+  {"name": "bush", "width": 128, "height": 80, "no_background": true,
+   "description": "pixel art game prop: a round lush green park bush with small pink and yellow flowers, crisp pixels, vibrant saturated colors, transparent background"},
+  {"name": "flowerbed", "width": 160, "height": 64, "no_background": true,
+   "description": "pixel art game prop, side view: a long low flower bed with a red brick border full of colorful petunias in white, pink, magenta and purple and green leaves, crisp pixels, vibrant, transparent background"}
+]

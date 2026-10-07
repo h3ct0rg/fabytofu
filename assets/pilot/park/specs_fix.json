@@ -1,0 +1,13 @@
+[
+  {"name": "pergola2", "width": 400, "height": 280, "no_background": true,
+   "description": "pixel art isolated set piece for a 16-bit side scrolling beat em up park level, side view: a wooden pergola covered with blooming bougainvillea in deep purple and magenta, with a curved flower bed in front with a red brick curb full of white, pink and purple petunias. The whole object is complete and fully contained inside the canvas with empty transparent space on all four sides, nothing cut off at the edges, no ground, no pavement, no path, no water, no trees behind, vibrant saturated colors, sunny, crisp pixels",
+   "refs": [{"usage": "the real pergola and flower bed of the park", "path": "assets/pilot/park/refs/pergola.png"}],
+   "style": "assets/pilot/park/pergola/c0.png"},
+  {"name": "pond", "width": 320, "height": 120, "no_background": true,
+   "description": "pixel art isolated set piece for a 16-bit side scrolling beat em up park level, slightly top-down side view: a shallow oval reflecting pool with a red brick rim, calm blue water reflecting the sky, a few green lily pads with pink flowers, the whole pond complete and fully inside the canvas with transparent space around it, nothing cut off, no ground around it, vibrant saturated colors, crisp pixels",
+   "refs": [{"usage": "the real reflecting pool next to the pergola", "path": "assets/pilot/park/refs/pergola.png"}],
+   "style": "assets/pilot/park/pergola/c0.png"},
+  {"name": "canchas2", "width": 480, "height": 220, "no_background": true,
+   "description": "pixel art isolated set piece for a 16-bit side scrolling beat em up park level, side view: a small outdoor basketball court enclosed by a green chain-link fence with posts at both ends, a basketball hoop with a white backboard, painted court floor with blue and orange lines. The whole object is complete and fully inside the canvas with transparent space on all sides, nothing cut off, no trees, no people, no background, vibrant saturated colors, sunny, crisp pixels",
+   "style": "assets/pilot/park/canchas/c0.png"}
+]

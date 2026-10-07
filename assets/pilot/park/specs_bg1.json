@@ -1,0 +1,14 @@
+[
+  {"name": "tunari", "width": 688, "height": 200, "no_background": true,
+   "description": "pixel art far background layer for a 16-bit side scrolling beat em up: the Tunari mountain range of Cochabamba Bolivia seen from the city, a long ridge of tall jagged blue-violet mountains with soft lavender haze at the base, sunlit peaks with warm highlights, vibrant saturated colors, sunny afternoon, crisp pixels, no sky, no ground",
+   "refs": [{"usage": "shape of the real mountain range on the horizon", "path": "assets/pilot/park/refs/mountains.png"}]},
+  {"name": "city", "width": 688, "height": 220, "no_background": true,
+   "description": "pixel art mid background layer for a 16-bit side scrolling beat em up: Cochabamba city skyline seen from a park, white and cream apartment towers with many windows, a pink building and a yellow building, low houses with red clay tile roofs, a few palm trees and jacaranda trees with purple flowers, warm golden afternoon light, vibrant saturated colors, crisp pixels, side view, no sky",
+   "refs": [{"usage": "real buildings, colors and roofs around the park", "path": "assets/pilot/park/refs/city.png"}]},
+  {"name": "treeline", "width": 688, "height": 280, "no_background": true,
+   "description": "pixel art background layer for a 16-bit side scrolling beat em up park level: a row of big lush green park trees with layered round canopies in several greens, tree trunks painted white at the bottom, a weeping willow, a tall eucalyptus, trimmed hedges at the base, sunlight dappling the leaves, vibrant saturated colors, crisp pixels, side view, no ground, no sky",
+   "refs": [{"usage": "real trees with white painted trunks along the bike lane", "path": "assets/pilot/park/refs/ciclovia.png"}]},
+  {"name": "glorieta", "width": 480, "height": 220, "no_background": true,
+   "description": "pixel art set piece for a 16-bit side scrolling beat em up park level, side view: a circular garden planter with a low red brick border, filled with round trimmed topiary bushes in bright yellow-green, a small leafy tree in the middle, flowers, vibrant saturated colors, sunny, crisp pixels, transparent background",
+   "refs": [{"usage": "the real circular topiary garden of the park", "path": "assets/pilot/park/refs/glorieta.png"}]}
+]

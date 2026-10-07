@@ -1,0 +1,11 @@
+services:
+  faby-tofu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: faby-tofu:latest
+    container_name: faby-tofu
+    restart: unless-stopped
+    ports:
+      # Puerto del servidor : puerto del contenedor. Cambia FABY_TOFU_PORT si el 8080 está ocupado.
+      - "${FABY_TOFU_PORT:-8080}:80"

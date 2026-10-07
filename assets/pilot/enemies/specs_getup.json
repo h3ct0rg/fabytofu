@@ -1,0 +1,4 @@
+[
+ {"name":"j_getup","base":"assets/pilot/enemies/j_knock/f8.png","frames":6,"action":"gets up from lying flat on his back: sits up, pushes off the ground, rises to his feet and returns to a boxing stance facing right, no visual effects"},
+ {"name":"s_getup","base":"assets/pilot/enemies/s_knock/f8.png","frames":6,"action":"gets up from lying flat on his back, grabs his skateboard, rises to his feet and stands ready to fight facing right, no visual effects"}
+]

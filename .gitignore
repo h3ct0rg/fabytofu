@@ -1,0 +1,10 @@
+# Registros de las generaciones de PixelLab
+*.log
+__pycache__/
+
+# Configuración local del editor/agente
+.claude/
+
+# Fotos de terceros usadas solo como referencia (tienen derechos de autor; no se redistribuyen)
+design/parque lincon/
+assets/pilot/park/refs/

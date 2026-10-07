@@ -1,0 +1,6 @@
+[
+  {"name": "run2", "base": "assets/pilot/tofu/base_stand_112.png", "frames": 8,
+   "action": "fast gallop run cycle in place facing right, staying in the same spot, legs stretching and tucking, the long curly floppy ears keep hanging down and bounce, curly poodle fur, loopable"},
+  {"name": "happy2", "base": "assets/pilot/tofu/base_sit_112.png", "frames": 4,
+   "action": "sitting happily while being petted: eyes closing in bliss, tongue out, tail wagging fast, the long curly floppy ears stay hanging down"}
+]

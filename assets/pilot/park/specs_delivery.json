@@ -1,0 +1,5 @@
+[
+ {"name":"delivery_a","tool":"create_image_pixen","width":64,"height":64,"no_background":true,"description":"pixel art game prop, side view: a closed red insulated food delivery backpack box, square thermal bag with a white fork and spoon icon and a lid zipper, standing on the ground, no brand logos, single color black outline"},
+ {"name":"delivery_b","tool":"create_image_pixen","width":64,"height":64,"no_background":true,"description":"pixel art 16-bit game item: a bright red cube-shaped thermal delivery box with black straps and a white plate icon on the side, closed, no text, no logos, single color black outline"},
+ {"name":"delivery_open_a","tool":"create_image_pixen","width":64,"height":64,"no_background":true,"description":"pixel art game prop, side view: the same red insulated food delivery box but opened, lid flipped open and dented, a little steam coming out, no brand logos, single color black outline"}
+]

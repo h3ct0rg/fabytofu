@@ -1,0 +1,19 @@
+[
+ {"name":"j_idle","base":"assets/pilot/enemies/jogger_base_144.png","frames":4,"action":"boxing stance idle, bouncing lightly on his toes, fists up, cocky, staying in place, no visual effects"},
+ {"name":"j_walk","base":"assets/pilot/enemies/jogger_base_144.png","frames":8,"action":"walk cycle in place facing right with fists up, staying in the same spot, loopable, no visual effects"},
+ {"name":"j_jab","base":"assets/pilot/enemies/jogger_base_144L.png","frames":4,"action":"throws a fast straight punch to the right with the fist fully extended at face height, then returns to guard, no visual effects"},
+ {"name":"j_hurt","base":"assets/pilot/enemies/jogger_base_144.png","frames":4,"action":"gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"},
+ {"name":"j_knock","base":"assets/pilot/enemies/jogger_base_192R.png","frames":8,"action":"knocked off his feet by a heavy hit, flies backward to the left and falls, landing lying flat on his back on the ground, no visual effects"},
+ {"name":"s_idle","base":"assets/pilot/enemies/skater_base_144.png","frames":4,"action":"cocky idle, shifting weight, skateboard under his arm, staying in place, no visual effects"},
+ {"name":"s_walk","base":"assets/pilot/enemies/skater_base_144.png","frames":8,"action":"walk cycle in place facing right holding the skateboard under his arm, staying in the same spot, loopable, no visual effects"},
+ {"name":"s_ride","base":"assets/pilot/enemies/skater_base_192C.png","frames":4,"action":"drops the skateboard and rides it fast to the right, crouched low on the board with arms out, staying in place, no visual effects"},
+ {"name":"s_kick","base":"assets/pilot/enemies/skater_base_144L.png","frames":4,"action":"does a quick front kick to the right with his leg fully extended at stomach height, then returns, skateboard still under his arm, no visual effects"},
+ {"name":"s_hurt","base":"assets/pilot/enemies/skater_base_144.png","frames":4,"action":"gets punched in the face, head snaps back, recoils backward to the left, no visual effects"},
+ {"name":"s_knock","base":"assets/pilot/enemies/skater_base_192R.png","frames":8,"action":"knocked off his feet by a heavy hit, flies backward to the left and falls, landing lying flat on his back on the ground, skateboard falling beside him, no visual effects"},
+ {"name":"d_idle","base":"assets/pilot/enemies/dog_base_112.png","frames":4,"action":"standing alert, tail wagging, breathing, staying in place, no visual effects"},
+ {"name":"d_run","base":"assets/pilot/enemies/dog_base_112.png","frames":8,"action":"fast run cycle in place facing right, staying in the same spot, ears flapping, loopable, no visual effects"},
+ {"name":"d_bark","base":"assets/pilot/enemies/dog_base_112.png","frames":4,"action":"barking aggressively to the right, front legs braced, mouth snapping open and shut, no visual effects"},
+ {"name":"d_pounce","base":"assets/pilot/enemies/dog_base_112.png","frames":6,"action":"jumps up forward to the right with front paws raised as if jumping on a person, then lands, no visual effects"},
+ {"name":"d_happy","base":"assets/pilot/enemies/dog_base_112.png","frames":4,"action":"happy and calm, tail wagging fast, tongue out, eyes closing contentedly, staying in place, no visual effects"},
+ {"name":"d_eat","base":"assets/pilot/enemies/dog_base_112.png","frames":4,"action":"lowers head and happily munches food from the ground, tail wagging, no visual effects"}
+]

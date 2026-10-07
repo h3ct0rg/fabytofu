@@ -1,0 +1,6 @@
+[
+  {"name": "getup", "base": "assets/pilot/faby_v3/knockdown/f8.png", "frames": 6,
+   "action": "gets up from lying flat on her back: sits up, pushes off the ground with one hand, rises to her feet and returns to a boxing fighting stance facing right"},
+  {"name": "run2", "base": "assets/pilot/faby_v3/stance_base_144.png", "frames": 8,
+   "action": "full speed sprint cycle in place facing right, staying in the same spot, strong forward lean, knees driving high, both feet leave the ground mid-stride, elbows pumping hard, hair streaming back, loopable"}
+]

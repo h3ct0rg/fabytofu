@@ -1,0 +1,5 @@
+# Solo juego/ y deploy/ entran a la imagen; todo lo demás queda fuera del contexto de build.
+*
+!juego/
+!deploy/
+juego/README.md

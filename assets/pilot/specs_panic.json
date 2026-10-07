@@ -1,0 +1,4 @@
+[
+ {"name":"faby_v3/panic","base":"assets/pilot/faby_v3/stance_base_144.png","frames":8,"action":"running away in panic in place facing right, terrified scared face with wide eyes and open mouth screaming, arms flailing, hair flying back, fast run cycle staying in the same spot, loopable, no visual effects"},
+ {"name":"tofu/panic","base":"assets/pilot/tofu/base_stand_112.png","frames":8,"action":"running away scared in place facing right, frightened wide eyes, ears flat back, tail tucked, fast run cycle staying in the same spot, loopable, no visual effects"}
+]

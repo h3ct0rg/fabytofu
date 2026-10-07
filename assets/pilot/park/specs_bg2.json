@@ -1,0 +1,17 @@
+[
+  {"name": "pergola", "width": 520, "height": 280, "no_background": true,
+   "description": "pixel art set piece for a 16-bit side scrolling beat em up park level, side view: a wooden pergola covered with blooming bougainvillea in deep purple and magenta, a flower bed in front with a red brick curb full of white, pink and purple petunias, a shallow reflecting pool with a brick edge, vibrant saturated colors, sunny golden afternoon, crisp pixels, transparent background",
+   "refs": [{"usage": "the real pergola, flower bed and reflecting pool of the park", "path": "assets/pilot/park/refs/pergola.png"}],
+   "style": "assets/pilot/park/glorieta/c0.png"},
+  {"name": "estrella", "width": 560, "height": 240, "no_background": true,
+   "description": "pixel art set piece for a 16-bit side scrolling beat em up park level, side view: a large star-shaped hedge planter with a light stone border filled with bright yellow and green trimmed hedges and red flowers, behind it a round stone fountain with sparkling water jets, vibrant saturated colors, sunny, crisp pixels, transparent background",
+   "refs": [{"usage": "the real star-shaped planter and fountain of the park", "path": "assets/pilot/park/refs/estrella.png"}],
+   "style": "assets/pilot/park/glorieta/c0.png"},
+  {"name": "canchas", "width": 560, "height": 240, "no_background": true,
+   "description": "pixel art set piece for a 16-bit side scrolling beat em up park level, side view: a small outdoor sports court behind a green chain-link fence, a basketball hoop with a white backboard, painted court lines in blue and orange, a few kids silhouettes playing far away, trees peeking behind, vibrant saturated colors, sunny, crisp pixels, transparent background",
+   "style": "assets/pilot/park/glorieta/c0.png"},
+  {"name": "street", "width": 688, "height": 150, "no_background": true,
+   "description": "pixel art mid background layer for a 16-bit side scrolling beat em up: a quiet side street next to a park, gray asphalt road with a sidewalk curb, a row of colorful parked cars side view (red hatchback, light blue sedan, white van, yellow taxi), a few small street trees, vibrant saturated colors, sunny, crisp pixels, transparent background",
+   "refs": [{"usage": "real street with parked cars next to the bike lane", "path": "assets/pilot/park/refs/ciclovia.png"}],
+   "style": "assets/pilot/park/city/c0.png"}
+]

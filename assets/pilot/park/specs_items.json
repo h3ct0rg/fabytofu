@@ -1,0 +1,22 @@
+[
+  {"name": "saltena", "tool": "create_image_pixen", "width": 48, "height": 48, "no_background": true,
+   "description": "pixel art game food item icon: a Bolivian salteña, a golden baked oval empanada with a braided crimped seam on top, glossy orange-golden crust, side view, single color black outline"},
+  {"name": "saltena_b", "tool": "create_image_pixen", "width": 48, "height": 48, "no_background": true,
+   "description": "pixel art food pickup: one Bolivian salteña pastry, golden brown baked oval empanada with a crimped braided top edge, shiny, single color black outline"},
+  {"name": "silpancho", "tool": "create_image_pixen", "width": 64, "height": 48, "no_background": true,
+   "description": "pixel art game food item: a plate of Bolivian silpancho seen slightly from above, white plate with white rice, fried potato slices, a large thin breaded beef cutlet, a fried egg with yellow yolk on top, diced tomato and onion salad, single color black outline"},
+  {"name": "silpancho_b", "tool": "create_image_pixen", "width": 64, "height": 48, "no_background": true,
+   "description": "pixel art food pickup: Bolivian silpancho plate, rice, breaded flat beef, fried egg on top, tomato onion salad, fried potatoes, on a white round plate, single color black outline"},
+  {"name": "api", "tool": "create_image_pixen", "width": 64, "height": 48, "no_background": true,
+   "description": "pixel art game food item: Bolivian api con pastel, a glass mug of hot purple corn drink with steam next to a big golden fried pastry dusted with white powdered sugar, single color black outline"},
+  {"name": "api_b", "tool": "create_image_pixen", "width": 64, "height": 48, "no_background": true,
+   "description": "pixel art food pickup: a cup of thick purple api drink with steam and a crispy fried empanada pastel covered in powdered sugar beside it, single color black outline"},
+  {"name": "ball", "tool": "create_image_pixen", "width": 24, "height": 24, "no_background": true,
+   "description": "pixel art game item: a bright yellow-green tennis ball with white curved seam, single color black outline"},
+  {"name": "treat", "tool": "create_image_pixen", "width": 32, "height": 32, "no_background": true,
+   "description": "pixel art game item: a bone-shaped dog biscuit treat, warm golden brown, side view, single color black outline"},
+  {"name": "bottle", "tool": "create_image_pixen", "width": 32, "height": 32, "no_background": true,
+   "description": "pixel art game item: a plastic water bottle lying on its side, light blue transparent with a blue label and a blue cap, single color black outline"},
+  {"name": "trashcan_broken", "tool": "create_image_pixen", "width": 48, "height": 64, "no_background": true,
+   "description": "pixel art game prop: a green metal park trash can knocked over and crumpled, lid off, a little paper trash spilling out, side view, single color black outline"}
+]
