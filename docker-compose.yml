@@ -1,3 +1,13 @@
+networks:
+  fabytofu-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.97.0.0/24
+  nginx-network:
+    external: true
+    name: nginx-manager_default
+
 services:
   faby-tofu:
     build:
@@ -7,5 +17,8 @@ services:
     container_name: faby-tofu
     restart: unless-stopped
     ports:
-      # Puerto del servidor : puerto del contenedor. Cambia FABY_TOFU_PORT si el 8080 está ocupado.
-      - "${FABY_TOFU_PORT:-8080}:80"
+      # Puerto del servidor : puerto del contenedor. Cambia FABY_TOFU_PORT si el 8099 está ocupado.
+      - "${FABY_TOFU_PORT:-8099}:80"
+    networks:
+      - fabytofu-network
+      - nginx-network
