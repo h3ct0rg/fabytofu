@@ -110,13 +110,28 @@ canvas.addEventListener('pointerdown', (e) => {
 // En un teléfono en vertical el juego espera (se muestra el aviso de girar).
 const portrait = matchMedia('(orientation: portrait) and (pointer: coarse)');
 
-// En el primer toque, pantalla completa y orientación horizontal (donde el navegador lo permita).
-window.addEventListener('touchend', async () => {
-  try {
-    if (!document.fullscreenElement) await document.documentElement.requestFullscreen?.({ navigationUI: 'hide' });
-    await screen.orientation?.lock?.('landscape');
-  } catch { /* iOS y algunos navegadores no lo permiten: queda el aviso de girar */ }
-}, { once: true });
+// Pantalla completa: SOLO si la persona la pide con el botón ⛶ (y el mismo botón la quita).
+// Antes se activaba sola con el primer toque y en Safari de iPhone quedaba "atrapada" sin
+// forma de salir; por eso en iPhone/iPad no se ofrece (ahí se usa "Agregar a inicio").
+const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+const fsBtn = document.getElementById('fs-btn');
+if (fsBtn) {
+  const canFs = !isIOS && !!document.documentElement.requestFullscreen;
+  fsBtn.hidden = !canFs;
+  const sync = () => { fsBtn.textContent = document.fullscreenElement ? '✕' : '⛶'; };
+  document.addEventListener('fullscreenchange', sync);
+  fsBtn.addEventListener('click', async () => {
+    try {
+      if (document.fullscreenElement) {
+        await document.exitFullscreen();
+      } else {
+        await document.documentElement.requestFullscreen({ navigationUI: 'hide' });
+        await screen.orientation?.lock?.('landscape').catch(() => {});
+      }
+    } catch { /* el navegador no lo permite */ }
+    sync();
+  });
+}
 
 // Los controles táctiles solo se muestran dentro del juego.
 const touchRoot = document.getElementById('touch');

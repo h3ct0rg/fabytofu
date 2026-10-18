@@ -6,9 +6,9 @@ skaters, perros ladradores y **Corli, el pug de traje**.
 
 ## Jugar
 
-- **Docker:** `docker compose up -d --build` y abrir `http://localhost:8080`
+- **Docker:** `docker compose up -d --build` y abrir `http://localhost:8099`
   (el puerto se cambia con la variable `FABY_TOFU_PORT`).
-- **Local sin Docker:** `python -m http.server 8137 --directory juego` y abrir `http://localhost:8137`.
+- **Local sin Docker:** `python tools/serve.py` y abrir `http://localhost:8137`.
 
 Controles, estructura del código y detalles en [juego/README.md](juego/README.md).
 

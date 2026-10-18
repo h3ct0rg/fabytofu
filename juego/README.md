@@ -7,7 +7,7 @@ Beat 'em up en JavaScript puro + Canvas 2D, sin dependencias ni paso de build.
 Los módulos ES necesitan un servidor (no funciona abriendo `index.html` con doble clic):
 
 ```bash
-python -m http.server 8137 --directory juego
+python tools/serve.py
 ```
 
 Luego abrir http://localhost:8137. La rocola con todas las pistas y efectos está en http://localhost:8137/musica.html. Con `?debug` se ven hitboxes, FPS y se expone `window.__faby` para pruebas.

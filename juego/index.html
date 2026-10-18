@@ -6,6 +6,11 @@
   <title>Faby & Tofu · Un paseo normal por el parque</title>
   <meta name="description" content="Solo quería sacar a pasear a Tofu… y terminó peleando por todo el Parque Lincoln de Cochabamba. Beat 'em up retro para jugar gratis en el navegador y en el celular.">
   <meta name="theme-color" content="#ff2fa8">
+  <!-- iPhone: al "Agregar a pantalla de inicio" se abre a pantalla completa, sin barras de Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Faby & Tofu">
 
   <!-- Vista previa al compartir el enlace (WhatsApp, Facebook, Telegram, X...).
        __SITE_URL__ lo reemplaza nginx por la dirección real del servidor (ver deploy/nginx.conf). -->
@@ -46,6 +51,7 @@
     </div>
     <button class="btn btn-pause" data-action="pause">II</button>
     <button class="btn btn-mute" data-action="mute">♪</button>
+    <button class="btn btn-fs" id="fs-btn" title="Pantalla completa" hidden>⛶</button>
   </div>
 
   <!-- Aviso para girar el teléfono -->
