@@ -1,0 +1,14 @@
+[
+  {"name": "shake_pro", "tool": "create_image_pro", "width": 144, "height": 160, "no_background": true,
+   "description": "Enemy for a 16-bit beat em up: a young male street vendor of green detox smoothies, skinny, green apron over a white t-shirt, green cap worn backwards, khaki shorts, sneakers, cocky grin. Full body, side view facing right, standing ready to fight, empty hands. Same pixel art style, size and outline as the style reference. Transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "art style, size, proportions and outline to match (an existing enemy of the game)", "path": "assets/pilot/enemies/jogger_base_144.png"}]},
+  {"name": "influ_pro", "tool": "create_image_pro", "width": 144, "height": 160, "no_background": true,
+   "description": "Enemy for a 16-bit beat em up: a young female fitness influencer, hot pink sports top, purple leggings, white sneakers, high blonde ponytail, sunglasses on her head, holding a selfie stick with a smartphone in one hand, smug expression. Full body, side view facing right, standing ready to fight. Same pixel art style, size and outline as the style reference. Transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "art style, size, proportions and outline to match (an existing enemy of the game)", "path": "assets/pilot/enemies/jogger_base_144.png"}]},
+  {"name": "coach_pro", "tool": "create_image_pro", "width": 144, "height": 160, "no_background": true,
+   "description": "Enemy for a 16-bit beat em up: a big muscular dog fitness coach, orange tank top, black track pants, red headband, silver whistle on a cord around his neck, short beard, holding a heavy black kettlebell in one hand, angry. Full body, side view facing right, standing ready to fight, bulky. Same pixel art style and outline as the style reference. Transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "art style, proportions and outline to match (an existing enemy of the game)", "path": "assets/pilot/enemies/jogger_base_144.png"}]},
+  {"name": "chi_pro", "tool": "create_image_pro", "width": 64, "height": 64, "no_background": true,
+   "description": "A tiny chihuahua dog wearing a knitted red and white sweater, big ears, bulging eyes, mischievous naughty grin, fawn tan fur. Standing in three-quarter view facing right, full body. Same pixel art style and outline as the reference dog. Transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "art style, outline and level of detail to match (another small dog of the game)", "path": "assets/pilot/morita/base/c8.png"}]}
+]

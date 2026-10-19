@@ -1,0 +1,5 @@
+[
+  {"name": "coach2_pro", "tool": "create_image_pro", "width": 144, "height": 160, "no_background": true,
+   "description": "Enemy for a 16-bit beat em up: a strong muscular female fitness trainer, short dark undercut hair, red headband, orange tank top, black track pants with white stripes, white sneakers, silver whistle on a cord around her neck, holding a heavy black kettlebell in one hand, tough angry face, broad shoulders. Human woman. Full body, side view facing right, standing ready to fight. Same pixel art style, size and outline as the style reference. Transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "art style, size, proportions and outline to match (an existing enemy of the game)", "path": "assets/pilot/enemies/jogger_base_144.png"}]}
+]

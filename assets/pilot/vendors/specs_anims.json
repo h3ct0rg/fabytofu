@@ -1,0 +1,18 @@
+[
+ {"name":"sh_idle","base":"assets/pilot/vendors/shake_base_144.png","frames":4,"action":"cocky fighting stance idle, bouncing lightly, fists up, staying in place, no visual effects"},
+ {"name":"sh_walk","base":"assets/pilot/vendors/shake_base_144.png","frames":8,"action":"walk cycle in place facing right with fists up, staying in the same spot, loopable, no visual effects"},
+ {"name":"sh_throw","base":"assets/pilot/vendors/shake_base_144L.png","frames":4,"action":"overhand throw: pulls his arm back behind his head and hurls something forward to the right, follow through, empty hands, no object, no visual effects"},
+ {"name":"sh_hurt","base":"assets/pilot/vendors/shake_base_144.png","frames":4,"action":"gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"},
+ {"name":"sh_knock","base":"assets/pilot/vendors/shake_base_192R.png","frames":8,"action":"knocked off his feet by a heavy hit, flies backward to the left and falls, landing lying flat on his back on the ground, no visual effects"},
+ {"name":"in_idle","base":"assets/pilot/vendors/influ_base_144.png","frames":4,"action":"smug idle, posing and checking herself on the selfie stick phone, slight bounce, staying in place, no visual effects"},
+ {"name":"in_walk","base":"assets/pilot/vendors/influ_base_144.png","frames":8,"action":"confident catwalk walk cycle in place facing right holding the selfie stick, staying in the same spot, loopable, no visual effects"},
+ {"name":"in_flash","base":"assets/pilot/vendors/influ_base_144L.png","frames":4,"action":"raises the selfie stick and points the phone forward to the right to take a photo, posing with a peace sign, staying in place, no flash, no visual effects"},
+ {"name":"in_swing","base":"assets/pilot/vendors/influ_base_144L.png","frames":4,"action":"swings the selfie stick forward to the right like a club in a fast arc, then recovers, staying in place, no visual effects"},
+ {"name":"in_hurt","base":"assets/pilot/vendors/influ_base_144.png","frames":4,"action":"gets punched, head snaps back, recoils backward to the left with a shocked face, ponytail flying, no visual effects"},
+ {"name":"in_knock","base":"assets/pilot/vendors/influ_base_192R.png","frames":8,"action":"knocked off her feet by a heavy hit, flies backward to the left and falls, landing lying flat on her back on the ground, still holding the selfie stick, no visual effects"},
+ {"name":"ch_idle","base":"assets/pilot/vendors/chi_base_80.png","frames":4,"action":"standing alert and mischievous, trembling with excitement, tail wagging, staying in place, no visual effects"},
+ {"name":"ch_run","base":"assets/pilot/vendors/chi_base_80.png","frames":8,"action":"very fast scampering run cycle in place facing right, tiny legs blurring, big ears flapping back, staying in the same spot, loopable, no visual effects"},
+ {"name":"ch_bark","base":"assets/pilot/vendors/chi_base_80.png","frames":4,"action":"yapping angrily to the right, front legs braced, mouth snapping open and shut, body jolting, staying in place, no visual effects"},
+ {"name":"ch_scared","base":"assets/pilot/vendors/chi_base_80.png","frames":4,"action":"terrified: crouches low, ears pinned back, tail tucked, shaking, staying in place, no visual effects"},
+ {"name":"ch_eat","base":"assets/pilot/vendors/chi_base_80.png","frames":4,"action":"lowers head to the ground and happily munches a treat, tail wagging, staying in place, no visual effects"}
+]

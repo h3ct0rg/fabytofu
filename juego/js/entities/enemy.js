@@ -1,6 +1,7 @@
 import { Fighter } from './fighter.js';
 import { Animator, drawSprite } from '../engine/sprite.js';
 import { worldBox, boxesHit } from '../engine/collision.js';
+import { Shake } from './hazards.js';
 
 // Enemigos humanos del parque. Comparten la IA de grupo (solo 2 atacan a la vez),
 // el aviso "!" antes de golpear y el agarre/lanzamiento de Faby. Cada tipo cambia
@@ -29,9 +30,46 @@ const TYPES = {
     targetsTofu: true,
     charge: { speed: 560, damage: 10, knockdown: true, hitstop: 0.08 },
   },
+  // ---- Nivel 2: vendedores de Doña Billetes ----
+  // Se queda a distancia y lanza batidos detox (dejan charcos resbalosos).
+  shake: {
+    name: 'VENDEDOR DE BATIDOS',
+    hp: 36,
+    speedX: 120,
+    speedY: 80,
+    windup: 0.45,
+    range: 230,
+    attack: { anim: 'throw', projectile: true },
+    targetsTofu: false,
+  },
+  // Golpea con el palo de selfie; de lejos saca una foto con flash que aturde.
+  influ: {
+    name: 'INFLUENCER FIT',
+    hp: 38,
+    speedX: 130,
+    speedY: 85,
+    windup: 0.4,
+    range: 72,
+    attack: { anim: 'swing', damage: 8, push: 120, hitstop: 0.08, box: { x: 14, w: 70, z: 70, h: 50 } },
+    targetsTofu: false,
+    flash: { damage: 2, stun: 1.0, hitstop: 0.03 },
+  },
+  // Lenta y resistente: los golpes leves no la interrumpen. La pesa rusa derriba.
+  coach: {
+    name: 'ENTRENADORA FITNESS',
+    hp: 72,
+    speedX: 95,
+    speedY: 70,
+    windup: 0.55,
+    range: 70,
+    attack: { anim: 'swing', damage: 12, knockdown: true, hitstop: 0.1, box: { x: 10, w: 72, z: 20, h: 80 } },
+    targetsTofu: true,
+    armor: true,
+  },
 };
 
 const TOFU_CHANCE = 0.3;
+const FLASH_CHANCE = 0.35;
 const CHARGE_CHANCE = 0.45;
 
 export class Enemy extends Fighter {
@@ -49,6 +87,18 @@ export class Enemy extends Fighter {
     this.waitOffset = (Math.random() * 2 - 1) * 50;
     this.hasHit = false;
     this.target = stage.player;
+  }
+
+  // Súper armadura (entrenadora): los golpes leves hacen daño pero no la interrumpen.
+  takeHit(hit, from) {
+    if (this.cfg.armor && !hit.knockdown && !hit.strong && this.hp - hit.damage > 0 && ['idle', 'walk', 'windup', 'strike', 'recover'].includes(this.state) && this.invuln <= 0) {
+      this.hp -= hit.damage;
+      this.flash = 0.1;
+      this.hitstop = hit.hitstop ?? 0.06;
+      this.stage.lastEnemyHit = this;
+      return true;
+    }
+    return super.takeHit(hit, from);
   }
 
   update(dt) {
@@ -90,6 +140,13 @@ export class Enemy extends Fighter {
           this.vx = 0;
           return this.setState('chargeWindup');
         }
+        // Influencer: de lejos y en el mismo carril, saca una foto con flash.
+        if (cfg.flash && this.cooldown <= 0 && Math.abs(p.x - this.x) > 130 && Math.abs(p.x - this.x) < 360 && Math.abs(p.y - this.y) < 30 && Math.random() < FLASH_CHANCE * dt * 3) {
+          this.facing = p.x < this.x ? -1 : 1;
+          this.vx = 0;
+          this.stage.fx.text(this.x, this.y - 170, '¡SONRÍAN!', '#ff6fb5', 12);
+          return this.setState('flashWindup');
+        }
         // Se ubica al lado del objetivo donde ya está, para no cruzarlo.
         this.side = this.x < p.x ? -1 : 1;
         const token = this.cooldown <= 0 && this.stage.requestToken(this);
@@ -122,7 +179,12 @@ export class Enemy extends Fighter {
         break;
 
       case 'strike': {
-        this.vx = this.facing * 40;
+        this.vx = cfg.attack.projectile ? 0 : this.facing * 40;
+        if (cfg.attack.projectile && !this.hasHit && this.anim.anim.active?.includes(this.anim.index)) {
+          this.hasHit = true;
+          this.stage.hazards.push(new Shake(this.stage, this.x + this.facing * 30, this.y, p.x, p.y));
+          this.stage.sfx('throw');
+        }
         if (!this.hasHit && this.anim.anim.active?.includes(this.anim.index)) {
           const hb = worldBox(this, cfg.attack.box);
           for (const t of [this.stage.player, this.stage.tofu]) {
@@ -141,6 +203,19 @@ export class Enemy extends Fighter {
       case 'recover':
         this.vx = 0;
         if (this.stateTime > 0.45) this.finishAttack();
+        break;
+
+      case 'flashWindup':
+        this.vx = 0;
+        if (this.stateTime > 0.7) {
+          // ¡Flash! Aturde a Faby si sigue en su carril y delante de la cámara.
+          this.stage.whiteout = 0.18;
+          this.stage.sfx('select');
+          const pl = this.stage.player;
+          const ahead = (pl.x - this.x) * this.facing > 0;
+          if (ahead && Math.abs(pl.y - this.y) < 34 && Math.abs(pl.x - this.x) < 420 && pl.grounded) pl.takeHit(cfg.flash, this);
+          this.finishAttack(1.2);
+        }
         break;
 
       case 'chargeWindup':
@@ -211,7 +286,7 @@ export class Enemy extends Fighter {
   updateAnim(dt) {
     const map = {
       idle: 'idle', walk: 'walk', windup: 'idle', recover: 'idle', grabbed: 'grabbed',
-      down: 'down', dead: 'down', chargeWindup: 'rideStart', charge: 'ride',
+      down: 'down', dead: 'down', chargeWindup: 'rideStart', charge: 'ride', flashWindup: 'flash',
     };
     const a = map[this.state];
     if (a && this.anim.sheet.anims[a]) this.anim.play(a);
@@ -294,7 +369,7 @@ export class Enemy extends Fighter {
     const x = this.x - camX;
     const y = this.y - this.z;
     drawSprite(ctx, this.anim, x, y, this.facing, { flash: this.flash > 0 });
-    if (this.state === 'windup' || this.state === 'chargeWindup') {
+    if (this.state === 'windup' || this.state === 'chargeWindup' || this.state === 'flashWindup') {
       // Aviso claro del ataque: "!" sobre la cabeza.
       ctx.fillStyle = this.state === 'chargeWindup' ? '#7df9ff' : '#ffd23f';
       ctx.fillRect(Math.round(x) - 3, Math.round(y) - 182, 6, 18);

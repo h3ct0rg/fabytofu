@@ -235,6 +235,60 @@ SHEETS["billetes"] = {
     },
 }
 
+# Nivel 2: vendedores de Doña Billetes y el chihuahua ladrón.
+V = ROOT / "assets" / "pilot" / "vendors"
+SHEETS["shake"] = {
+    "src": V,
+    "anims": {
+        "idle":      {"dir": "sh_idle", "frames": [0, 1, 2, 1], "ms": [160] * 4, "loop": True},
+        "walk":      {"dir": "sh_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100] * 8, "loop": True, "perFrame": True},
+        "throw":     {"dir": "sh_throw", "frames": [2, 3, 4, 4], "ms": [90, 120, 140, 140], "loop": False, "active": [2], "perFrame": True, "clean": True},
+        "hurt":      {"dir": "sh_hurt", "frames": [3, 4, 3], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+        "grabbed":   {"dir": "sh_hurt", "frames": [4], "ms": [100], "loop": True, "perFrame": True},
+        "knockdown": {"dir": "sh_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True},
+        "down":      {"dir": "sh_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+    },
+}
+SHEETS["influ"] = {
+    "src": V,
+    "anims": {
+        "idle":      {"dir": "in_idle", "frames": [1, 2, 3, 4], "ms": [170] * 4, "loop": True},
+        "walk":      {"dir": "in_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100] * 8, "loop": True, "perFrame": True},
+        "flash":     {"dir": "in_flash", "frames": [1, 2, 3, 4], "ms": [120, 160, 200, 300], "loop": False, "perFrame": True},
+        "swing":     {"dir": "in_swing", "frames": [1, 2, 3, 4], "ms": [80, 70, 130, 110], "loop": False, "active": [2, 3], "perFrame": True},
+        "hurt":      {"dir": "in_hurt", "frames": [2, 3, 2], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+        "grabbed":   {"dir": "in_hurt", "frames": [3], "ms": [100], "loop": True, "perFrame": True},
+        "knockdown": {"dir": "in_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True},
+        "down":      {"dir": "in_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+    },
+}
+SHEETS["chihuahua"] = {
+    "src": V,
+    "clean": True,
+    "anims": {
+        "idle":   {"dir": "ch_idle", "frames": [0, 1, 2, 1], "ms": [150] * 4, "loop": True},
+        "run":    {"dir": "ch_run", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [50] * 8, "loop": True, "perFrame": True},
+        "bark":   {"dir": "ch_bark", "frames": [1, 2, 3, 4], "ms": [60, 80, 80, 100], "loop": False},
+        "pounce": {"dir": "ch_run", "frames": [3, 4, 5, 6], "ms": [60] * 4, "loop": False, "perFrame": True},
+        "scared": {"dir": "ch_scared", "frames": [2, 3, 4, 3], "ms": [70] * 4, "loop": True},
+        "eat":    {"dir": "ch_eat", "frames": [2, 3, 4, 3], "ms": [150] * 4, "loop": True},
+        "happy":  {"dir": "ch_idle", "frames": [2, 3, 4, 3], "ms": [120] * 4, "loop": True},
+    },
+}
+SHEETS["coach"] = {
+    "src": V,
+    "anims": {
+        "idle":      {"dir": "co_idle", "frames": [0, 1, 2, 3], "ms": [190] * 4, "loop": True},
+        "walk":      {"dir": "co_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [120] * 8, "loop": True, "perFrame": True},
+        # Si existe co_swing2 (balanceo con la pesa) se usa esa; si no, el golpe de puño.
+        "swing":     {"dir": "co_swing2" if (V / "co_swing2" / "f4.png").exists() else "co_swing", "frames": [1, 2, 3, 4], "ms": [110, 90, 160, 120], "loop": False, "active": [2], "perFrame": True, "clean": True},
+        "hurt":      {"dir": "co_hurt", "frames": [3, 4, 3], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+        "grabbed":   {"dir": "co_hurt", "frames": [4], "ms": [100], "loop": True, "perFrame": True},
+        "knockdown": {"dir": "co_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True, "clean": True},
+        "down":      {"dir": "co_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+    },
+}
+
 def pack(name, sheet):
     frames, meta = [], {}
     for anim, cfg in sheet["anims"].items():

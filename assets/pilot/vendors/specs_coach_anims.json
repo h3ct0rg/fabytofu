@@ -1,0 +1,7 @@
+[
+ {"name":"co_idle","base":"assets/pilot/vendors/coach_base_144.png","frames":4,"action":"tough fighting stance idle, breathing heavily, holding the kettlebell low, staying in place, no visual effects"},
+ {"name":"co_walk","base":"assets/pilot/vendors/coach_base_144.png","frames":8,"action":"heavy determined walk cycle in place facing right carrying the kettlebell, staying in the same spot, loopable, no visual effects"},
+ {"name":"co_swing","base":"assets/pilot/vendors/coach_base_144L.png","frames":4,"action":"swings the heavy kettlebell upward and forward to the right in a big powerful arc with both hands, then recovers, staying in place, no visual effects"},
+ {"name":"co_hurt","base":"assets/pilot/vendors/coach_base_144.png","frames":4,"action":"gets punched, head snaps back, recoils backward to the left grimacing, still holding the kettlebell, no visual effects"},
+ {"name":"co_knock","base":"assets/pilot/vendors/coach_base_192R.png","frames":8,"action":"knocked off her feet by a heavy hit, flies backward to the left and falls, landing lying flat on her back on the ground, kettlebell dropping beside her, no visual effects"}
+]

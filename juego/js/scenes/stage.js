@@ -72,6 +72,7 @@ export class Stage {
     this.props = PROPS.map(([x, y, type]) => new Prop(this, x, y, type));
     this.breakables = BOXES.map(([x, y, food]) => new DeliveryBox(this, x, y, food));
     this.foods = [];
+    this.hazards = [];         // proyectiles y charcos (nivel 2)
     this.foodEaten = { ...(save?.foodEaten ?? {}) };
     this.tofu = this.sheets.tofu ? new Tofu(this, this.sheets.tofu, 90, 470) : null;
     this.butterfly = null;
@@ -149,6 +150,8 @@ export class Stage {
     for (const b of this.breakables) b.update(dt);
     for (const f of this.foods) f.update(dt);
     this.foods = this.foods.filter((f) => !f.removed);
+    for (const h of this.hazards) h.update(dt);
+    this.hazards = this.hazards.filter((h) => !h.removed);
     this.props = this.props.filter((p) => !p.removed);
     for (const e of this.enemies) if (e.removed) this.releaseToken(e);
     this.enemies = this.enemies.filter((e) => !e.removed);
@@ -158,6 +161,7 @@ export class Stage {
     this.updateAreas(dt);
     this.camera.follow(this.player.x, dt);
     this.fx.update(dt);
+    if (this.whiteout > 0) this.whiteout -= dt;
 
     if (this.mode === 'play') {
       if (this.player.state === 'dead') {
@@ -395,7 +399,9 @@ export class Stage {
     // Orden por profundidad: lo que está más abajo en pantalla se dibuja encima.
     const loneBoss = this.boss && !this.enemies.includes(this.boss) ? this.boss : null;
     const extra = [this.tofu, this.butterfly, this.owner, loneBoss].filter(Boolean);
-    const actors = [this.player, ...extra, ...this.enemies, ...this.props, ...this.breakables, ...this.foods].sort((a, b) => a.y - b.y || (a.z ?? 0) - (b.z ?? 0));
+    for (const h of this.hazards) if (h.floor) h.draw(ctx, camX);
+    const shots = this.hazards.filter((h) => !h.floor);
+    const actors = [this.player, ...extra, ...this.enemies, ...this.props, ...this.breakables, ...this.foods, ...shots].sort((a, b) => a.y - b.y || (a.z ?? 0) - (b.z ?? 0));
     for (const a of actors) a.drawShadow(ctx, camX);
     for (const a of actors) a.draw(ctx, camX);
 
@@ -403,6 +409,11 @@ export class Stage {
     this.bg.drawFront(ctx, camX);
     if (debug) this.drawDebug(ctx, camX, actors);
     ctx.restore();
+    // Destello blanco (flash de la influencer).
+    if (this.whiteout > 0) {
+      ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, this.whiteout * 6)})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    }
 
     this.drawHud(ctx);
   }

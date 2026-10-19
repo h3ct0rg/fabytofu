@@ -183,11 +183,24 @@ export class Tofu extends Fighter {
       }
 
       case 'called': {
-        // Corre hacia Faby y derriba a quien se cruce.
-        const dx = p.x - this.x;
+        // Corre hacia Faby y derriba a quien se cruce. Si un chihuahua se llevó croquetas, lo persigue.
+        const thief = this.chaseTarget && !this.chaseTarget.removed && this.chaseTarget.carrying ? this.chaseTarget : null;
+        const goal = thief ?? p;
+        const dx = goal.x - this.x;
         this.facing = Math.sign(dx) || this.facing;
         this.vx = this.facing * CALL_RUN;
-        this.y += Math.sign(p.y + 14 - this.y) * Math.min(Math.abs(p.y + 14 - this.y), 200 * dt);
+        this.y += Math.sign(goal.y + (thief ? 0 : 14) - this.y) * Math.min(Math.abs(goal.y + (thief ? 0 : 14) - this.y), 200 * dt);
+        if (thief && Math.abs(dx) < 30 && Math.abs(goal.y - this.y) < 20) {
+          thief.takeHit(CHARGE, this);
+          this.chaseTarget = null;
+          this.stage.fx.text(this.x, this.y - 90, '¡GRRR!', '#ffd23f', 14);
+          this.setState('follow');
+          break;
+        }
+        if (thief) {
+          if (this.stateTime > 4) { this.chaseTarget = null; this.setState('follow'); }
+          break;
+        }
         for (const e of this.stage.enemies) {
           if (this.charged.has(e) || !e.alive) continue;
           if (Math.abs(e.x - this.x) < 34 && Math.abs(e.y - this.y) < 18 && e.takeHit(CHARGE, this)) {
@@ -272,6 +285,8 @@ export class Tofu extends Fighter {
     this.temper = Math.max(0, this.temper - 25);
     this.charged.clear();
     this.stage.sfx('bark');
+    this.chaseTarget = this.stage.enemies.find((e) => e.carrying && !e.removed) ?? null;
+    if (this.chaseTarget) this.stage.fx.text(this.x, this.y - 90, '¡A ÉL, TOFU!', '#7df9ff', 12);
     this.setState('called');
   }
 

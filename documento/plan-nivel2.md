@@ -82,7 +82,7 @@ Entre la zona 2 y la 3, como respiro entre peleas. Cierra el gancho del final de
 | **Vendedor de batidos verdes** | Lanza vasos que dejan **charcos resbalosos** | A golpes |
 | **Influencer fit** (palo de selfie) | El **flash** aturde a Faby un momento | A golpes; Tofu le muerde el palo |
 | **Entrenador canino** (pesa rusa) | Lento; cada golpe **derriba** | A golpes, esquivando el giro |
-| **Chihuahua con chompita** | Molesta y provoca a Tofu | **No se le pega**: se le distrae (regla del nivel 1) |
+| **Chihuahua con chompita** | **Roba una bolsita de croquetas** y huye; también provoca a Tofu | **No se le pega**: llamar a Tofu (lo persigue y suelta la bolsita) o tirarle un premio. Si se escapa, Morita tendrá menos comida |
 
 Los tres humanos comparten una base de cuerpo y se diferencian por ropa, objeto y colores, para ahorrar generaciones. Variantes de color por código.
 
