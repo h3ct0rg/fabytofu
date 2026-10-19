@@ -1,0 +1,14 @@
+[
+  {"name": "idle", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "fighting stance idle loop, breathing, slight bounce, fists up, staying in place, no effects"},
+  {"name": "walk", "base": "assets/pilot/billetes/base_192.png", "frames": 8, "action": "walking forward to the right in place, staying in the same spot, determined angry stride, arms swinging, ponytail swaying, loopable, no effects"},
+  {"name": "scold", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "scolding angrily: points her index finger forward to the right and shouts, other hand on her hip, head jutting forward, staying in place, no effects, no speech bubble"},
+  {"name": "jab", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "throws a fast straight punch forward to the right with her front fist, arm fully extended, then pulls back to guard, staying in place, no effects"},
+  {"name": "slap", "base": "assets/pilot/billetes/base_192.png", "frames": 6, "action": "big swinging backhand slap forward to the right with a wide arc of her arm, body twisting, then recovers to guard, staying in place, no effects"},
+  {"name": "push", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "leans forward and pushes with both arms extended straight in front of her at chest height, as if shoving something big and heavy, staying in place, no object, no effects"},
+  {"name": "throw", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "overhand throw: pulls an arm back behind her head and hurls something forward to the right, follow through, staying in place, empty hands, no object, no effects"},
+  {"name": "phone", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "holds a smartphone to her ear with one hand and yells angrily into it, other hand gesturing, staying in place, no effects"},
+  {"name": "charge", "base": "assets/pilot/billetes/base_192.png", "frames": 8, "action": "running fast forward to the right in place, body leaning far forward, both arms extended straight ahead at waist height as if pushing a cart, legs pumping, staying in the same spot, loopable, no object, no effects"},
+  {"name": "hurt", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "gets hit in the face and recoils backward to the left, eyes squeezed shut, ponytail flying, then recovers, staying in place, no effects"},
+  {"name": "tired", "base": "assets/pilot/billetes/base_192.png", "frames": 4, "action": "exhausted, bent over panting with both hands on her knees, shoulders heaving, staying in place, no effects, no sweat drops"},
+  {"name": "ko", "base": "assets/pilot/billetes/base_192.png", "frames": 6, "action": "totally exhausted, legs give out and she slowly falls to sit down on the ground, then slumps sitting, gasping for breath, staying in place, no effects"}
+]

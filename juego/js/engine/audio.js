@@ -304,6 +304,12 @@ const SFX = {
   select: (a, t) => [660, 990].forEach((f, i) => a.tone(t + i * 0.07, f, 0.07, { wave: 'p25', vol: 0.2 })),
   lifeLost: (a, t) => [440, 392, 330, 262].forEach((f, i) => a.tone(t + i * 0.12, f, 0.12, { wave: 'p25', vol: 0.22 })),
   stomp: (a, t) => a.tone(t, 70, 0.12, { wave: 'triangle', vol: 0.45, slide: 0.6 }),
+  // Lluvia de billetes de Doña Billetes: tintineo de monedas.
+  coins: (a, t) => [1568, 2093, 1760, 2349, 1976].forEach((f, i) => a.tone(t + i * 0.05, f, 0.05, { wave: 'p12', vol: 0.12 })),
+  // Celular sonando (llama a sus vendedores).
+  ring: (a, t) => [0, 0.12, 0.36, 0.48].forEach((d) => a.tone(t + d, 1320, 0.09, { wave: 'p50', vol: 0.12 })),
+  // Batido que se revienta en el suelo.
+  splash: (a, t) => a.noiseHit(t, 0.25, { vol: 0.3, freq: 1200, type: 'bandpass', sweepTo: 400 }),
   // Aullido de Morita: sube, se sostiene temblando y cae.
   howl: (a, t) => {
     a.tone(t, 560, 0.3, { wave: 'triangle', vol: 0.22, slide: 1.45, attack: 0.06 });

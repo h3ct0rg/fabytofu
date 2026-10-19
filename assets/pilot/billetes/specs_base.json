@@ -1,0 +1,6 @@
+[
+  {"name": "pro", "tool": "create_image_pro", "width": 144, "height": 160, "no_background": true,
+   "description": "Doña Billetes, a middle-aged Bolivian woman boss for a 16-bit beat em up: dark hair with grey streaks pulled back in a low ponytail, stern annoyed face, blue denim jacket with chest pockets (a few banknotes peeking out of the pockets), dark navy t-shirt, black trousers, white sneakers. Full body, side view facing right, standing in a confident fighting-ready stance, arms slightly bent. Same pixel art style, proportions and outline as the style reference character. Transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "character design to follow: face, hair, clothes and colors of this woman", "path": "design/dona_billetes.png"},
+            {"usage": "art style, size and proportions to match (the game's main character)", "path": "assets/pilot/faby_v3/base_right_128.png"}]}
+]

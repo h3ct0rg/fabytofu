@@ -213,6 +213,28 @@ SHEETS["morita"] = {
     },
 }
 
+# Doña Billetes (jefa del nivel 2), 15 % más alta que Faby.
+SHEETS["billetes"] = {
+    "src": ROOT / "assets" / "pilot" / "billetes",
+    "clean": True,
+    "anims": {
+        "idle":   {"dir": "idle", "frames": [0, 1, 2, 3], "ms": [170] * 4, "loop": True, "perFrame": True},
+        "walk":   {"dir": "walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100] * 8, "loop": True, "perFrame": True},
+        "scold":  {"dir": "scold", "frames": [1, 2, 3, 4, 3, 4], "ms": [120, 160, 160, 160, 160, 220], "loop": False, "perFrame": True},
+        "jab":    {"dir": "jab", "frames": [1, 2, 3, 4], "ms": [80, 70, 150, 100], "loop": False, "active": [2], "perFrame": True},
+        "slap":   {"dir": "slap", "frames": [1, 2, 3, 4, 5, 6], "ms": [90, 90, 70, 120, 100, 90], "loop": False, "active": [3, 4], "perFrame": True},
+        "push":   {"dir": "push", "frames": [1, 2, 3, 4], "ms": [90, 90, 120, 200], "loop": False, "perFrame": True},
+        "hold":   {"dir": "push", "frames": [4], "ms": [100], "loop": True, "perFrame": True},
+        "throw":  {"dir": "throw", "frames": [1, 2, 3, 4], "ms": [90, 140, 70, 160], "loop": False, "active": [3], "perFrame": True},
+        "phone":  {"dir": "phone", "frames": [1, 2, 3, 4, 3, 4], "ms": [120, 160, 160, 160, 160, 200], "loop": False, "perFrame": True},
+        "charge": {"dir": "charge", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [60] * 8, "loop": True, "perFrame": True},
+        "hurt":   {"dir": "hurt", "frames": [1, 2, 3, 2], "ms": [70, 160, 120, 90], "loop": False, "perFrame": True},
+        "guard":  {"dir": "tired", "frames": [2, 3, 4, 3], "ms": [120] * 4, "loop": True, "perFrame": True},
+        "ko":     {"dir": "ko", "frames": [1, 2, 3, 4, 5, 6], "ms": [100, 110, 120, 140, 160, 200], "loop": False, "perFrame": True},
+        "down":   {"dir": "ko", "frames": [5, 6], "ms": [500, 500], "loop": True, "perFrame": True},
+    },
+}
+
 def pack(name, sheet):
     frames, meta = [], {}
     for anim, cfg in sheet["anims"].items():

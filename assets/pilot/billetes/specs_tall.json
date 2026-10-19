@@ -1,0 +1,6 @@
+[
+  {"name": "tall", "tool": "create_image_pro", "width": 176, "height": 208, "no_background": true,
+   "description": "Exactly the same woman as the character reference (Doña Billetes): dark hair with grey streaks in a low ponytail, stern angry face, blue denim jacket with green banknotes sticking out of both pockets, dark navy t-shirt, black trousers, white sneakers, same fighting stance, side view facing right. She is TALL: her full body fills the canvas height from head to sneakers (about 180 pixels tall), taller than the style reference character. Same pixel art style and outline. Transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "this exact character: same face, hair, clothes, colors and pose", "path": "assets/pilot/billetes/ref_c0.png"},
+            {"usage": "art style and outline to match (the game's main character, who is shorter)", "path": "assets/pilot/faby_v3/base_right_128.png"}]}
+]
