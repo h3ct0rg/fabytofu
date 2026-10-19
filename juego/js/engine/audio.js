@@ -12,6 +12,22 @@ export function noteFreq(name) {
   return 440 * Math.pow(2, (midi - 69) / 12);
 }
 
+// WAV de 0.1 s de silencio (8 kHz, 8 bits, mono) como data URI.
+function silentWav() {
+  const n = 800;
+  const bytes = new Uint8Array(44 + n);
+  const v = new DataView(bytes.buffer);
+  const str = (o, s) => { for (let i = 0; i < s.length; i++) bytes[o + i] = s.charCodeAt(i); };
+  str(0, 'RIFF'); v.setUint32(4, 36 + n, true); str(8, 'WAVEfmt ');
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true);
+  str(36, 'data'); v.setUint32(40, n, true);
+  bytes.fill(128, 44); // 128 = silencio en PCM de 8 bits
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return `data:audio/wav;base64,${btoa(bin)}`;
+}
+
 // Onda de pulso con ciclo de trabajo variable (el sonido "NES").
 function pulseWave(ctx, duty) {
   const n = 64;
@@ -33,9 +49,13 @@ export class AudioEngine {
 
   // Los navegadores exigen un gesto del usuario antes de sonar.
   unlock() {
-    // iPhone: que el juego suene aunque el interruptor de silencio esté activado.
-    try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* no soportado */ }
-    if (!this.silentTried) { this.silentTried = true; this.playSilentTag(); }
+    if (this.ctx && this.ctx.state === 'running') return;
+    if (!this.silentTried) {
+      this.silentTried = true;
+      // iPhone: que el juego suene aunque el interruptor de silencio esté activado (una sola vez).
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch { /* no soportado */ }
+      this.playSilentTag();
+    }
     if (!this.ctx) {
       const Ctx = window.AudioContext || window.webkitAudioContext;
       if (!Ctx) return;
@@ -65,9 +85,11 @@ export class AudioEngine {
   }
 
   // Truco para iOS antiguos: un <audio> silencioso en bucle pasa la sesión de audio a "reproducción".
+  // El WAV debe tener muestras: uno de duración cero falla al decodificar en Safari y,
+  // en bucle, deja el elemento de audio atascado.
   playSilentTag() {
     try {
-      const a = new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=');
+      const a = new Audio(silentWav());
       a.loop = true;
       a.volume = 0;
       a.setAttribute('playsinline', '');
