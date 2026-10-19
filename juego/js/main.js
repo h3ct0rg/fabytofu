@@ -91,7 +91,7 @@ async function boot() {
       'delivery', 'delivery_open', 'saltena', 'silpancho', 'api', 'ball', 'treat', 'bottle', 'owner',
       // Nivel 2: El Prado y los objetos "fit" de Doña Billetes.
       'p_buildings', 'p_tree', 'p_juice', 'p_fitpet', 'p_fitpet2', 'p_monument', 'p_planter', 'p_palm',
-      'o_bag', 'o_cup', 'o_ball', 'o_stroller', 'o_bill'];
+      'o_bag', 'o_cup', 'o_ball', 'o_stroller', 'o_bill', 'o_bowl'];
     game.bgImages = {};
     await Promise.all(BG.map((n) => loadImage(`assets/bg/${n}.png`).then((im) => { game.bgImages[n] = im; }).catch(() => {})));
     game.stage = new Stage(game);

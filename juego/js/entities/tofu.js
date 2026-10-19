@@ -44,9 +44,32 @@ export class Tofu extends Fighter {
     return !['carried', 'knockdown', 'down'].includes(this.state);
   }
 
+
+  // Modo guion (escenas): camina hasta script.x/y y, al llegar, mira hacia script.face y hace script.anim.
+  runScript(dt, walkAnim, idleAnim) {
+    const sc = this.script;
+    const dx = sc.x - this.x;
+    const dy = (sc.y ?? this.y) - this.y;
+    const step = (sc.speed ?? 140) * dt;
+    this.vx = this.vz = 0;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+      this.x += Math.sign(dx) * Math.min(Math.abs(dx), step);
+      this.y += Math.sign(dy) * Math.min(Math.abs(dy), step * 0.6);
+      if (Math.abs(dx) > 2) this.facing = Math.sign(dx);
+      this.anim.play(walkAnim);
+      sc.arrived = false;
+    } else {
+      if (sc.face) this.facing = sc.face;
+      this.anim.play(sc.anim ?? idleAnim);
+      sc.arrived = true;
+    }
+    this.anim.update(dt);
+  }
+
   update(dt) {
     this.tick(dt);
     if (this.hitstop > 0) { this.hitstop -= dt; return; }
+    if (this.script) { this.runScript(dt, 'walk', 'idle'); return; }
     if (this.callCooldown > 0) this.callCooldown -= dt;
     if (this.petCooldown > 0) this.petCooldown -= dt;
     if (this.alert > 0) this.alert -= dt;

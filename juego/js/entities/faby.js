@@ -94,6 +94,28 @@ export class Faby extends Fighter {
     if (this.exhausted && this.stamina >= EXHAUST_UNTIL) this.exhausted = false;
   }
 
+
+  // Modo guion (escenas): camina hasta script.x/y y, al llegar, mira hacia script.face y hace script.anim.
+  runScript(dt, walkAnim, idleAnim) {
+    const sc = this.script;
+    const dx = sc.x - this.x;
+    const dy = (sc.y ?? this.y) - this.y;
+    const step = (sc.speed ?? 140) * dt;
+    this.vx = this.vz = 0;
+    if (Math.abs(dx) > 2 || Math.abs(dy) > 2) {
+      this.x += Math.sign(dx) * Math.min(Math.abs(dx), step);
+      this.y += Math.sign(dy) * Math.min(Math.abs(dy), step * 0.6);
+      if (Math.abs(dx) > 2) this.facing = Math.sign(dx);
+      this.anim.play(walkAnim);
+      sc.arrived = false;
+    } else {
+      if (sc.face) this.facing = sc.face;
+      this.anim.play(sc.anim ?? idleAnim);
+      sc.arrived = true;
+    }
+    this.anim.update(dt);
+  }
+
   update(dt, input) {
     this.tick(dt);
     if (this.comboShow > 0) this.comboShow -= dt;
@@ -102,6 +124,7 @@ export class Faby extends Fighter {
       this.hitstop -= dt;
       return;
     }
+    if (this.script) { this.runScript(dt, 'walk', 'idle'); return; }
     if (this.comboTimer > 0) this.comboTimer -= dt;
     else this.combo = 0;
     this.updateStamina(dt);

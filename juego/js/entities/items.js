@@ -68,3 +68,61 @@ export function drawBag(ctx, x, y, k, img) {
   ctx.fillRect(x - bw / 2 - 1, y - h / 2 - bh, Math.max(2, Math.round(3 * k)), bh * 2);
   ctx.fillRect(x + bw / 2 - 2, y - h / 2 - bh, Math.max(2, Math.round(3 * k)), bh * 2);
 }
+
+// Plato de croquetas del final del nivel 2: Tofu lo empuja con el hocico hasta Morita,
+// y las croquetas van bajando mientras ella come.
+export class FoodBowl {
+  constructor(stage, x, y) {
+    this.stage = stage;
+    this.x = x;
+    this.y = y;
+    this.z = 0;
+    this.fill = 1;          // 1 = lleno, 0 = vacío
+    this.pusher = null;     // quien lo empuja (Tofu)
+    this.eaters = 0;        // velocidad a la que se vacía
+    this.t = 0;
+  }
+
+  update(dt) {
+    this.t += dt;
+    if (this.pusher) {
+      this.x = this.pusher.x + this.pusher.facing * 36;
+      this.y = this.pusher.y + 3;
+    }
+    if (this.eaters) {
+      const before = this.fill;
+      this.fill = Math.max(0, this.fill - dt * this.eaters);
+      // Un "ñam" de vez en cuando mientras queden croquetas.
+      if (this.fill > 0 && Math.floor(before * 12) !== Math.floor(this.fill * 12)) this.stage.sfx('eat');
+    }
+  }
+
+  drawShadow(ctx, camX) {
+    ctx.fillStyle = COLORS.shadow;
+    ctx.beginPath();
+    ctx.ellipse(Math.round(this.x - camX), Math.round(this.y), 22, 5, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  draw(ctx, camX) {
+    const x = Math.round(this.x - camX);
+    const y = Math.round(this.y);
+    const img = this.stage.game.bgImages.o_bowl;
+    ctx.imageSmoothingEnabled = false;
+    if (img) {
+      // La parte de arriba de la imagen es el montón de croquetas: se recorta según lo que queda.
+      const pile = Math.round(img.height * 0.5);
+      const cut = Math.round(pile * (1 - this.fill));
+      ctx.drawImage(img, 0, cut, img.width, img.height - cut, x - Math.round(img.width / 2), y - img.height + cut, img.width, img.height - cut);
+      return;
+    }
+    // Respaldo dibujado por código: plato rosado con montón de croquetas.
+    ctx.fillStyle = '#140c1c';
+    ctx.fillRect(x - 22, y - 14, 44, 14);
+    ctx.fillStyle = '#ff6fb5';
+    ctx.fillRect(x - 20, y - 12, 40, 10);
+    const h = Math.round(12 * this.fill);
+    ctx.fillStyle = '#8a5a35';
+    for (let i = -16; i <= 12; i += 4) ctx.fillRect(x + i, y - 12 - Math.round(h * (1 - Math.abs(i + 2) / 20)), 4, Math.round(h * (1 - Math.abs(i + 2) / 20)) + 1);
+  }
+}

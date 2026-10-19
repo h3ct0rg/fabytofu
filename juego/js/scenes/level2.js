@@ -3,7 +3,7 @@ import { PradoBackground } from './prado.js';
 import { Morita } from '../entities/morita.js';
 import { Owner } from '../entities/owner.js';
 import { BilletesBoss } from '../entities/billetesBoss.js';
-import { CroquetteBag } from '../entities/items.js';
+import { CroquetteBag, FoodBowl } from '../entities/items.js';
 
 // NIVEL 2: El Prado (Av. Ballivián, Cochabamba) un domingo.
 // Doña Billetes se llevó a Morita, una perrita hambrienta. Faby y Tofu cruzan El Prado
@@ -193,7 +193,8 @@ function startBoss(s, z) {
   ]);
 }
 
-// Doña Billetes cae rendida. Tofu le lleva una croqueta a Morita y Faby le da todas las que juntó.
+// Doña Billetes cae rendida. Tofu le lleva a Morita un plato con todas las croquetas que juntaron;
+// Morita deja de temblar, se acerca y come feliz mientras Faby y Tofu la miran.
 function onBossDefeated(s) {
   s.releaseToken(s.boss);
   s.player.score += 5000;
@@ -201,54 +202,83 @@ function onBossDefeated(s) {
   s.music('victory');
   const m = s.morita;
   const t = s.tofu;
+  const p = s.player;
+  // Todo pasa en el carril de adelante, para que Doña Billetes (sentada) no tape nada.
+  const bowlX = m.x - 70;
+  const bowlY = 500;
+  const near = (a) => !a || a.script?.arrived;
   s.cutscene = new Cutscene(s, [
     { wait: 1.6 },
     { run: (s) => {
       s.enemies = s.enemies.filter((e) => e !== s.boss);
-      for (const e of s.enemies) e.takeHit?.({ damage: 999, knockdown: true, hitstop: 0 }, s.player);
-      s.player.facing = 1;
+      for (const e of s.enemies) e.takeHit?.({ damage: 999, knockdown: true, hitstop: 0 }, p);
+      // Faby saca el plato y lo deja en el suelo; Tofu se pone detrás para empujarlo.
+      p.script = { x: m.x - 340, y: bowlY + 12, face: 1 };
+      if (t) t.script = { x: m.x - 290, y: bowlY - 3, face: 1 };
     } },
-    // Faby y Tofu se acercan a Morita.
-    { until: (s, dt) => {
-      const p = s.player;
-      const gx = m.x - 110;
-      p.x += Math.sign(gx - p.x) * Math.min(Math.abs(gx - p.x), 3);
-      p.y += Math.sign(m.y + 30 - p.y) * Math.min(Math.abs(m.y + 30 - p.y), 2);
-      p.anim.play(Math.abs(gx - p.x) > 3 ? 'walk' : 'idle');
-      if (t) { t.x = Math.min(t.x + 4, m.x - 46); t.y += Math.sign(m.y - t.y) * Math.min(Math.abs(m.y - t.y), 2); t.facing = 1; }
-      return Math.abs(gx - p.x) <= 3 && (!t || t.x >= m.x - 46);
-    }, timeout: 6 },
+    { until: () => near(p) && near(t), timeout: 5 },
     { run: (s) => {
-      s.player.anim.play('idle');
-      s.fx.text(m.x - 30, m.y - 70, '♥', '#ff2fa8', 16);
+      s.bowl = new FoodBowl(s, (t ?? p).x + 36, bowlY);
+      s.foods.push(s.bowl);
+      s.sfx('pickup');
+      s.fx.text(s.bowl.x, m.y - 60, `¡CROQUETAS x${Math.max(1, s.croquettes)}!`, '#ffd23f', 12);
+    } },
+    { say: 'faby', text: 'Tofu, llévale esto a Morita. ¡Con cuidadito!' },
+    // Tofu empuja el plato con el hocico hasta Morita.
+    { run: (s) => {
+      if (!t) { s.bowl.x = bowlX; s.bowl.y = bowlY; return; }
+      s.bowl.pusher = t;
+      t.script = { x: bowlX - 36, y: bowlY - 3, face: 1, speed: 70 };
+    } },
+    { until: () => near(t), timeout: 7 },
+    { run: (s) => {
+      s.bowl.pusher = null;
+      s.fx.text(s.bowl.x, m.y - 70, '♥', '#ff2fa8', 16);
       s.sfx('heart');
     } },
-    { say: 'tofu', text: 'Guau… (Toma, es mi croqueta. Para ti.)' },
-    { say: 'faby', text: 'Ya, ya, chiquita, no tiembles más. ¡Todas estas croquetas son para ti!' },
-    { run: (s) => {
-      m.carrier = null;
-      m.feed();
-      s.sfx('eat');
-      s.music('morita');
-      s.fx.text(m.x, m.y - 90, `¡ÑAM! x${Math.max(1, s.croquettes)}`, '#ffd23f', 14);
+    { say: 'tofu', text: 'Guau… (Toma, Morita. ¡Todas son para ti!)' },
+    // Tofu se hace a un lado; Morita deja de temblar y se acerca al plato.
+    { run: () => {
+      if (t) t.script = { x: bowlX - 70, y: bowlY + 16, face: 1, speed: 90 };
+      m.play('idle');
     } },
-    { wait: 2.6 },
+    { wait: 0.8 },
+    { run: () => { m.walkTo(bowlX + 30, 70, bowlY - 2); } },
+    { until: () => Math.abs(m.x - m.targetX) < 3 && Math.abs(m.y - m.targetY) < 3, timeout: 6 },
+    { run: (s) => {
+      m.facing = -1;
+      m.feed();
+      s.bowl.eaters = 0.22;
+      s.music('morita');
+      s.fx.text(m.x, m.y - 70, '¡ÑAM ÑAM!', '#ffd23f', 12);
+      // Faby y Tofu se acercan a mirar cómo come.
+      p.script = { x: bowlX - 150, y: bowlY + 14, face: 1, speed: 110 };
+      if (t) t.script = { x: bowlX - 62, y: bowlY + 20, face: 1, speed: 80, anim: 'happy' };
+    } },
+    { until: () => near(p) && near(t), timeout: 5 },
+    { say: 'faby', text: '¡Mírala, Tofu! Come feliz…' },
+    { until: (s) => s.bowl.fill <= 0, timeout: 4 },
     { run: (s) => {
       m.play('happy');
       for (let i = 0; i < 3; i++) s.fx.text(m.x - 30 + i * 30, m.y - 70 - i * 10, '♥', '#ff2fa8', 14);
       s.sfx('heart');
+      s.fx.text(m.x, m.y - 110, '¡PANCITA LLENA!', '#ffb3d9', 12);
     } },
     { say: 'billetes', text: '…¡No sabía que Morita tenía tanta hambre!' },
     { say: 'billetes', text: 'Bueno… croquetas de verdad. Pero de calidad, ¿ya?' },
-    // Morita corre feliz alrededor.
-    { run: () => m.walkTo(m.x + 160, 260) },
+    // Morita, gordita, corre feliz alrededor.
+    { run: () => m.walkTo(m.x + 170, 260) },
     { until: () => Math.abs(m.x - m.targetX) < 3, timeout: 2 },
-    { run: () => m.walkTo(m.x - 300, 260) },
+    { run: () => m.walkTo(m.x - 120, 260) },
     { until: () => Math.abs(m.x - m.targetX) < 3, timeout: 2 },
-    { run: () => { m.walkTo(m.x + 140, 260); m.mood = 'happy'; } },
+    { run: () => { m.walkTo(m.x + 80, 260); m.mood = 'happy'; } },
     { until: () => Math.abs(m.x - m.targetX) < 3, timeout: 2 },
     { say: 'tofu', text: '¡GUAU! (¡Ahora sí, a jugar!)' },
     { wait: 0.4 },
-    { run: (s) => s.finishLevel() },
+    { run: (s) => {
+      p.script = null;
+      if (t) t.script = null;
+      s.finishLevel();
+    } },
   ]);
 }

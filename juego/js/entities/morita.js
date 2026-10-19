@@ -18,8 +18,9 @@ export class Morita {
     this.t = 0;
   }
 
-  walkTo(x, speed = this.fed ? 260 : 90) {
+  walkTo(x, speed = this.fed ? 260 : 90, y = null) {
     this.targetX = x;
+    this.targetY = y;
     this.speed = speed;
   }
 
@@ -50,10 +51,12 @@ export class Morita {
     }
     this.z = 0;
     const dx = this.targetX - this.x;
-    const moving = Math.abs(dx) > 2;
+    const dy = this.targetY == null ? 0 : this.targetY - this.y;
+    const moving = Math.abs(dx) > 2 || Math.abs(dy) > 2;
     if (moving) {
       this.x += Math.sign(dx) * Math.min(Math.abs(dx), this.speed * dt);
-      this.facing = Math.sign(dx);
+      this.y += Math.sign(dy) * Math.min(Math.abs(dy), this.speed * 0.6 * dt);
+      if (Math.abs(dx) > 2) this.facing = Math.sign(dx);
       this.anim.play(this.fed ? 'run' : 'walk');
     } else if (this.anim.name === 'walk' || this.anim.name === 'run') {
       this.anim.play(this.fed && this.mood === 'idle' ? 'happy' : this.mood);
