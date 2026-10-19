@@ -1,0 +1,12 @@
+[
+  {"name": "idle", "base": "assets/pilot/morita/base_stand_80.png", "frames": 4,
+   "action": "standing idle loop, sad and hungry, small slow breathing, slight shiver, tail down, staying in place, no effects"},
+  {"name": "walk", "base": "assets/pilot/morita/base_stand_80.png", "frames": 8,
+   "action": "timid trotting walk cycle in place facing right, staying in the same spot, small light steps, ears bouncing softly, head a little low, loopable, no effects"},
+  {"name": "howl", "base": "assets/pilot/morita/base_stand_80.png", "frames": 4,
+   "action": "sad hungry howl: raises her head up toward the sky, mouth opening in a long howl, ears falling back, then lowers head, staying in place, no effects, no music notes"},
+  {"name": "eat", "base": "assets/pilot/morita/base_stand_80.png", "frames": 4,
+   "action": "lowers her head to the ground and eats kibble happily, munching, tail starting to wag, staying in place, no bowl, no effects"},
+  {"name": "tremble", "base": "assets/pilot/morita/base_curl_80.png", "frames": 4,
+   "action": "curled up sitting, shivering and trembling with fear and hunger, eyes closed, ears down, staying in place, no effects, no motion lines"}
+]

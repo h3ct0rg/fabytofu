@@ -438,3 +438,9 @@ Las fases 1 y 7 no gastan generaciones. La fase 1 puede avanzar en paralelo con 
 
 ### Pendientes
 1. Confirmar las comidas de recuperación (salteña, silpancho, api con pastel) y las frases cochabambinas.
+
+---
+
+## 11. Siguiente: Nivel 2
+
+El plan del **Nivel 2 — El Prado** (Morita, Doña Billetes y la amenaza de venganza de Corli) está en [plan-nivel2.md](plan-nivel2.md).

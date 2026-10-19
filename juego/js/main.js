@@ -81,7 +81,7 @@ const game = {
 async function boot() {
   try {
     await document.fonts.load(`16px ${FONT}`).catch(() => {});
-    for (const n of ['faby', 'tofu', 'jogger', 'skater', 'dog', 'pug']) game.sheets[n] = await loadSheet(n);
+    for (const n of ['faby', 'tofu', 'jogger', 'skater', 'dog', 'pug', 'morita']) game.sheets[n] = await loadSheet(n);
     // Ilustraciones del parque (si alguna falta, el escenario la omite).
     const BG = ['tunari', 'city', 'street', 'treeline', 'canchas', 'glorieta', 'pergola', 'pond',
       'lamp', 'bench', 'flag', 'bush', 'flowerbed',

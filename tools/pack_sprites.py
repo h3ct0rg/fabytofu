@@ -189,13 +189,29 @@ def torso_cx(img):
     return sum(xs) / len(xs)
 
 
-def frame_anchors(src, imgs):
+def frame_anchors(src, imgs, k=1):
     """Anclas por cuadro: y = pies de ese cuadro; x = sigue al torso, para que el cuerpo
     no salte de lado cuando la IA desplazó el dibujo dentro del lienzo."""
     base = Image.open(src / "f0.png").convert("RGBA")
-    offset = torso_cx(base) - feet_anchor(base)[0]
+    offset = (torso_cx(base) - feet_anchor(base)[0]) * k
     return [[round(torso_cx(im) - offset), feet_anchor(im)[1]] for im in imgs]
 
+
+# Morita (nivel 2): perrita más chica y flaquita que Tofu; "happy" y "run" son su versión gordita del final.
+SHEETS["morita"] = {
+    "src": ROOT / "assets" / "pilot" / "morita",
+    "clean": True,
+    "scale": 0.72,
+    "anims": {
+        "idle":    {"dir": "idle", "frames": [0, 2, 3, 2], "ms": [220] * 4, "loop": True, "dropWhite": True},
+        "walk":    {"dir": "walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [110] * 8, "loop": True, "perFrame": True},
+        "howl":    {"dir": "howl", "frames": [1, 2, 3, 2, 3, 4], "ms": [120, 160, 400, 200, 400, 200], "loop": False},
+        "tremble": {"dir": "tremble", "frames": [0, 1, 2, 3], "ms": [70] * 4, "loop": True},
+        "eat":     {"dir": "eat2", "frames": [3, 4, 3, 4], "ms": [160, 200, 160, 200], "loop": True, "optional": True, "dropWhite": True},
+        "happy":   {"dir": "happy", "frames": [0, 1, 2, 3], "ms": [120] * 4, "loop": True, "optional": True},
+        "run":     {"dir": "run", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [65] * 8, "loop": True, "perFrame": True, "optional": True, "dropRed": True},
+    },
+}
 
 def pack(name, sheet):
     frames, meta = [], {}
@@ -212,10 +228,37 @@ def pack(name, sheet):
                         r, g, b, a = px[x, y]
                         if a and r > 225 and g > 225 and b > 200:
                             px[x, y] = (0, 0, 0, 0)
+        if cfg.get("dropRed"):
+            # Quita corazoncitos rojos pegados a la cabeza (el moño rosado no se toca).
+            for im in imgs:
+                px = im.load()
+                for y in range(im.height):
+                    for x in range(im.width):
+                        r, g, b, a = px[x, y]
+                        if a and r > 150 and g < 90 and b < 90:
+                            px[x, y] = (0, 0, 0, 0)
+                # Su contorno oscuro queda flotando: se borra el contorno que no toca pelo ni ropa.
+                dark = lambda c: c[3] and sum(c[:3]) < 200
+                changed = True
+                while changed:
+                    changed = False
+                    for y in range(im.height):
+                        for x in range(im.width):
+                            if not dark(px[x, y]):
+                                continue
+                            near = [px[nx, ny] for nx in (x - 1, x, x + 1) for ny in (y - 1, y, y + 1)
+                                    if 0 <= nx < im.width and 0 <= ny < im.height]
+                            if not any(c[3] and not dark(c) for c in near):
+                                px[x, y] = (0, 0, 0, 0)
+                                changed = True
         if cfg.get("clean") or sheet.get("clean"):
             imgs = [keep_largest(im) for im in imgs]
+        if sheet.get("scale"):
+            # Personajes más chicos que su lienzo de generación (Morita es 2/3 de Tofu).
+            k = sheet["scale"]
+            imgs = [im.resize((round(im.width * k), round(im.height * k)), Image.NEAREST) for im in imgs]
         ax, ay = feet_anchor(imgs[0])
-        anchors = frame_anchors(sheet["src"] / cfg["dir"], imgs) if cfg.get("perFrame") else None
+        anchors = frame_anchors(sheet["src"] / cfg["dir"], imgs, sheet.get("scale", 1)) if cfg.get("perFrame") else None
         start = len(frames)
         frames.extend(imgs)
         meta[anim] = {

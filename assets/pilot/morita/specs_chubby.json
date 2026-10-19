@@ -1,0 +1,5 @@
+[
+  {"name": "chubby", "tool": "create_image_pro", "width": 64, "height": 64, "no_background": true,
+   "description": "The same dog Morita from the reference (tiny female apricot toy poodle, pink collar, pink ribbon bow on her ear), but now well fed: a little chubbier with a round full belly, very happy, eyes bright, mouth open smiling with tongue out, tail up wagging. Standing in three-quarter view facing right, full body, same pixel art style, clean dark outline, transparent background, single character, no text, no shadow, no effects.",
+   "refs": [{"usage": "this exact dog: same colors, bow, collar and art style; only make her a bit chubbier and happy", "path": "assets/pilot/morita/base/c8.png"}]}
+]

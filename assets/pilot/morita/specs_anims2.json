@@ -1,0 +1,8 @@
+[
+  {"name": "eat2", "base": "assets/pilot/morita/base_stand_80.png", "frames": 4,
+   "action": "bends her neck all the way down until her nose touches the ground in front of her front paws and chews food from the ground, head bobbing down while munching, tail wagging, staying in place, no bowl, no effects"},
+  {"name": "happy", "base": "assets/pilot/morita/base_chubby_80.png", "frames": 4,
+   "action": "standing happy idle loop: tail wagging fast, small happy bounce, tongue out panting, staying in place, no effects, no hearts"},
+  {"name": "run", "base": "assets/pilot/morita/base_chubby_80.png", "frames": 8,
+   "action": "joyful bouncy run cycle in place facing right, staying in the same spot, chubby round belly bouncing, ears flapping, tail up wagging, loopable, no effects"}
+]

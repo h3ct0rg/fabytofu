@@ -1,0 +1,5 @@
+[
+  {"name": "base", "tool": "create_image_pro", "width": 64, "height": 64, "no_background": true,
+   "description": "Morita: a tiny skinny female toy poodle puppy, same apricot curly fur and same pixel art style as the reference dog Tofu, but smaller, thinner and more delicate: slim narrow body, thin legs, slightly sunken belly, fluffy curly ears. She wears a pink collar and a small pink ribbon bow on one ear. Standing in three-quarter view facing right, full body, shy and a little sad, hungry expression, head slightly lowered, tail down. Clean dark outline, vivid colors, transparent background, single character, no text, no shadow.",
+   "refs": [{"usage": "same breed, same apricot fur color and same art style as this dog (Tofu); the new dog is a smaller, thinner female", "path": "assets/pilot/tofu/base_stand_112.png"}]}
+]

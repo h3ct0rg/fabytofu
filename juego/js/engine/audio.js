@@ -304,4 +304,10 @@ const SFX = {
   select: (a, t) => [660, 990].forEach((f, i) => a.tone(t + i * 0.07, f, 0.07, { wave: 'p25', vol: 0.2 })),
   lifeLost: (a, t) => [440, 392, 330, 262].forEach((f, i) => a.tone(t + i * 0.12, f, 0.12, { wave: 'p25', vol: 0.22 })),
   stomp: (a, t) => a.tone(t, 70, 0.12, { wave: 'triangle', vol: 0.45, slide: 0.6 }),
+  // Aullido de Morita: sube, se sostiene temblando y cae.
+  howl: (a, t) => {
+    a.tone(t, 560, 0.3, { wave: 'triangle', vol: 0.22, slide: 1.45, attack: 0.06 });
+    [0, 1, 2, 3].forEach((i) => a.tone(t + 0.3 + i * 0.14, i % 2 ? 790 : 830, 0.14, { wave: 'triangle', vol: 0.2, release: 0.02 }));
+    a.tone(t + 0.86, 810, 0.6, { wave: 'triangle', vol: 0.2, slide: 0.5, release: 0.25 });
+  },
 };
