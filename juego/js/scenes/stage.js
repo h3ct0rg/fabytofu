@@ -16,6 +16,7 @@ import { Owner } from '../entities/owner.js';
 import { Cutscene, NO_INPUT } from './cutscene.js';
 import { Chihuahua } from '../entities/chihuahua.js';
 import { drawBag } from '../entities/items.js';
+import { levelCode, prettyCode } from '../engine/codes.js';
 import { LEVEL2 } from './level2.js';
 
 const WORLD_W = 3400;
@@ -614,11 +615,19 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
     heart(ctx, hx, hy, true);
   }
   ctx.fillStyle = 'rgba(20, 12, 40, 0.72)';
-  ctx.fillRect(420, 110, 440, 310);
+  const last = this.levelNum >= LAST_LEVEL;
+  const panelH = last ? 310 : 352;
+  ctx.fillRect(420, 110, 440, panelH);
   ctx.strokeStyle = '#ff2fa8';
   ctx.lineWidth = 3;
-  ctx.strokeRect(421.5, 111.5, 437, 307);
-  const last = this.levelNum >= LAST_LEVEL;
+  ctx.strokeRect(421.5, 111.5, 437, panelH - 3);
+  // Código personal para empezar directo en el siguiente nivel.
+  if (!last) {
+    ctx.fillStyle = 'rgba(255, 210, 63, 0.15)';
+    ctx.fillRect(436, 412, 408, 40);
+    text(ctx, `CÓDIGO PARA EL NIVEL ${this.levelNum + 1}:  ${prettyCode(levelCode(this.levelNum + 1))}`, 640, 432, 11, '#ffd23f', 'center');
+    text(ctx, '¡Anótalo! Solo sirve en este dispositivo', 640, 447, 7, '#ffffff', 'center');
+  }
   text(ctx, last ? '¡GRACIAS POR JUGAR!' : `¡NIVEL ${this.levelNum} COMPLETADO!`, 640, 150, last ? 22 : 20, '#ff2fa8', 'center');
   text(ctx, 'FABY & TOFU', 640, 200, 16, '#7df9ff', 'center');
   text(ctx, this.levelNum === 2 ? 'El Prado · Cochabamba' : 'Parque Lincoln · Cochabamba', 640, 228, 10, '#ffffff', 'center');
@@ -648,7 +657,7 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
     text(ctx, names[type], 520, y + 18, 10, '#ffffff');
     text(ctx, `x${this.foodEaten[type] ?? 0}`, 800, y + 18, 12, '#ffd23f', 'right');
   });
-  if (Math.floor(t * 2) % 2 === 0) text(ctx, last ? 'J / ENTER PARA VOLVER AL INICIO' : `J / ENTER: ¡AL NIVEL ${this.levelNum + 1}! · K: MENÚ`, 640, 448, 10, '#ffd23f', 'center');
+  if (Math.floor(t * 2) % 2 === 0) text(ctx, last ? 'J / ENTER PARA VOLVER AL INICIO' : `J / ENTER: ¡AL NIVEL ${this.levelNum + 1}! · K: MENÚ`, 640, last ? 448 : 486, 10, '#ffd23f', 'center');
 };
 
 Stage.prototype.drawTofuHud = function drawTofuHud(ctx, t) {

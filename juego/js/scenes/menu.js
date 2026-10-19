@@ -1,12 +1,14 @@
 import { VIEW_W, VIEW_H } from '../config.js';
 import { SLOTS, loadSlot, clearSlot, saveSettings } from '../engine/save.js';
-import { hudText as text } from './stage.js';
+import { hudText as text, LAST_LEVEL } from './stage.js';
+import { ALPHABET, CODE_LEN, checkCode } from '../engine/codes.js';
 
 // Pantalla de inicio: fondo del parque con la persecución (Faby tras Tofu; luego el Pug tras los dos),
 // menú JUGAR / CONFIGURAR, ranuras de partida y configuración. Se maneja con teclado, mando o toque.
 
 const GROUND = 508;
 const DIFFICULTY = ['FÁCIL', 'NORMAL', 'DIFÍCIL'];
+const CODE_COLS = 7;
 
 export class Menu {
   constructor(game) {
@@ -17,6 +19,14 @@ export class Menu {
     this.parade = 0;          // tiempo de la animación de fondo
     this.slotSel = 0;
     this.items = [];          // rectángulos clicables del cuadro actual
+    this.code = '';           // código de nivel que se está escribiendo
+    // En la PC también se puede escribir el código con el teclado.
+    window.addEventListener('keydown', (e) => {
+      if (this.game.scene !== 'title' || this.screen !== 'code') return;
+      const k = e.key.toUpperCase();
+      if (k.length === 1 && ALPHABET.includes(k)) this.typeKey(k);
+      else if (e.key === 'Backspace') this.typeKey('<');
+    });
   }
 
   open() {
@@ -46,10 +56,16 @@ export class Menu {
         const list = [];
         if (data && !data.done && (data.zone > 0 || data.level > 1)) list.push({ label: 'CONTINUAR', go: () => g.startGame(this.slotSel, data) });
         list.push({ label: data ? 'NUEVA PARTIDA' : 'EMPEZAR', go: () => g.startGame(this.slotSel, { best: data?.best ?? 0 }) });
+        const ci = list.length;
+        list.push({ label: 'CÓDIGO DE NIVEL', go: () => { this.code = ''; this.codeReturn = ci; this.goto('code'); } });
         if (data) list.push({ label: 'BORRAR PARTIDA', go: () => { clearSlot(this.slotSel); this.goto('slots', this.slotSel); } });
         list.push({ label: 'VOLVER', go: () => this.goto('slots', this.slotSel) });
         return list;
       }
+      case 'code':
+        // Teclado en pantalla: las letras del código, borrar y aceptar.
+        return [...ALPHABET].map((k) => ({ key: k, go: () => this.typeKey(k) }))
+          .concat([{ key: '<', go: () => this.typeKey('<') }, { key: 'OK', go: () => this.submitCode() }]);
       case 'config': {
         const s = g.settings;
         return [
@@ -107,6 +123,30 @@ export class Menu {
     this.toastTime = 3;
   }
 
+  typeKey(k) {
+    if (k === '<') this.code = this.code.slice(0, -1);
+    else if (this.code.length < CODE_LEN) this.code += k;
+    this.game.audio.play('blip');
+  }
+
+  // Código correcto: empieza la partida en ese nivel. Incorrecto: aviso y de vuelta al menú de la partida.
+  submitCode() {
+    const g = this.game;
+    const lv = this.code.length === CODE_LEN ? checkCode(this.code, LAST_LEVEL) : null;
+    if (!lv) {
+      g.audio.play('lifeLost');
+      this.toast = 'NO ES UN CÓDIGO VÁLIDO';
+      this.toastTime = 2.5;
+      this.goto('slot', this.codeReturn ?? 0);
+      return;
+    }
+    const best = loadSlot(this.slotSel)?.best ?? 0;
+    const data = { level: lv, zone: 0, score: 0, lives: 3, done: false, best };
+    g.startGame(this.slotSel, data);
+    g.saveProgress(data);
+    g.stage.banner = { text: '¡CÓDIGO CORRECTO!', sub: `NIVEL ${lv}`, time: 2 };
+  }
+
   pickSlot(i) {
     this.slotSel = i;
     this.goto('slot');
@@ -123,6 +163,7 @@ export class Menu {
     if (this.toastTime > 0) this.toastTime -= dt;
     this.parade += dt;
     const opts = this.options();
+    if (this.screen === 'code') return this.updateCode(input, opts);
     // En las ranuras (que van en fila) también se navega con izquierda/derecha.
     const horiz = this.screen === 'slots';
     if (input.pressed.up || (horiz && input.pressed.left)) { this.sel = (this.sel - 1 + opts.length) % opts.length; this.game.audio.play('blip'); }
@@ -138,6 +179,22 @@ export class Menu {
     }
     if (input.pressed.jump && this.screen !== 'main') {
       this.goto(this.screen === 'slot' ? 'slots' : 'main', this.screen === 'slot' ? this.slotSel : 0);
+    }
+  }
+
+  // Teclado del código: flechas en la grilla, J elige la letra, Enter acepta, K borra (o vuelve si está vacío).
+  updateCode(input, opts) {
+    const n = opts.length;
+    const move = (d) => { this.sel = Math.max(0, Math.min(n - 1, this.sel + d)); this.game.audio.play('blip'); };
+    if (input.pressed.left) move(-1);
+    if (input.pressed.right) move(1);
+    if (input.pressed.up) move(-CODE_COLS);
+    if (input.pressed.down) move(CODE_COLS);
+    if (input.pressed.attack) opts[this.sel].go();
+    else if (input.pressed.pause) this.submitCode();
+    if (input.pressed.jump) {
+      if (this.code) this.typeKey('<');
+      else this.goto('slot', this.codeReturn ?? 0);
     }
   }
 
@@ -170,6 +227,7 @@ export class Menu {
 
     this.items = [];
     if (this.screen === 'slots') this.drawSlots(ctx);
+    else if (this.screen === 'code') this.drawCode(ctx);
     else this.drawList(ctx, this.screen === 'slot' ? `PARTIDA ${this.slotSel + 1}` : this.screen === 'config' ? 'CONFIGURAR' : null);
 
     // Estadísticas en línea (solo en la pantalla de inicio)
@@ -179,11 +237,11 @@ export class Menu {
     if (g.audio.muted) text(ctx, 'SONIDO SILENCIADO (M)', VIEW_W - 16, 26, 8, '#ff3040', 'right');
     if (this.toastTime > 0) {
       ctx.fillStyle = 'rgba(20, 12, 40, 0.9)';
-      ctx.fillRect(VIEW_W / 2 - 300, 400, 600, 40);
+      ctx.fillRect(VIEW_W / 2 - 300, 458, 600, 40);
       ctx.strokeStyle = '#7df9ff';
       ctx.lineWidth = 2;
-      ctx.strokeRect(VIEW_W / 2 - 299, 401, 598, 38);
-      text(ctx, this.toast, VIEW_W / 2, 426, 10, '#7df9ff', 'center');
+      ctx.strokeRect(VIEW_W / 2 - 299, 459, 598, 38);
+      text(ctx, this.toast, VIEW_W / 2, 484, 10, '#7df9ff', 'center');
     }
     // Arriba a la izquierda: abajo quedan los botones táctiles en el celular.
     ctx.fillStyle = 'rgba(20, 12, 40, 0.7)';
@@ -192,7 +250,7 @@ export class Menu {
     text(ctx, `JUGANDO AHORA: ${online}`, 18, 43, 8, '#7df9ff');
 
     const help = g.input.usingTouch ? 'Toca una opción para elegirla' : 'Flechas: elegir y ajustar · J/Enter: aceptar · K: volver';
-    text(ctx, help, 20, VIEW_H - 22, 8, '#ffffff');
+    if (this.screen !== 'code') text(ctx, help, 20, VIEW_H - 22, 8, '#ffffff');
   }
 
   drawList(ctx, title) {
@@ -216,6 +274,41 @@ export class Menu {
       this.items.push({ x, y: y - 24, w, h: 36, i });
       y += 48;
     });
+  }
+
+  drawCode(ctx) {
+    text(ctx, `CÓDIGO DE NIVEL · PARTIDA ${this.slotSel + 1}`, VIEW_W / 2, 190, 14, '#ffd23f', 'center');
+    // Casillas del código
+    for (let i = 0; i < CODE_LEN; i++) {
+      const x = VIEW_W / 2 - 3 * 50 + i * 50 + (i >= 3 ? 16 : 0) - 8;
+      ctx.fillStyle = 'rgba(20, 12, 40, 0.85)';
+      ctx.fillRect(x, 206, 40, 44);
+      ctx.strokeStyle = i === this.code.length ? '#ffd23f' : '#ff2fa8';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x + 1, 207, 38, 42);
+      const ch = this.code[i] ?? (i === this.code.length && Math.floor(this.t * 3) % 2 ? '_' : '');
+      text(ctx, ch, x + 21, 240, 20, '#ffffff', 'center');
+    }
+    text(ctx, '-', VIEW_W / 2 - 1, 238, 16, '#ffffff', 'center');
+    // Teclado
+    const opts = this.options();
+    const cw = 62, ch = 44;
+    const x0 = VIEW_W / 2 - (CODE_COLS * cw) / 2;
+    opts.forEach((o, i) => {
+      const x = x0 + (i % CODE_COLS) * cw;
+      const y = 268 + Math.floor(i / CODE_COLS) * (ch + 8);
+      const on = i === this.sel;
+      ctx.fillStyle = on ? 'rgba(255, 47, 168, 0.9)' : 'rgba(20, 12, 40, 0.8)';
+      ctx.fillRect(x + 3, y, cw - 6, ch);
+      ctx.strokeStyle = on ? '#ffffff' : '#7df9ff';
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x + 4, y + 1, cw - 8, ch - 2);
+      const label = o.key === '<' ? 'BORRA' : o.key;
+      text(ctx, label, x + cw / 2, y + 29, label.length > 1 ? 9 : 16, o.key === 'OK' ? '#7dff8a' : '#ffffff', 'center');
+      this.items.push({ x: x + 3, y, w: cw - 6, h: ch, i });
+    });
+    const help = this.game.input.usingTouch ? 'Toca las letras y luego OK' : 'Escribe o usa flechas + J · Enter: aceptar · K: borrar / volver';
+    text(ctx, help, VIEW_W / 2, VIEW_H - 22, 8, '#7df9ff', 'center');
   }
 
   drawSlots(ctx) {
