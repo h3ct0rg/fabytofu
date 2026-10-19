@@ -313,10 +313,10 @@ export class BilletesBoss extends Fighter {
     const x = this.x - camX;
     const y = this.y - this.z;
     const ball = this.state === 'hold' || (this.state === 'windup' && this.next === 'hold');
-    if (ball && this.facing < 0) drawBall(ctx, x + this.facing * 62, y - 4, 0);
-    if (this.state === 'charge' || (this.state === 'windup' && this.next === 'charge')) drawStroller(ctx, x + this.facing * 70, y, this.facing, this.stateTime);
+    if (ball && this.facing < 0) drawBall(ctx, x + this.facing * 62, y - 4, 0, this.stage.game.bgImages.o_ball);
+    if (this.state === 'charge' || (this.state === 'windup' && this.next === 'charge')) drawStroller(ctx, x + this.facing * 70, y, this.facing, this.stateTime, this.stage.game.bgImages.o_stroller);
     drawSprite(ctx, this.anim, x, y, this.facing, { flash: this.flash > 0 });
-    if (ball && this.facing > 0) drawBall(ctx, x + this.facing * 62, y - 4, 0);
+    if (ball && this.facing > 0) drawBall(ctx, x + this.facing * 62, y - 4, 0, this.stage.game.bgImages.o_ball);
     if (this.state === 'windup') {
       ctx.fillStyle = this.next === 'charge' ? '#ff4040' : '#ffd23f';
       ctx.fillRect(Math.round(x) - 3, Math.round(y) - 212, 6, 16);

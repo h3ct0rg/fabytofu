@@ -37,6 +37,18 @@ export class Morita {
 
   update(dt) {
     this.t += dt;
+    // En brazos de alguien (Doña Billetes se la lleva).
+    if (this.carrier) {
+      const c = this.carrier;
+      this.facing = c.facing;
+      this.x = c.x + c.facing * 26;
+      this.y = c.y + 2;
+      this.z = 84;
+      if (this.anim.done && this.mood === 'howl') this.play('tremble');
+      this.anim.update(dt);
+      return;
+    }
+    this.z = 0;
     const dx = this.targetX - this.x;
     const moving = Math.abs(dx) > 2;
     if (moving) {
@@ -51,6 +63,7 @@ export class Morita {
   }
 
   drawShadow(ctx, camX) {
+    if (this.carrier) return;
     ctx.fillStyle = COLORS.shadow;
     ctx.beginPath();
     ctx.ellipse(Math.round(this.x - camX), Math.round(this.y), this.fed ? 18 : 15, 4, 0, 0, Math.PI * 2);

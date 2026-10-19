@@ -41,14 +41,20 @@ export class CroquetteBag {
 
   draw(ctx, camX) {
     const bob = this.z === 0 ? Math.round(Math.sin(this.t * 4) * 2) : 0;
-    drawBag(ctx, this.x - camX, this.y - this.z - 4 + bob, 1);
+    drawBag(ctx, this.x - camX, this.y - this.z - 4 + bob, 1, this.stage.game.bgImages.o_bag);
   }
 }
 
 // Bolsita rosada con un hueso dibujado.
-export function drawBag(ctx, x, y, k) {
+export function drawBag(ctx, x, y, k, img) {
   x = Math.round(x);
   y = Math.round(y);
+  if (img) {
+    ctx.imageSmoothingEnabled = false;
+    const w = Math.round(img.width * k), h = Math.round(img.height * k);
+    ctx.drawImage(img, x - Math.round(w / 2), y - h, w, h);
+    return;
+  }
   const w = Math.round(22 * k), h = Math.round(26 * k);
   ctx.fillStyle = '#140c1c';
   ctx.fillRect(x - w / 2 - 2, y - h - 2, w + 4, h + 4);

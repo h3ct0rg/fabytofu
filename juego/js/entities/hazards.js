@@ -8,7 +8,19 @@ const SHAKE = { damage: 5, push: 80, hitstop: 0.05 };
 const BILL = { damage: 6, push: 60, hitstop: 0.05 };
 const SLIP = { damage: 2, knockdown: true, hitstop: 0.03 };
 
-export function drawBall(ctx, x, y, spin) {
+// Imagen de PixelLab dibujada nítida (sin suavizado), con giro y escala opcionales.
+function sprite(ctx, img, x, y, k = 1, rot = 0, flip = false) {
+  ctx.save();
+  ctx.imageSmoothingEnabled = false;
+  ctx.translate(Math.round(x), Math.round(y));
+  if (flip) ctx.scale(-1, 1);
+  if (rot) ctx.rotate(rot);
+  ctx.drawImage(img, Math.round(-img.width * k / 2), Math.round(-img.height * k / 2), Math.round(img.width * k), Math.round(img.height * k));
+  ctx.restore();
+}
+
+export function drawBall(ctx, x, y, spin, img) {
+  if (img) return sprite(ctx, img, x, y - 38, 1.4, spin);
   x = Math.round(x);
   y = Math.round(y);
   ctx.fillStyle = '#140c1c';
@@ -24,7 +36,8 @@ export function drawBall(ctx, x, y, spin) {
   ctx.fillRect(x - 18, y - 64, 6, 6);
 }
 
-export function drawStroller(ctx, x, y, dir, t) {
+export function drawStroller(ctx, x, y, dir, t, img) {
+  if (img) return sprite(ctx, img, x, y - img.height / 2 + Math.round(Math.sin(t * 30)), 1, 0, dir < 0);
   x = Math.round(x);
   y = Math.round(y);
   ctx.save();
@@ -94,7 +107,7 @@ export class PilatesBall {
   }
 
   draw(ctx, camX) {
-    drawBall(ctx, this.x - camX, this.y, this.spin);
+    drawBall(ctx, this.x - camX, this.y, this.spin, this.stage.game.bgImages.o_ball);
   }
 }
 
@@ -138,6 +151,8 @@ export class Shake {
   draw(ctx, camX) {
     const x = Math.round(this.x - camX);
     const y = Math.round(this.y - this.z);
+    const img = this.stage.game.bgImages.o_cup;
+    if (img) return sprite(ctx, img, x, y, 1, this.z * 0.03);
     ctx.fillStyle = '#140c1c';
     ctx.fillRect(x - 8, y - 14, 16, 22);
     ctx.fillStyle = '#e8f4ff';
@@ -221,6 +236,8 @@ export class Bill {
     if (this.t < this.delay) return;
     const x = Math.round(this.x - camX + Math.sin(this.t * 9) * 6);
     const y = Math.round(this.y - this.z);
+    const img = this.stage.game.bgImages.o_bill;
+    if (img) return sprite(ctx, img, x, y, 1, Math.sin(this.t * 7) * 0.4);
     ctx.fillStyle = '#140c1c';
     ctx.fillRect(x - 14, y - 8, 28, 16);
     ctx.fillStyle = '#5fbf6a';

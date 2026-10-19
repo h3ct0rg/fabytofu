@@ -1,0 +1,21 @@
+[
+  {"name": "buildings", "width": 688, "height": 220, "no_background": true,
+   "description": "pixel art mid background layer for a 16-bit side scrolling beat em up, side view: a row of modern city buildings along a tree-lined boulevard in Cochabamba Bolivia, cream, beige, white and terracotta apartment towers and offices of different heights with many windows and balconies, at street level small cafes, ice cream shops and restaurants with colorful awnings and umbrellas, a couple of palm trees, vibrant saturated colors, sunny day, crisp pixels, transparent background, no ground",
+   "refs": [{"usage": "real buildings along the boulevard El Prado", "path": "assets/pilot/prado/refs/aerea.png"},
+            {"usage": "real street level shops and cafes of the boulevard", "path": "assets/pilot/prado/refs/avenida.png"}],
+   "style": "assets/pilot/park/city/c0.png"},
+  {"name": "tree", "width": 128, "height": 170, "no_background": true,
+   "description": "pixel art set piece, side view: one tall old boulevard tree with a thick twisted dark trunk whose lower part is painted white, wide lush green canopy, a small square planter at its base with a low green metal fence and dark red flowers, isolated, fully inside the canvas, transparent space on all sides, no ground, vibrant saturated colors, sunny, crisp pixels",
+   "refs": [{"usage": "the real boulevard trees with white painted trunks and planters", "path": "assets/pilot/prado/refs/paseo.png"}],
+   "style": "assets/pilot/park/glorieta/c0.png"},
+  {"name": "juice", "width": 170, "height": 128, "no_background": true,
+   "description": "pixel art set piece for a 16-bit beat em up, side view: a colorful street juice stand on a boulevard, wooden cart with a big striped umbrella in orange and yellow, blenders, piles of oranges, papayas, bananas and strawberries, glass jars of juice, a hand painted sign, isolated, fully inside the canvas, transparent space on all sides, no ground, vibrant saturated colors, crisp pixels",
+   "style": "assets/pilot/park/glorieta/c0.png"},
+  {"name": "fitpet", "width": 170, "height": 128, "no_background": true,
+   "description": "pixel art set piece for a 16-bit beat em up, side view: a fancy promotional stand of a fitness pet food brand at a Sunday pet fair, white and lime green tent with triangular bunting flags, shelves with green bags of diet dog food and green smoothie bottles, a big banner with a green dog paw logo, a small dog bed and toys, isolated, fully inside the canvas, transparent space on all sides, no ground, no readable text, vibrant saturated colors, crisp pixels",
+   "style": "assets/pilot/park/glorieta/c0.png"},
+  {"name": "monument", "width": 128, "height": 170, "no_background": true,
+   "description": "pixel art set piece, side view: a historic monument in a city roundabout, a tall stone column on a stepped stone pedestal with a bronze statue of a standing man on top, a round flower bed with yellow and red flowers around the base, a couple of small palm trees, isolated, fully inside the canvas, transparent space on all sides, no ground, vibrant saturated colors, sunny, crisp pixels",
+   "refs": [{"usage": "the real monument at the end of the boulevard", "path": "assets/pilot/prado/refs/monumento.png"}],
+   "style": "assets/pilot/park/glorieta/c0.png"}
+]

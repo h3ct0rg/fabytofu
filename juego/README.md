@@ -20,6 +20,13 @@ Luego abrir http://localhost:8137. La rocola con todas las pistas y efectos est�
 - Vista previa del enlace (imagen + descripción) con etiquetas Open Graph; la imagen `og-image.jpg` se regenera con `python tools/make_share_card.py`. En Docker, nginx completa la dirección del sitio (`__SITE_URL__`).
 - La pantalla de inicio muestra cuántas personas jugaron y cuántas están jugando ahora (Firebase Realtime Database, ruta `fabytofu/` de `spud-survival-default-rtdb`).
 
+## Niveles
+
+1. **Parque Lincoln**: corredores, skaters, el perro ladrador y Corli, el pug de traje.
+2. **El Prado**: vendedores de batidos (charcos resbalosos), influencers (el flash aturde), entrenadoras (súper armadura) y el chihuahua que roba croquetas. Jefa: **Doña Billetes** (pelota de pilates, batidos, lluvia de billetes, llama a sus vendedores y carga con el cochecito). Las **bolsitas de croquetas** que juntes deciden el final de Morita.
+
+Al ganar el nivel 1 se pasa al 2 con el mismo puntaje y vidas; la ranura recuerda el nivel. Los datos de cada nivel (zonas, objetos, escenas) están en `scenes/stage.js` (nivel 1) y `scenes/level2.js`.
+
 ## Controles
 
 | Acción | Teclado | Mando | Táctil |
@@ -36,6 +43,7 @@ Luego abrir http://localhost:8137. La rocola con todas las pistas y efectos est�
 | Acariciar a Tofu (sin enemigos) / cargarlo y soltarlo (en pelea) | L junto a Tofu | B | — |
 | Patada cargando a Tofu | J | X | A |
 | Abrir caja de delivery (trae comida: salteña +20, api con pastel +35 e invencible 3 s, silpancho = vida completa) | Golpes | X | A |
+| Recuperar las croquetas que robó el chihuahua | Llamar a Tofu (Espacio) o tirarle un premio | RB | — |
 | Estamina (solo contra el jefe): cada ataque gasta, se recarga al dejar de atacar; vacía = no puedes golpear | — | — | — |
 | Pausa | Enter / Esc / P | Start | II |
 | Silenciar música y sonido | M | — | ♪ |
@@ -54,8 +62,9 @@ juego/
     ├── engine/           loop, input, assets, sprite, camera, collision, fx, audio (WebAudio), save
     ├── net/stats.js      contador de jugadores y presencia en línea (Firebase REST)
     ├── data/music.js     canciones como patrones de texto (4 canales)
-    ├── entities/         fighter (base), faby, tofu, enemy (corredor/skater), dog, prop, butterfly
-    └── scenes/           stage (zonas, HUD, escenas), menu (inicio, ranuras, configuración), background, cutscene
+    ├── entities/         fighter (base), faby, tofu, enemy (corredor, skater y vendedores), dog, chihuahua, prop, butterfly,
+    │                     pugBoss, billetesBoss, morita, hazards (batidos, charcos, pelota, billetes), items (croquetas)
+    └── scenes/           stage (zonas, HUD, nivel 1), level2 (El Prado), menu, background, prado, cutscene
 ```
 
 Para regenerar el atlas de Faby después de agregar animaciones:

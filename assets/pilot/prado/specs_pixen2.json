@@ -1,0 +1,6 @@
+[
+  {"name": "cup", "tool": "create_image_pixen", "width": 32, "height": 32, "no_background": true,
+   "description": "pixel art game item icon: a clear plastic cup of bright green detox smoothie with a pink straw and dome lid, single color black outline"},
+  {"name": "bill", "tool": "create_image_pixen", "width": 32, "height": 32, "no_background": true,
+   "description": "pixel art game item icon: one green paper banknote money bill, slightly curved, single color black outline"}
+]

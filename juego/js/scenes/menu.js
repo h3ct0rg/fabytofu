@@ -44,7 +44,7 @@ export class Menu {
       case 'slot': {
         const data = loadSlot(this.slotSel);
         const list = [];
-        if (data && !data.done && data.zone > 0) list.push({ label: 'CONTINUAR', go: () => g.startGame(this.slotSel, data) });
+        if (data && !data.done && (data.zone > 0 || data.level > 1)) list.push({ label: 'CONTINUAR', go: () => g.startGame(this.slotSel, data) });
         list.push({ label: data ? 'NUEVA PARTIDA' : 'EMPEZAR', go: () => g.startGame(this.slotSel, { best: data?.best ?? 0 }) });
         if (data) list.push({ label: 'BORRAR PARTIDA', go: () => { clearSlot(this.slotSel); this.goto('slots', this.slotSel); } });
         list.push({ label: 'VOLVER', go: () => this.goto('slots', this.slotSel) });
@@ -247,7 +247,7 @@ export class Menu {
         text(ctx, 'VACÍA', x + w / 2, y + 96, 14, '#ffffff', 'center');
         text(ctx, 'Nueva partida', x + w / 2, y + 124, 8, '#bbbbbb', 'center');
       } else {
-        const zone = d.done ? '¡COMPLETADA!' : d.zone > 0 ? `ZONA ${d.zone + 1} DE 4` : 'INICIO';
+        const zone = d.done ? '¡COMPLETADA!' : d.zone > 0 || d.level > 1 ? `NIVEL ${d.level ?? 1} · ZONA ${d.zone + 1}` : 'INICIO';
         text(ctx, zone, x + w / 2, y + 70, 10, d.done ? '#7df9ff' : '#ffffff', 'center');
         text(ctx, `PUNTAJE ${String(d.score ?? 0).padStart(6, '0')}`, x + w / 2, y + 98, 10, '#ffffff', 'center');
         text(ctx, `VIDAS x${d.lives ?? 3}`, x + w / 2, y + 122, 10, '#ffffff', 'center');

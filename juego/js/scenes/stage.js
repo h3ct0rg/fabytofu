@@ -14,6 +14,9 @@ import { DeliveryBox, FOODS } from '../entities/breakable.js';
 import { PugBoss } from '../entities/pugBoss.js';
 import { Owner } from '../entities/owner.js';
 import { Cutscene, NO_INPUT } from './cutscene.js';
+import { Chihuahua } from '../entities/chihuahua.js';
+import { drawBag } from '../entities/items.js';
+import { LEVEL2 } from './level2.js';
 
 const WORLD_W = 3400;
 const MAX_ATTACKERS = 2;
@@ -52,7 +55,26 @@ const ZONES = [
   { at: 2760, min: 2440, max: 3400, boss: true },
 ];
 
-// Escenario de prueba de la fase 1: un tramo del Parque Lincoln con 3 peleas.
+// Nivel 1: el Parque Lincoln. Sus escenas son métodos de Stage (introScene, startBoss, onBossDefeatedL1).
+const LEVEL1 = {
+  num: 1,
+  worldW: WORLD_W,
+  music: 'level',
+  makeBg: (images) => new Background(WORLD_W, images),
+  props: PROPS,
+  boxes: BOXES,
+  areas: AREAS,
+  zones: ZONES,
+  variants: VARIANTS,
+  events: [],
+  intro: (s) => (s.sheets.pug ? s.introScene() : null),
+  startBoss: (s, z) => s.startBoss(z),
+  onBossDefeated: (s) => s.onBossDefeatedL1(),
+};
+const LEVELS = { 1: LEVEL1, 2: LEVEL2 };
+export const LAST_LEVEL = 2;
+
+// Un nivel en curso: zonas de pelea, escenas, objetos y HUD. Los datos salen de LEVELS.
 export class Stage {
   constructor(game) {
     this.game = game;
@@ -63,14 +85,17 @@ export class Stage {
   // save: avance guardado { zone, score, lives } para continuar desde un punto de control.
   reset(save = null) {
     this.save = save;
-    this.camera = new Camera(WORLD_W);
+    this.levelNum = LEVELS[save?.level] ? save.level : 1;
+    this.L = LEVELS[this.levelNum];
+    this.camera = new Camera(this.L.worldW);
     this.camera.noShake = this.game.settings && !this.game.settings.shake;
     this.fx = new FX();
-    this.bg = this.bg ?? new Background(WORLD_W, this.game.bgImages);
+    this.bgs ??= {};
+    this.bg = this.bgs[this.levelNum] ??= this.L.makeBg(this.game.bgImages);
     this.player = new Faby(this, this.sheets.faby, 160, 450);
     this.enemies = [];
-    this.props = PROPS.map(([x, y, type]) => new Prop(this, x, y, type));
-    this.breakables = BOXES.map(([x, y, food]) => new DeliveryBox(this, x, y, food));
+    this.props = this.L.props.map(([x, y, type]) => new Prop(this, x, y, type));
+    this.breakables = this.L.boxes.map(([x, y, food]) => new DeliveryBox(this, x, y, food));
     this.foods = [];
     this.hazards = [];         // proyectiles y charcos (nivel 2)
     this.foodEaten = { ...(save?.foodEaten ?? {}) };
@@ -91,10 +116,33 @@ export class Stage {
     this.time = 0;
     this.boss = null;
     this.owner = null;
-    this.cutscene = this.sheets.pug ? this.introScene() : null;
-    this.music('level');
+    this.morita = null;
+    this.croquettes = 0;
+    this.eventsDone = new Set();
+    this.cutscene = this.L.intro(this);
+    this.music(this.L.music);
     if (save?.zone > 0) this.resumeFrom(save);
-    else if (save) this.player.score = 0;
+    else if (save) {
+      // Nivel nuevo: el puntaje y las vidas pasan del nivel anterior.
+      this.player.score = this.levelNum > 1 ? save.score ?? 0 : 0;
+      if (this.levelNum > 1) this.lives = save.lives ?? LIVES;
+    }
+    this.L.setup?.(this);
+  }
+
+  // Doña Billetes llama a sus vendedores (y cualquier otro refuerzo del nivel).
+  summon(n) {
+    this.L.summon?.(this, n);
+  }
+
+  spawnEnemy(type, x, y, n = 0) {
+    const e = type === 'dog'
+      ? new Dog(this, this.sheets.dog, x, y)
+      : type === 'chihuahua'
+        ? new Chihuahua(this, this.sheets.chihuahua, x, y)
+        : new Enemy(this, this.variantSheet(type, n), type, x, y);
+    this.enemies.push(e);
+    return e;
   }
 
   sfx(name) {
@@ -128,7 +176,10 @@ export class Stage {
       return;
     }
     if (this.mode === 'ending') {
-      if (this.modeTime > 1.5 && (input.pressed.attack || input.pressed.pause || input.pressed.jump)) this.game.toTitle?.();
+      if (this.modeTime > 1.5 && (input.pressed.attack || input.pressed.pause || input.pressed.jump)) {
+        if (this.levelNum < LAST_LEVEL && !input.pressed.jump) this.game.startGame?.(this.game.slot, this.game.save);
+        else this.game.toTitle?.();
+      }
       return;
     }
     // Durante una escena, Faby no recibe controles.
@@ -141,6 +192,7 @@ export class Stage {
 
     this.player.update(dt, actorInput);
     this.owner?.update(dt);
+    this.morita?.update(dt);
     this.tofu?.update(dt);
     if (this.boss && !this.enemies.includes(this.boss)) this.boss.update(dt);
     this.updateButterfly(dt);
@@ -171,18 +223,19 @@ export class Stage {
   }
 
   updateAreas(dt) {
-    const next = AREAS[this.areaIndex + 1];
+    const next = this.L.areas[this.areaIndex + 1];
     if (next && this.player.x >= next.x) {
       this.areaIndex++;
       this.areaBanner = { ...next, time: 3 };
     }
-    if (this.areaBanner && (this.areaBanner.time -= dt) <= 0) this.areaBanner = null;
+    // El nombre del lugar espera a que termine la escena para no taparse con los diálogos.
+    if (this.areaBanner && !this.cutscene && (this.areaBanner.time -= dt) <= 0) this.areaBanner = null;
   }
 
   // Hoja de sprites del enemigo con la ropa recoloreada (se calcula una vez).
   variantSheet(type, n) {
-    const list = VARIANTS[type];
-    const v = list[n % list.length];
+    const list = this.L.variants?.[type];
+    const v = list?.[n % list.length];
     if (!v) return this.sheets[type];
     this.variantCache ??= {};
     const key = `${type}${n % list.length}`;
@@ -192,16 +245,19 @@ export class Stage {
 
   // Continúa una partida guardada: Faby aparece al final de la última pelea ganada.
   resumeFrom(save) {
-    const z = Math.min(save.zone, ZONES.length - 1);
+    const zones = this.L.zones;
+    const z = Math.min(save.zone, zones.length - 1);
     this.zoneIndex = z;
-    const x = ZONES[z - 1].max - 360;
+    const x = zones[z - 1].max - 360;
     this.player.x = x;
     if (this.tofu) this.tofu.x = x - 80;
     this.camera.x = Math.max(0, x - 400);
     this.player.score = save.score ?? 0;
     this.lives = save.lives ?? 3;
     this.cutscene = null;
-    this.areaIndex = AREAS.reduce((acc, a, i) => (a.x <= x ? i - 1 : acc), -1);
+    this.areaIndex = this.L.areas.reduce((acc, a, i) => (a.x <= x ? i - 1 : acc), -1);
+    // Las escenas que quedaron atrás ya pasaron.
+    for (const ev of this.L.events) if (ev.x < x) this.eventsDone.add(ev);
     // Los objetos y basureros que quedaron atrás ya no importan.
     this.props = this.props.filter((p) => p.x > this.camera.x);
     this.breakables = this.breakables.filter((b) => b.x > this.camera.x);
@@ -209,7 +265,7 @@ export class Stage {
 
   // Guarda el avance al ganar cada pelea (punto de control).
   checkpoint() {
-    this.game.saveProgress?.({ zone: this.zoneIndex, score: this.player.score, lives: this.lives, done: false, foodEaten: this.foodEaten });
+    this.game.saveProgress?.({ level: this.levelNum, zone: this.zoneIndex, score: this.player.score, lives: this.lives, done: false, foodEaten: this.foodEaten, croquettes: this.croquettes });
   }
 
   // ---- Escenas ----
@@ -263,8 +319,23 @@ export class Stage {
     ]);
   }
 
-  // El Pug cae mareado y llega su dueño gigante.
   onBossDefeated() {
+    this.L.onBossDefeated(this);
+  }
+
+  // Fin del nivel: pantalla de resultados. Del nivel 1 se pasa al 2; el último muestra "Gracias por jugar".
+  finishLevel() {
+    this.mode = 'ending';
+    this.modeTime = 0;
+    this.music('ending');
+    const last = this.levelNum >= LAST_LEVEL;
+    this.game.saveProgress?.(last
+      ? { level: this.levelNum, zone: 0, score: this.player.score, lives: this.lives, done: true }
+      : { level: this.levelNum + 1, zone: 0, score: this.player.score, lives: this.lives, done: false });
+  }
+
+  // Nivel 1: el Pug cae mareado y llega su dueño gigante.
+  onBossDefeatedL1() {
     this.releaseToken(this.boss);
     this.player.score += 5000;
     this.music('victory');
@@ -281,12 +352,7 @@ export class Stage {
       { say: 'faby', text: '¡¿Yo?! ¡Él empezó! ...Tofu, corre.' },
       { say: 'tofu', text: '¡GUAU! (¡Ya pues, vamos!)' },
       { wait: 0.4 },
-      { run: (s) => {
-        s.mode = 'ending';
-        s.modeTime = 0;
-        s.music('ending');
-        s.game.saveProgress?.({ zone: 0, score: s.player.score, lives: s.lives, done: true });
-      } },
+      { run: (s) => s.finishLevel() },
     ]);
   }
 
@@ -354,7 +420,8 @@ export class Stage {
     if (this.goTimer > 0) this.goTimer -= dt;
     this.zoneTime = (this.zoneTime ?? 0) + dt;
     if (this.activeZone) {
-      if (this.enemies.length === 0) {
+      // La zona del jefe no se despeja mientras hay jefe (ni durante su escena de entrada).
+      if (this.enemies.length === 0 && !(this.activeZone.boss && this.boss)) {
         this.activeZone = null;
         this.camera.lock = null;
         this.goTimer = 2.5;
@@ -364,14 +431,24 @@ export class Stage {
       }
       return;
     }
-    const z = ZONES[this.zoneIndex];
+    // Escenas a mitad de camino (fuera de las peleas).
+    if (!this.cutscene) {
+      for (const ev of this.L.events) {
+        if (!this.eventsDone.has(ev) && this.player.x > ev.x) {
+          this.eventsDone.add(ev);
+          this.cutscene = ev.scene(this);
+          return;
+        }
+      }
+    }
+    const z = this.L.zones[this.zoneIndex];
     if (z && this.player.x > z.at) {
       this.activeZone = z;
       this.zoneIndex++;
       this.zoneTime = 0;
       this.camera.lock = { min: Math.max(this.camera.x, z.min), max: z.max };
       if (z.boss) {
-        this.startBoss(z);
+        this.L.startBoss(this, z);
         return;
       }
       const count = {};
@@ -380,11 +457,8 @@ export class Stage {
         const x = fromRight ? z.max + 40 + i * 30 : this.camera.lock.min - 40 - i * 30;
         const y = FLOOR_TOP + 10 + Math.random() * (FLOOR_BOTTOM - FLOOR_TOP - 20);
         count[type] = (count[type] ?? -1) + 1;
-        const e = type === 'dog'
-          ? new Dog(this, this.sheets.dog, x, y)
-          : new Enemy(this, this.variantSheet(type, count[type]), type, x, y);
+        const e = this.spawnEnemy(type, x, y, count[type]);
         e.cooldown += i * 0.5;
-        this.enemies.push(e);
       });
     }
   }
@@ -398,7 +472,7 @@ export class Stage {
 
     // Orden por profundidad: lo que está más abajo en pantalla se dibuja encima.
     const loneBoss = this.boss && !this.enemies.includes(this.boss) ? this.boss : null;
-    const extra = [this.tofu, this.butterfly, this.owner, loneBoss].filter(Boolean);
+    const extra = [this.tofu, this.butterfly, this.owner, this.morita, loneBoss].filter(Boolean);
     for (const h of this.hazards) if (h.floor) h.draw(ctx, camX);
     const shots = this.hazards.filter((h) => !h.floor);
     const actors = [this.player, ...extra, ...this.enemies, ...this.props, ...this.breakables, ...this.foods, ...shots].sort((a, b) => a.y - b.y || (a.z ?? 0) - (b.z ?? 0));
@@ -447,6 +521,10 @@ export class Stage {
     bar(ctx, 96, 40, 260, 14, p.hp / p.maxHp, COLORS.hpFaby);
     text(ctx, `${String(p.score).padStart(6, '0')}`, 96, 84, 12, '#ffd23f');
     text(ctx, `x${this.lives}`, 300, 84, 12, '#ffffff');
+    if (this.levelNum === 2) {
+      drawBag(ctx, 258, 136, 0.8, this.game.bgImages.o_bag);
+      text(ctx, `x${this.croquettes}`, 270, 134, 10, '#ffb3d9');
+    }
 
     if (this.tofu) this.drawTofuHud(ctx, this.tofu);
 
@@ -476,7 +554,7 @@ export class Stage {
       text(ctx, 'GO →', VIEW_W - 170, 200, 32, '#ffd23f');
     }
 
-    if (this.areaBanner && !this.banner) {
+    if (this.areaBanner && !this.banner && !this.cutscene) {
       const a = this.areaBanner;
       const k = Math.min(1, a.time / 0.4, (3 - a.time) / 0.3);
       ctx.globalAlpha = Math.max(0, k);
@@ -505,7 +583,7 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
   ctx.fillStyle = `rgba(20, 10, 40, ${0.55 * k})`;
   ctx.fillRect(0, 0, VIEW_W, VIEW_H);
   if (this.modeTime < 1.2) {
-    text(ctx, 'CONTINUARÁ…', VIEW_W / 2, VIEW_H / 2, 28, '#ffffff', 'center');
+    text(ctx, this.levelNum >= LAST_LEVEL ? 'CONTINUARÁ…' : '¡BIEN HECHO!', VIEW_W / 2, VIEW_H / 2, 28, '#ffffff', 'center');
     return;
   }
   const t = this.modeTime;
@@ -519,6 +597,16 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(sheet.image, sx, sy, sw, sh, 250 - ax * 3, 520 - ay * 3, sw * 3, sh * 3);
   }
+  // Nivel 2: Morita gordita y feliz al lado.
+  const ms = this.sheets.morita;
+  if (this.levelNum === 2 && ms) {
+    const ma = ms.anims.happy;
+    const fi = ma.frames[Math.floor(t * 8) % ma.frames.length];
+    const [sx, sy, sw, sh] = ms.rects[fi];
+    const [ax, ay] = ma.anchor;
+    const hop = Math.round(Math.abs(Math.sin(t * 5)) * 10);
+    ctx.drawImage(ms.image, sx, sy, sw, sh, 360 - ax * 3, 520 - ay * 3 - hop, sw * 3, sh * 3);
+  }
   // Corazones que suben
   for (let i = 0; i < 7; i++) {
     const hx = 180 + ((i * 97) % 260);
@@ -530,10 +618,23 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
   ctx.strokeStyle = '#ff2fa8';
   ctx.lineWidth = 3;
   ctx.strokeRect(421.5, 111.5, 437, 307);
-  text(ctx, '¡GRACIAS POR JUGAR!', 640, 150, 22, '#ff2fa8', 'center');
+  const last = this.levelNum >= LAST_LEVEL;
+  text(ctx, last ? '¡GRACIAS POR JUGAR!' : `¡NIVEL ${this.levelNum} COMPLETADO!`, 640, 150, last ? 22 : 20, '#ff2fa8', 'center');
   text(ctx, 'FABY & TOFU', 640, 200, 16, '#7df9ff', 'center');
-  text(ctx, 'Parque Lincoln · Cochabamba', 640, 228, 10, '#ffffff', 'center');
+  text(ctx, this.levelNum === 2 ? 'El Prado · Cochabamba' : 'Parque Lincoln · Cochabamba', 640, 228, 10, '#ffffff', 'center');
   text(ctx, `PUNTAJE  ${String(this.player.score).padStart(6, '0')}`, 640, 270, 14, '#ffd23f', 'center');
+  if (this.levelNum === 2) {
+    // Lo que juntaron para Morita.
+    const n = this.croquettes;
+    text(ctx, 'CROQUETAS PARA MORITA', 640, 306, 10, '#7df9ff', 'center');
+    drawBag(ctx, 500, 352, 1.4, this.game.bgImages.o_bag);
+    text(ctx, `x${n}`, 540, 346, 16, '#ffd23f');
+    const msg = n >= 6 ? '¡Morita quedó feliz y gordita!' : n >= 3 ? '¡Morita quedó contenta!' : 'Morita comió un poquito… ¡la próxima le traemos más!';
+    text(ctx, msg, 640, 384, 9, '#ffb3d9', 'center');
+    if (this.croquettesLost) text(ctx, `(el chihuahua se llevó ${this.croquettesLost})`, 640, 404, 8, '#ffffff', 'center');
+    if (Math.floor(t * 2) % 2 === 0) text(ctx, 'CONTINUARÁ… · J / ENTER PARA VOLVER AL INICIO', 640, 448, 9, '#ffd23f', 'center');
+    return;
+  }
   // Lo que comió Faby en el paseo: ícono, nombre y cantidad.
   text(ctx, 'LO QUE COMISTE', 640, 302, 10, '#7df9ff', 'center');
   const names = { saltena: 'Salteña', api: 'Api con pastel', silpancho: 'Silpancho' };
@@ -547,7 +648,7 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
     text(ctx, names[type], 520, y + 18, 10, '#ffffff');
     text(ctx, `x${this.foodEaten[type] ?? 0}`, 800, y + 18, 12, '#ffd23f', 'right');
   });
-  if (Math.floor(t * 2) % 2 === 0) text(ctx, 'J / ENTER PARA VOLVER AL INICIO', 640, 448, 10, '#ffd23f', 'center');
+  if (Math.floor(t * 2) % 2 === 0) text(ctx, last ? 'J / ENTER PARA VOLVER AL INICIO' : `J / ENTER: ¡AL NIVEL ${this.levelNum + 1}! · K: MENÚ`, 640, 448, 10, '#ffd23f', 'center');
 };
 
 Stage.prototype.drawTofuHud = function drawTofuHud(ctx, t) {

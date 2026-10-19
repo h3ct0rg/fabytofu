@@ -59,7 +59,10 @@ const game = {
     game.save = data;
     audio.play('select');
     // Una partida nueva ocupa la ranura desde el primer momento.
-    if (!(data?.zone > 0)) game.saveProgress({ zone: 0, score: 0, lives: 3, done: false });
+    if (!data || data.done || (!(data.zone > 0) && !(data.level > 1))) {
+      data = null;
+      game.saveProgress({ level: 1, zone: 0, score: 0, lives: 3, done: false });
+    }
     game.stage.reset(data);
     game.scene = 'play';
   },
@@ -85,7 +88,10 @@ async function boot() {
     // Ilustraciones del parque (si alguna falta, el escenario la omite).
     const BG = ['tunari', 'city', 'street', 'treeline', 'canchas', 'glorieta', 'pergola', 'pond',
       'lamp', 'bench', 'flag', 'bush', 'flowerbed',
-      'delivery', 'delivery_open', 'saltena', 'silpancho', 'api', 'ball', 'treat', 'bottle', 'owner'];
+      'delivery', 'delivery_open', 'saltena', 'silpancho', 'api', 'ball', 'treat', 'bottle', 'owner',
+      // Nivel 2: El Prado y los objetos "fit" de Doña Billetes.
+      'p_buildings', 'p_tree', 'p_juice', 'p_fitpet', 'p_fitpet2', 'p_monument', 'p_planter', 'p_palm',
+      'o_bag', 'o_cup', 'o_ball', 'o_stroller', 'o_bill'];
     game.bgImages = {};
     await Promise.all(BG.map((n) => loadImage(`assets/bg/${n}.png`).then((im) => { game.bgImages[n] = im; }).catch(() => {})));
     game.stage = new Stage(game);

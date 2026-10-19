@@ -1,6 +1,6 @@
 # Faby & Tofu — Plan del Nivel 2: El Prado
 
-> Estado: **planificación** (no se ha generado ningún asset todavía).
+> Estado: **jugable** ✅ (19-oct-2026). Costo real en PixelLab: **~310 generaciones** (ver §8).
 > El motor, los controles, el HUD, las escenas y la música del nivel 1 se reutilizan: lo nuevo es sobre todo arte, IA de enemigos y guion.
 
 ---
@@ -142,15 +142,15 @@ Basado en lo que **de verdad costó el nivel 1**: Faby 55, Tofu 94, 3 enemigos 1
 
 ## 8. Hoja de ruta del nivel 2
 
-| Etapa | Entregable | Gen |
+| Etapa | Entregable | Gen (real) |
 |---|---|---|
-| A. Morita | Sprite normal y gordita, escenas de intro y final en borrador | 30–40 |
-| B. Escenas | Intro con Doña Billetes llevándose a Morita; escena de Corli y su dueño a mitad del nivel | 5–10 (+ base de Doña Billetes) |
-| C. Enemigos | 3 vendedores + chihuahua con su IA | 90–130 |
-| D. El Prado | Fondo con parallax, puestos, zonas, objetos y croquetas | 135–205 |
-| E. Doña Billetes | Pelea de 3 fases, KO agotada, retrato | 40–60 |
-| F. Final y música | Final con Morita (variantes por croquetas), 2 pistas + jingle, efectos | 10–15 |
-| G. Integración | Selección de nivel / continuar tras el nivel 1, guardado, pruebas en celular | 0 |
+| A. Morita ✅ | 7 animaciones (triste, caminar, aullar, temblar, comer, gordita, correr feliz), 2/3 del tamaño de Tofu | 28 |
+| B. Escenas ✅ | Intro con Doña Billetes llevándose a Morita; Corli y su dueño a mitad del nivel (armado por código) | 0 |
+| C. Enemigos ✅ | Vendedor de batidos, influencer (flash), entrenadora (súper armadura, pesa rusa) y chihuahua ladrón | 122 |
+| D. El Prado ✅ | Edificios, árbol de tronco blanco, puestos de jugos, stands FitPet, monumento, jardinera, palmera; piso de baldosas por código; objetos (bolsita, batido, pelota, cochecito, billete) | 93 |
+| E. Doña Billetes ✅ | 15 % más alta que Faby, 12 animaciones, pelea de 3 fases, KO rendida, retrato | 67 |
+| F. Final y música ✅ | Final con Morita (mensaje según las croquetas), pistas "El Prado" y "Doña Billetes", jingle de Morita, efectos | 0 |
+| G. Integración ✅ | Niveles en datos (`scenes/level2.js`), del nivel 1 se pasa al 2 con puntaje y vidas, guardado por nivel | 0 |
 
 **Orden propuesto:** A → B → C → D → E → F → G. Se empieza por Morita porque es la estrella emocional del nivel y valida el estilo antes de gastar en el resto.
 

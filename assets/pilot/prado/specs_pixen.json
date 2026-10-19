@@ -1,0 +1,18 @@
+[
+  {"name": "planter", "tool": "create_image_pixen", "width": 128, "height": 48, "no_background": true,
+   "description": "pixel art game prop, side view: a long low concrete planter box with a small green metal hoop fence along its edge, filled with green grass and dark red and magenta flowers, single color black outline, vibrant"},
+  {"name": "palm", "tool": "create_image_pixen", "width": 80, "height": 128, "no_background": true,
+   "description": "pixel art game prop, side view: a tall slender palm tree with a ringed tan trunk and a crown of bright green fronds, single color black outline, vibrant"},
+  {"name": "sign", "tool": "create_image_pixen", "width": 96, "height": 96, "no_background": true,
+   "description": "pixel art game prop, side view: a dark green metal street name sign on a tall pole with a white rectangular plate, decorative iron details, single color black outline, vibrant"},
+  {"name": "bag", "tool": "create_image_pixen", "width": 32, "height": 32, "no_background": true,
+   "description": "pixel art game item icon: a small pink bag of dog food kibble with a white bone drawn on it, top folded, side view, single color black outline"},
+  {"name": "cup", "tool": "create_image_pixen", "width": 24, "height": 32, "no_background": true,
+   "description": "pixel art game item icon: a clear plastic cup of bright green detox smoothie with a pink straw and dome lid, single color black outline"},
+  {"name": "ball", "tool": "create_image_pixen", "width": 64, "height": 64, "no_background": true,
+   "description": "pixel art game item: a big shiny purple pilates exercise ball, round, with a white highlight, single color black outline"},
+  {"name": "stroller", "tool": "create_image_pixen", "width": 96, "height": 80, "no_background": true,
+   "description": "pixel art game prop, side view facing right: a fancy pink dog stroller pet pram with a mesh canopy, push handle on the left, four small black wheels, single color black outline, vibrant"},
+  {"name": "bill", "tool": "create_image_pixen", "width": 32, "height": 24, "no_background": true,
+   "description": "pixel art game item icon: one green paper banknote money bill, slightly curved, single color black outline"}
+]

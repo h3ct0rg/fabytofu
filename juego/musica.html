@@ -32,7 +32,7 @@
     const audio = new AudioEngine();
     audio.songs = SONGS;
     audio.muted = false;
-    const labels = { title: 'Título', level: 'Nivel · Parque Lincoln', boss: 'Jefe · Corli', ending: 'Final', victory: 'Victoria (jingle)', gameover: 'Game over (jingle)' };
+    const labels = { title: 'Título', level: 'Nivel · Parque Lincoln', boss: 'Jefe · Corli', ending: 'Final', prado: 'Nivel 2 · El Prado', boss2: 'Jefa · Doña Billetes', morita: 'Morita feliz (jingle)', victory: 'Victoria (jingle)', gameover: 'Game over (jingle)' };
     for (const name of Object.keys(SONGS)) {
       const b = document.createElement('button');
       b.textContent = '▶ ' + (labels[name] ?? name);

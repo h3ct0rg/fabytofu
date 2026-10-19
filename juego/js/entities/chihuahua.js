@@ -104,6 +104,6 @@ export class Chihuahua extends Dog {
 
   draw(ctx, camX) {
     super.draw(ctx, camX);
-    if (this.carrying) drawBag(ctx, this.x - camX + this.facing * 20, this.y - this.z - 14, 0.6);
+    if (this.carrying) drawBag(ctx, this.x - camX + this.facing * 20, this.y - this.z - 14, 0.7, this.stage.game.bgImages.o_bag);
   }
 }

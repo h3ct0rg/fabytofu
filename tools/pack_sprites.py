@@ -280,8 +280,8 @@ SHEETS["coach"] = {
     "anims": {
         "idle":      {"dir": "co_idle", "frames": [0, 1, 2, 3], "ms": [190] * 4, "loop": True},
         "walk":      {"dir": "co_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [120] * 8, "loop": True, "perFrame": True},
-        # Si existe co_swing2 (balanceo con la pesa) se usa esa; si no, el golpe de puño.
-        "swing":     {"dir": "co_swing2" if (V / "co_swing2" / "f4.png").exists() else "co_swing", "frames": [1, 2, 3, 4], "ms": [110, 90, 160, 120], "loop": False, "active": [2], "perFrame": True, "clean": True},
+        # Levanta la pesa rusa y la lanza hacia adelante (el primer cuadro de PixelLab la perdió).
+        "swing":     {"dir": "co_swing2", "frames": [2, 3, 4, 4], "ms": [160, 90, 150, 110], "loop": False, "active": [1, 2], "perFrame": True},
         "hurt":      {"dir": "co_hurt", "frames": [3, 4, 3], "ms": [60, 160, 100], "loop": False, "perFrame": True},
         "grabbed":   {"dir": "co_hurt", "frames": [4], "ms": [100], "loop": True, "perFrame": True},
         "knockdown": {"dir": "co_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True, "clean": True},

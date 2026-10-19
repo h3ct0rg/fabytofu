@@ -127,6 +127,77 @@ export const SONGS = {
     },
   },
 
+  // Nivel 2: El Prado un domingo. Alegre y saltarín (Sol mayor), con bajo de rock y arpegios.
+  prado: {
+    bpm: 134,
+    loop: true,
+    swing: 0.1,
+    inst: { lead: { wave: 'p25', vol: 0.15 }, harm: { wave: 'p12', vol: 0.06, gate: 0.5 }, bass: { wave: 'triangle', wave2: 'p50', vol: 0.22, gate: 0.7 } },
+    parts: {
+      lead: [
+        rest,
+        'D5 - G5 - B5 - - . A5 - G5 - E5 - D5 -',
+        'E5 - - . G5 - - . C6 - B5 - A5 - G5 -',
+        'F#5 - A5 - D6 - - . C6 - B5 - A5 - F#5 -',
+        'G5 - - - - - . . D5 - E5 - F#5 - G5 -',
+        'B5 - - . A5 - G5 . B5 - A5 - G5 - E5 -',
+        'C6 - - . B5 - A5 . G5 - E5 - G5 - C6 -',
+        'B5 - A5 - G5 - F#5 - E5 - F#5 - A5 - D6 -',
+        'G5 - - - - - - - . . D5 - G5 - . .',
+      ],
+      harm: [arp('G3', 'B3', 'D4'), arp('G3', 'B3', 'D4'), arp('C4', 'E4', 'G4'), arp('D4', 'F#4', 'A4'), arp('G3', 'B3', 'D4'),
+        arp('E3', 'G3', 'B3'), arp('C4', 'E4', 'G4'), arp('D4', 'F#4', 'A4'), arp('G3', 'B3', 'D4')],
+      bass: [rock('G', 'D'), rock('G', 'D'), rock('C', 'G'), rock('D', 'A'), rock('G', 'D'), rock('E', 'B'), rock('C', 'G'), rock('D', 'A'), rock('G', 'D')],
+      drums: ['K . H . S . H . K . H . S . H O', ...rep('K . H K S . H . K K H . S . H O', 7), 'K . H . S . S . S S S S KC . . .'],
+    },
+  },
+
+  // Jefa del nivel 2: Doña Billetes. Groove tenso y "de plata" (Re menor), caja en contratiempo.
+  boss2: {
+    bpm: 146,
+    loop: true,
+    swing: 0.14,
+    inst: { lead: { wave: 'p50', vol: 0.12 }, harm: { wave: 'p12', vol: 0.07, gate: 0.35 }, bass: { wave: 'sawtooth', wave2: 'triangle', vol: 0.14, gate: 0.5 } },
+    parts: {
+      lead: [
+        'D5 - - . F5 - E5 - D5 - - . A4 - - .',
+        'D5 - F5 - A5 - - . G5 - F5 - E5 - - .',
+        'A#5 - - . A5 - G5 - F5 - - . D5 - - .',
+        'C#5 - - - E5 - - - A5 - - - G5 - E5 -',
+        'D5 - D5 . F5 - D5 . G#5 - A5 - F5 - D5 -',
+        'F5 - - . E5 - - . D5 - - . C#5 - - .',
+        'A#5 - A5 - G5 - F5 - G5 - - - D5 - - .',
+        'A4 - C#5 - E5 - A5 - - - - - . . . .',
+      ],
+      harm: [stab('A4'), stab('A4'), stab('A#4'), stab('A4'), stab('A4'), stab('A4'), stab('A#4'), stab('C#5')],
+      bass: [
+        'D2 . D2 D3 . D2 F2 . D2 . D2 D3 . G#2 A2 .',
+        'D2 . D2 D3 . D2 F2 . D2 . D2 D3 . G#2 A2 .',
+        'A#1 . A#1 A#2 . A#1 D2 . A#1 . A#1 A#2 . E2 F2 .',
+        'A1 . A1 A2 . A1 C#2 . A1 . A1 A2 . E2 G2 .',
+        'D2 . D2 D3 . D2 F2 . D2 . D2 D3 . G#2 A2 .',
+        'D2 . D2 D3 . D2 F2 . D2 . D2 D3 . G#2 A2 .',
+        'A#1 . A#1 A#2 . A#1 D2 . A#1 . A#1 A#2 . E2 F2 .',
+        'A1 . A1 A2 . A1 C#2 . A1 . A1 A2 . E2 G2 .',
+      ],
+      drums: [...rep('K . H . S K H . K . H K S . H S', 3), 'K . H . S . H . K . S . S S S S',
+        ...rep('K . H . S K H . K . H K S . H S', 3), 'KC . . . S . S . S S S S S S S S'],
+    },
+  },
+
+  // Jingle: Morita come feliz.
+  morita: {
+    bpm: 150,
+    loop: false,
+    inst: { lead: { wave: 'triangle', vol: 0.26 }, harm: HARM, bass: BASS },
+    parts: {
+      lead: ['G5 A5 B5 D6 - B5 D6 - G6 - - - E6 - D6 -', 'B5 - G5 - A5 - F#5 - G5 - - - - - . .'],
+      harm: ['B4 - D5 - - - G5 - - - - - C5 - B4 -', 'G4 - - - F#4 - - - G4 - - - - - . .'],
+      bass: ['G2 - - - D3 - - - C3 - - - D3 - - -', 'G2 - D2 - D2 - - - G2 - - - - - . .'],
+      drums: ['K . H . S . H . K . H . S . H H', 'K . H . S . H . KC . . . . . . .'],
+    },
+  },
+
   // Jingles (no se repiten)
   victory: {
     bpm: 160,

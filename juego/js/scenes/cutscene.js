@@ -4,11 +4,11 @@ import { VIEW_W, VIEW_H, FONT, COLORS, fontSafe } from '../config.js';
 //   { say: 'faby' | 'tofu' | 'pug' | 'owner', text }   cuadro de diálogo (J / Enter / A avanza)
 //   { wait: segundos }
 //   { run: (stage) => {} }                              acción inmediata
-//   { until: (stage) => bool, timeout }                 espera una condición
+//   { until: (stage, dt) => bool, timeout }             espera una condición (puede mover personajes cada cuadro)
 // Mientras dura, Faby no recibe controles y los enemigos no atacan.
 
-const NAMES = { faby: 'FABY', tofu: 'TOFU', pug: 'CORLI', owner: 'EL DUEÑO DE CORLI' };
-const COLORS_BY = { faby: '#ff2fa8', tofu: '#7df9ff', pug: '#ffd23f', owner: '#ff6b3d' };
+const NAMES = { faby: 'FABY', tofu: 'TOFU', pug: 'CORLI', owner: 'EL DUEÑO DE CORLI', billetes: 'DOÑA BILLETES', morita: 'MORITA' };
+const COLORS_BY = { faby: '#ff2fa8', tofu: '#7df9ff', pug: '#ffd23f', owner: '#ff6b3d', billetes: '#7dff8a', morita: '#ffb3d9' };
 const TYPE_SPEED = 42; // letras por segundo
 
 // Entrada "vacía" para los personajes durante la escena.
@@ -61,7 +61,7 @@ export class Cutscene {
     } else if (s.wait !== undefined) {
       if (this.t >= s.wait) this.next();
     } else if (s.until) {
-      if (s.until(this.stage) || this.t > (s.timeout ?? 5)) this.next();
+      if (s.until(this.stage, dt) || this.t > (s.timeout ?? 5)) this.next();
     }
   }
 
@@ -125,6 +125,13 @@ export function portrait(ctx, stage, who, x, y) {
   } else if (who === 'pug' && sheets.pug) {
     const [sx, sy, sw] = sheets.pug.rects[sheets.pug.anims.idle.frames[0]];
     ctx.drawImage(sheets.pug.image, sx + sw / 2 - 2, sy + 8, 52, 46, x + 2, y + 8, 76, 67);
+  } else if (who === 'billetes' && sheets.billetes) {
+    const [sx, sy, sw] = sheets.billetes.rects[sheets.billetes.anims.idle.frames[0]];
+    const [ax] = sheets.billetes.anims.idle.anchor;
+    ctx.drawImage(sheets.billetes.image, sx + ax - 26, sy + 18, 56, 52, x + 2, y + 6, 76, 71);
+  } else if (who === 'morita' && sheets.morita) {
+    const [sx, sy, sw] = sheets.morita.rects[sheets.morita.anims.idle.frames[0]];
+    ctx.drawImage(sheets.morita.image, sx + sw / 2 - 4, sy + 4, 32, 30, x + 4, y + 8, 72, 66);
   } else if (who === 'owner') {
     const img = stage.game.bgImages.owner;
     if (img) ctx.drawImage(img, 30, 4, 90, 80, x - 4, y, 90, 80);

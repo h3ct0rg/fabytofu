@@ -1,4 +1,5 @@
 import { COLORS } from '../config.js';
+import { Animator, drawSprite } from '../engine/sprite.js';
 
 // El dueño del Pug: solo aparece en la escena final. Imagen fija que "corre" rebotando.
 export class Owner {
@@ -43,5 +44,20 @@ export class Owner {
     if (this.facing < 0) ctx.scale(-1, 1);
     ctx.drawImage(this.img, -this.img.width / 2, -this.img.height + 4);
     ctx.restore();
+    // Nivel 2: trae a Corli en brazos, con una curita en la cabeza.
+    if (this.holding === 'pug' && this.stage.sheets.pug) {
+      this.pugAnim ??= new Animator(this.stage.sheets.pug, 'idle');
+      this.pugAnim.update(1 / 60);
+      const face = this.vigilando ? -this.facing : this.facing;
+      const px = Math.round(this.x - camX + this.facing * 22);
+      const py = Math.round(this.y - bob - 96);
+      drawSprite(ctx, this.pugAnim, px, py, face);
+      ctx.fillStyle = '#140c1c';
+      ctx.fillRect(px - 13, py - 54, 26, 8);
+      ctx.fillStyle = '#ffd9b3';
+      ctx.fillRect(px - 11, py - 52, 22, 4);
+      ctx.fillStyle = '#e0a070';
+      ctx.fillRect(px - 2, py - 52, 4, 4);
+    }
   }
 }
