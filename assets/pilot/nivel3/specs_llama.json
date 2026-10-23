@@ -1,0 +1,3 @@
+[
+ {"name":"llama_walk","base":"assets/pilot/nivel3/llama_base.png","frames":4,"action":"walking cycle to the left in place, legs stepping, head bobbing gently, staying in the same spot, loopable, no visual effects"}
+]

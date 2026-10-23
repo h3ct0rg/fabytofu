@@ -396,16 +396,24 @@ export class Drive {
       const y = this.screenY(od);
       const r = rng(i * 7919 + 13);
       const plain = od >= CHECKPOINT - 1500;
-      for (const side of [-1, 1]) {
+      for (const side of [-1, 1, -1, 1]) {
         const dist = ROAD_W / 2 + 50 + r() * 230;
         const x = roadX(od) + side * dist;
         if (x < -60 || x > VIEW_W + 60) continue;
         const kind = r();
         if (plain) {
-          if (kind < 0.55) drawPaja(ctx, x, y, 0.8 + r() * 0.6);
-          else if (kind < 0.65) drawStone(ctx, x, y, 6 + r() * 6);
+          const llama = this.img.d_llama;
+          if (llama && kind < 0.025 && dist > ROAD_W / 2 + 110) {
+            // Llama pastando a lo lejos
+            ctx.save();
+            ctx.translate(Math.round(x), Math.round(y));
+            if (side > 0) ctx.scale(-1, 1);
+            ctx.drawImage(llama, -llama.width / 2, -llama.height + 8);
+            ctx.restore();
+          } else if (kind < 0.6) drawPaja(ctx, x, y, 0.9 + r() * 0.7);
+          else if (kind < 0.7) this.stone(ctx, x, y, 0.5 + r() * 0.3);
         } else {
-          const img = this.img.d_hill;
+          const img = this.img[i % 2 ? 'd_hill2' : 'd_hill'];
           if (img && kind < 0.18 && dist > ROAD_W / 2 + 120) {
             ctx.save();
             ctx.translate(Math.round(x), Math.round(y));
@@ -413,10 +421,18 @@ export class Drive {
             ctx.drawImage(img, -img.width / 2, -img.height + 10);
             ctx.restore();
           } else if (kind < 0.45) drawBush(ctx, x, y, 10 + r() * 12);
-          else if (kind < 0.7) drawStone(ctx, x, y, 8 + r() * 14);
+          else if (kind < 0.7) this.stone(ctx, x, y, 0.7 + r() * 0.6);
         }
       }
     }
+  }
+
+  // Piedra del paisaje: la de PixelLab escalada, o el respaldo por código.
+  stone(ctx, x, y, k) {
+    const img = this.img.o_rock;
+    if (!img) return drawStone(ctx, x, y, 14 * k);
+    const w = Math.round(img.width * k), h = Math.round(img.height * k);
+    ctx.drawImage(img, Math.round(x - w / 2), Math.round(y - h), w, h);
   }
 
   drawCar(ctx) {
@@ -495,16 +511,16 @@ export class Drive {
     ctx.fillStyle = '#f2ede4';
     for (let x = 0; x < VIEW_W; x += 80) ctx.fillRect(x, 500, 44, 4);
     const img = this.img.d_oruro;
-    if (img) ctx.drawImage(img, Math.round(VIEW_W * 0.62 - img.width / 2), Math.round(440 - img.height));
+    if (img) ctx.drawImage(img, Math.round(VIEW_W * 0.6 - img.width / 2), Math.round(452 - img.height));
     else drawOruroFallback(ctx);
     // El Baleno de costado se estaciona; bajan Faby y Tofu.
     const car = this.img.d_car_side;
     const cx = Math.round(this.carSideX ?? 330);
-    if (car) ctx.drawImage(car, cx - Math.round(car.width / 2), 470 - car.height);
+    if (car) ctx.drawImage(car, cx - Math.round(car.width / 2), 482 - car.height);
     else drawCarSideFallback(ctx, cx, 470);
     if (this.out) {
-      drawSprite(ctx, this.faby, cx + 110, 476, 1);
-      drawSprite(ctx, this.tofu, cx + 170, 478, 1);
+      drawSprite(ctx, this.faby, cx + 190, 484, 1);
+      drawSprite(ctx, this.tofu, cx + 250, 486, 1);
     }
   }
 
@@ -634,11 +650,12 @@ class Thrower {
   update(dt) { if (this.throwT > 0) this.throwT -= dt; }
   draw(ctx, dr, y, rx) {
     const x = Math.round(rx + this.side * (ROAD_W / 2 + 70));
-    const img = dr.img[this.throwT > 0 ? 'd_thrower_throw' : 'd_thrower'];
+    const img = dr.img.d_thrower;
     if (img) {
       ctx.save();
       ctx.translate(x, Math.round(y));
       if (this.side > 0) ctx.scale(-1, 1);
+      if (this.throwT > 0) ctx.rotate(-0.12);
       ctx.drawImage(img, -img.width / 2, -img.height + 6);
       ctx.restore();
       return;
@@ -680,7 +697,10 @@ class Llama {
   }
   draw(ctx, dr, y, rx) {
     const x = Math.round(rx + this.off);
-    const img = dr.img[Math.floor(this.t * 6) % 2 ? 'd_llama2' : 'd_llama'] ?? dr.img.d_llama;
+    ctx.fillStyle = COLORS.shadow;
+    ctx.beginPath(); ctx.ellipse(x, Math.round(y) + 4, 26, 7, 0, 0, Math.PI * 2); ctx.fill();
+    const walk = [1, 2, 3, 4].map((i) => dr.img['d_llama' + i]).filter(Boolean);
+    const img = walk.length ? walk[Math.floor(this.t * (this.scared ? 14 : 7)) % walk.length] : dr.img.d_llama;
     if (img) {
       ctx.save();
       ctx.translate(x, Math.round(y));
@@ -742,7 +762,7 @@ class Barrier {
     // Bloqueadores parados a los costados
     for (const b of this.blockers) {
       const x = Math.round(rx + b.side * (hw + 46));
-      const img = dr.img.d_blocker;
+      const img = dr.img[b.side < 0 ? 'd_blocker' : 'd_blocker2'];
       if (img) {
         ctx.save();
         ctx.translate(x, Math.round(y));

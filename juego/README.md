@@ -25,7 +25,9 @@ Luego abrir http://localhost:8137. La rocola con todas las pistas y efectos est�
 1. **Parque Lincoln**: corredores, skaters, el perro ladrador y Corli, el pug de traje.
 2. **El Prado**: vendedores de batidos (charcos resbalosos), influencers (el flash aturde), entrenadoras (súper armadura) y el chihuahua que roba croquetas. Jefa: **Doña Billetes** (pelota de pilates, batidos, lluvia de billetes, llama a sus vendedores y carga con el cochecito). Las **bolsitas de croquetas** que juntes deciden el final de Morita.
 
-Al ganar el nivel 1 se pasa al 2 con el mismo puntaje y vidas; la ranura recuerda el nivel.
+3. **Carretera a Oruro** (modo de manejo, `scenes/drive.js`): el Baleno acelera solo; se esquiva con izquierda/derecha y la bocina (J / A) aparta a las llamas. Cerros con tirapiedras y derrumbes, luego el altiplano con llamas y barreras de llantas con huecos. Llaves y gasolina reparan el auto. Punto de control a la mitad. Sin jefe: al final pasa la camioneta de Corli y Faby llega al casco de Oruro.
+
+Al ganar un nivel se pasa al siguiente con el mismo puntaje y vidas; la ranura recuerda el nivel.
 
 **Códigos de nivel** (como en los juegos de SNES): al terminar un nivel, la pantalla de resultados muestra un código de 6 caracteres para empezar directo en el siguiente. Se escribe en **CÓDIGO DE NIVEL**, en el menú de cada partida (teclado en pantalla, mando, toque o teclado de la PC). Los códigos son **personales**: salen de un identificador de jugador secreto guardado en el navegador (`faby-tofu-id`), así que solo sirven en el dispositivo de quien los ganó. Si se borran los datos del navegador, se generan otros (`js/engine/codes.js`). Los datos de cada nivel (zonas, objetos, escenas) están en `scenes/stage.js` (nivel 1) y `scenes/level2.js`.
 
@@ -66,7 +68,7 @@ juego/
     ├── data/music.js     canciones como patrones de texto (4 canales)
     ├── entities/         fighter (base), faby, tofu, enemy (corredor, skater y vendedores), dog, chihuahua, prop, butterfly,
     │                     pugBoss, billetesBoss, morita, hazards (batidos, charcos, pelota, billetes), items (croquetas)
-    └── scenes/           stage (zonas, HUD, nivel 1), level2 (El Prado), menu, background, prado, cutscene
+    └── scenes/           stage (zonas, HUD, nivel 1), level2 (El Prado), drive (nivel 3), menu, background, prado, cutscene
 ```
 
 Para regenerar el atlas de Faby después de agregar animaciones:
