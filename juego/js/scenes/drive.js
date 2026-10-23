@@ -9,15 +9,16 @@ import { levelCode, prettyCode } from '../engine/codes.js';
 // La pandilla del dueño de Corli tira piedras desde los cerros y bloquea la carretera en el altiplano.
 // Coordenadas: "d" es la distancia recorrida; un objeto en la distancia od se ve en y = CAR_Y - (od - d).
 
-const CAR_Y = 440;
-const ROAD_W = 420;           // ancho del asfalto
+const CAR_Y = 420;
+const ROAD_W = 500;           // ancho del asfalto
 const LENGTH = 80000;         // largo total del viaje
 const CHECKPOINT = 40000;     // mitad: empieza el altiplano
 const SPEED0 = 330;
 const SPEED1 = 560;
 const STEER = 460;
-const CAR_W = 52;
-const CAR_H = 70;
+const CAR_SCALE = 1.5;        // el Baleno y la camioneta se ven más grandes (se distingue a Tofu)
+const CAR_W = 76;
+const CAR_H = 104;
 
 const SECTIONS = [
   { at: 0, name: 'SALIENDO DE COCHABAMBA', sub: 'Rumbo a Oruro' },
@@ -161,7 +162,7 @@ export class Drive {
   horn() {
     this.hornCool = 0.6;
     this.sfx('horn');
-    this.stage.fx.text(this.carX, CAR_Y - 70, '¡PIIIP!', '#ffd23f', 10);
+    this.stage.fx.text(this.carX, CAR_Y - 90, '¡PIIIP!', '#ffd23f', 10);
     for (const o of this.objs) if (o.kind === 'llama' && o.d - this.d < 520 && o.d > this.d) o.scare();
   }
 
@@ -177,7 +178,7 @@ export class Drive {
       this.flash = 0.2;
       this.stage.camera.shake(6, 0.2);
       this.sfx('crash');
-      if (what) this.stage.fx.text(this.carX, CAR_Y - 80, what, '#ff4040', 11);
+      if (what) this.stage.fx.text(this.carX, CAR_Y - 100, what, '#ff4040', 11);
     }
     return true;
   }
@@ -186,7 +187,7 @@ export class Drive {
     this.hp = Math.min(100, this.hp + n);
     this.score += 300;
     this.sfx('pickup');
-    this.stage.fx.text(this.carX, CAR_Y - 80, label, '#7dff8a', 11);
+    this.stage.fx.text(this.carX, CAR_Y - 100, label, '#7dff8a', 11);
   }
 
   // Aparecen peligros y premios según el tramo. Los tiempos están en segundos.
@@ -214,7 +215,9 @@ export class Drive {
       // Apunta cerca de donde va el auto, para que haya que esquivar.
       const target = Math.max(-ROAD_W / 2 + 34, Math.min(ROAD_W / 2 - 34, this.carX - roadX(this.d) + (r() * 2 - 1) * 70));
       const thrower = s === 1 ? this.objs.find((o) => o.kind === 'thrower' && o.side === side && Math.abs(this.screenY(o.d) - 200) < 200) : null;
-      this.objs.push(new Rock(this.d + 330, target, side, thrower));
+      // Cae justo donde va a estar el auto cuando aterrice (si no esquiva, le pega).
+      const T = Math.min(1.2, 400 / this.speed);
+      this.objs.push(new Rock(this.d + this.speed * T - 6, target, side, thrower, T));
       if (thrower) thrower.throw();
     }
     if (s === 1 && n.thrower <= 0) {
@@ -257,10 +260,10 @@ export class Drive {
     this.stateTime = 0;
     this.objs = this.objs.filter((o) => this.screenY(o.d) > CAR_Y + 40);
     this.score += 5000 + this.hp * 20;
-    const truck = { y: VIEW_H + 120, x: this.carX + 110 };
+    const truck = { y: VIEW_H + 150, x: this.carX + 140 };
     this.truck = truck;
     this.stage.cutscene = new Cutscene(this.stage, [
-      { until: (s, dt) => { truck.y -= 240 * dt; truck.x += (roadX(this.d) + 100 - truck.x) * dt * 2; return truck.y < CAR_Y - 60; }, timeout: 5 },
+      { until: (s, dt) => { truck.y -= 240 * dt; truck.x += (roadX(this.d) + 130 - truck.x) * dt * 2; return truck.y < CAR_Y - 90; }, timeout: 5 },
       { say: 'owner', text: '¡Te salvaste esta vez, Faby! ¡Pero ya nos veremos!' },
       { say: 'pug', text: '¡GUAU GUAU! (¡Ya verás, Tofu!)' },
       { say: 'tofu', text: '¡GRRR… GUAU! (¡Cuando quieras!)' },
@@ -311,7 +314,7 @@ export class Drive {
 
   updateSmoke(dt) {
     if (this.hp < 40 && this.state === 'drive' && this.r() < dt * (this.hp < 20 ? 30 : 14)) {
-      this.smoke.push({ x: this.carX + (this.r() * 2 - 1) * 14, y: CAR_Y + 26, t: 0 });
+      this.smoke.push({ x: this.carX + (this.r() * 2 - 1) * 20, y: CAR_Y + 40, t: 0 });
     }
     for (const s of this.smoke) { s.t += dt; s.y += 120 * dt; s.x += Math.sin(s.t * 6) * 0.6; }
     this.smoke = this.smoke.filter((s) => s.t < 0.9);
@@ -442,7 +445,7 @@ export class Drive {
     // Sombra
     ctx.fillStyle = COLORS.shadow;
     ctx.beginPath();
-    ctx.ellipse(x, CAR_Y + 30, 36, 9, 0, 0, Math.PI * 2);
+    ctx.ellipse(x, CAR_Y + 44, 54, 12, 0, 0, Math.PI * 2);
     ctx.fill();
     for (const s of this.smoke) {
       ctx.fillStyle = `rgba(90, 90, 100, ${0.6 * (1 - s.t / 0.9)})`;
@@ -454,12 +457,18 @@ export class Drive {
     ctx.rotate(tilt);
     const bump = Math.round(Math.sin(this.t * 30) * 0.6);
     const img = this.img.d_car;
-    if (img) ctx.drawImage(img, -Math.round(img.width / 2), -Math.round(img.height / 2) + bump);
-    else drawCarFallback(ctx, bump);
+    ctx.imageSmoothingEnabled = false;
+    if (img) {
+      const w = Math.round(img.width * CAR_SCALE), h = Math.round(img.height * CAR_SCALE);
+      ctx.drawImage(img, -Math.round(w / 2), -Math.round(h / 2) + bump, w, h);
+    } else {
+      ctx.scale(CAR_SCALE, CAR_SCALE);
+      drawCarFallback(ctx, bump);
+    }
     ctx.restore();
     if (this.flash > 0) {
       ctx.fillStyle = 'rgba(255,80,80,0.35)';
-      ctx.fillRect(x - 40, CAR_Y - 45, 80, 90);
+      ctx.fillRect(x - 60, CAR_Y - 64, 120, 128);
     }
   }
 
@@ -594,14 +603,14 @@ class Pickup {
 
 // Piedra lanzada desde el costado (o derrumbe): vuela en arco hasta su sombra y queda en la carretera.
 class Rock {
-  constructor(d, off, side, thrower) {
+  constructor(d, off, side, thrower, T = 1.15) {
     this.kind = 'rock';
     this.d = d;
     this.off = off;
     this.side = side;
     this.from = side * (ROAD_W / 2 + 120);
     this.t = 0;
-    this.T = 1.15;
+    this.T = T;
     this.air = true;
     this.h = 24;
     this.warned = false;
@@ -613,7 +622,7 @@ class Rock {
       // Tofu avisa si la piedra cae cerca del auto.
       if (Math.abs(dr.carX - (roadX(this.d) + this.off)) < 90) {
         dr.sfx('bark');
-        dr.stage.fx.text(dr.carX + 26, CAR_Y - 60, '¡GUAU!', '#7df9ff', 10);
+        dr.stage.fx.text(dr.carX + 40, CAR_Y - 80, '¡GUAU!', '#7df9ff', 10);
       }
     }
     if (this.air && this.t >= this.T) {
@@ -719,8 +728,8 @@ class Barrier {
     this.kind = 'barrier';
     this.d = d;
     this.h = 30;
-    this.gaps = [{ c: (r() * 2 - 1) * (ROAD_W / 2 - 80), w: 120 }];
-    if (r() < 0.35) this.gaps.push({ c: -this.gaps[0].c * 0.8, w: 110 });
+    this.gaps = [{ c: (r() * 2 - 1) * (ROAD_W / 2 - 95), w: 160 }];
+    if (r() < 0.35) this.gaps.push({ c: -this.gaps[0].c * 0.8, w: 150 });
     this.moving = moving;
     this.phase = r() * 6;
     this.speed = 0.8 + r() * 0.6;
@@ -741,7 +750,7 @@ class Barrier {
     this.done = true;
     if (this.inGap(cx - rx)) {
       dr.score += 200;
-      dr.stage.fx.text(cx, CAR_Y - 80, '¡PASASTE!', '#7dff8a', 10);
+      dr.stage.fx.text(cx, CAR_Y - 100, '¡PASASTE!', '#7dff8a', 10);
       return;
     }
     dr.damage(22, '¡BLOQUEO!');
@@ -815,7 +824,11 @@ function drawOruroFallback(ctx) {
 function drawTruck(ctx, img, x, y, stage, t) {
   x = Math.round(x);
   y = Math.round(y);
-  if (img) return ctx.drawImage(img, x - img.width / 2, y - img.height / 2);
+  ctx.imageSmoothingEnabled = false;
+  if (img) {
+    const w = Math.round(img.width * CAR_SCALE), h = Math.round(img.height * CAR_SCALE);
+    return ctx.drawImage(img, x - Math.round(w / 2), y - Math.round(h / 2), w, h);
+  }
   ctx.fillStyle = '#140c1c';
   ctx.fillRect(x - 34, y - 50, 68, 100);
   ctx.fillStyle = '#1f3a8a';
