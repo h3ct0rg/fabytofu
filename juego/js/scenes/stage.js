@@ -135,6 +135,7 @@ export class Stage {
     this.boss = null;
     this.owner = null;
     this.morita = null;
+    this.bowl = null;
     this.croquettes = 0;
     this.eventsDone = new Set();
     this.cutscene = this.L.intro(this);
