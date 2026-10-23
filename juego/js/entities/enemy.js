@@ -253,8 +253,9 @@ export class Enemy extends Fighter {
   // Entran caminando desde fuera; desde que pisan la pantalla, quedan dentro de ella.
   keepOnScreen() {
     const cam = this.stage.camera;
-    const left = cam.left + 30;
-    const right = cam.right - 30;
+    const a = this.stage.arena?.() ?? { left: cam.left + 30, right: cam.right - 30 };
+    const left = a.left;
+    const right = a.right;
     if (!this.inArena) {
       if (this.x > left && this.x < right) this.inArena = true;
       return;

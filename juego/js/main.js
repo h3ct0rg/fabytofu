@@ -24,6 +24,32 @@ function fit() {
 window.addEventListener('resize', fit);
 fit();
 
+// Safari de iPhone ignora "user-scalable=no": al tocar dos botones a la vez (o hacer doble toque)
+// agrandaba la página y los controles quedaban corridos. Se bloquean esos gestos y, si la página
+// igual se movió o agrandó, se vuelve a acomodar.
+for (const ev of ['gesturestart', 'gesturechange', 'gestureend']) {
+  document.addEventListener(ev, (e) => e.preventDefault(), { passive: false });
+}
+document.addEventListener('touchmove', (e) => { if (e.cancelable) e.preventDefault(); }, { passive: false });
+document.addEventListener('touchstart', (e) => { if (e.touches.length > 1 && e.cancelable) e.preventDefault(); }, { passive: false });
+document.addEventListener('dblclick', (e) => e.preventDefault(), { passive: false });
+let lastTouchEnd = 0;
+document.addEventListener('touchend', (e) => {
+  // Evita el zoom por doble toque rápido.
+  const now = Date.now();
+  if (now - lastTouchEnd < 300 && e.cancelable) e.preventDefault();
+  lastTouchEnd = now;
+}, { passive: false });
+const vv = window.visualViewport;
+if (vv) {
+  const settle = () => {
+    if (vv.scale > 1.01 || window.scrollX || window.scrollY) window.scrollTo(0, 0);
+    fit();
+  };
+  vv.addEventListener('resize', settle);
+  vv.addEventListener('scroll', settle);
+}
+
 const input = new Input();
 input.bindTouch(document.getElementById('touch'));
 

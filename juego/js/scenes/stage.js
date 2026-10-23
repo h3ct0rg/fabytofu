@@ -148,6 +148,14 @@ export class Stage {
     this.L.setup?.(this);
   }
 
+  // Franja de pantalla donde deben quedarse los enemigos y perros mientras pelean: en el celular,
+  // lejos de los botones táctiles (abajo a la derecha) para que no se escondan debajo de ellos.
+  arena() {
+    const cam = this.camera;
+    const touch = this.game.input?.usingTouch;
+    return { left: cam.left + (touch ? 70 : 30), right: cam.right - (touch ? 190 : 30) };
+  }
+
   // Doña Billetes llama a sus vendedores (y cualquier otro refuerzo del nivel).
   summon(n) {
     this.L.summon?.(this, n);
@@ -443,9 +451,30 @@ export class Stage {
     if (this.goTimer > 0) this.goTimer -= dt;
     this.zoneTime = (this.zoneTime ?? 0) + dt;
     if (this.activeZone) {
+      // Solo quedan perros (no se les pega): se explica qué hacer y, al rato, se van solos.
+      const left = this.enemies.filter((e) => !e.removed);
+      if (left.length && left.every((e) => e.isDog) && !this.cutscene) {
+        this.dogOnly = (this.dogOnly ?? 0) + dt;
+        if (this.dogOnly > 4 && !this.dogHint) {
+          this.dogHint = true;
+          this.banner = { text: '¡A LOS PERRITOS NO SE LES PEGA!', sub: 'Recoge la pelota o el premio con GOLPE (J) y tíraselo con GOLPE', time: 4 };
+        }
+        if (this.dogOnly > 16) {
+          for (const d of left) {
+            if (d.state === 'leaving' || d.state === 'flee') continue;
+            this.fx.text(d.x, d.y - 80, '*se aburre y se va*', '#ffffff', 9);
+            d.carrying && d.drop?.('…');
+            d.leave?.();
+          }
+          this.dogOnly = 0;
+        }
+      } else {
+        this.dogOnly = 0;
+      }
       // La zona del jefe no se despeja mientras hay jefe (ni durante su escena de entrada).
       if (this.enemies.length === 0 && !(this.activeZone.boss && this.boss)) {
         this.activeZone = null;
+        this.dogHint = false;
         this.camera.lock = null;
         this.goTimer = 2.5;
         this.sfx('go');

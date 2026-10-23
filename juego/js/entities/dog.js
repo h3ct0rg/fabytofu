@@ -60,8 +60,10 @@ export class Dog extends Fighter {
     // Mientras pelea no sale de la pantalla (sí puede irse cuando ya lo distrajeron).
     const cam = this.stage.camera;
     if (this.state !== 'leaving' && this.state !== 'flee') {
-      if (!this.inArena && this.x > cam.left + 30 && this.x < cam.right - 30) this.inArena = true;
-      if (this.inArena) this.x = Math.max(cam.left + 30, Math.min(cam.right - 30, this.x));
+      // Una vez que entra, no sale de la parte visible (ni se esconde bajo los botones táctiles).
+      const a = this.stage.arena?.() ?? { left: cam.left + 30, right: cam.right - 30 };
+      if (!this.inArena && this.x > a.left && this.x < a.right) this.inArena = true;
+      if (this.inArena) this.x = Math.max(a.left, Math.min(a.right, this.x));
     }
     this.anim.update(dt);
   }
