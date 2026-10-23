@@ -70,6 +70,7 @@ export class Tofu extends Fighter {
     this.tick(dt);
     if (this.hitstop > 0) { this.hitstop -= dt; return; }
     if (this.script) { this.runScript(dt, 'walk', 'idle'); return; }
+    if (this.updateFetch(dt)) return;
     if (this.callCooldown > 0) this.callCooldown -= dt;
     if (this.petCooldown > 0) this.petCooldown -= dt;
     if (this.alert > 0) this.alert -= dt;
@@ -79,6 +80,57 @@ export class Tofu extends Fighter {
     this.physics(dt);
     if (!this.carried) this.clampToCamera();
     this.updateAnim(dt);
+  }
+
+  // Si cae comida "para buscar" (pelea con Doña Billetes), Tofu corre a buscarla y se la lleva a Faby.
+  // Devuelve true mientras está ocupado en eso.
+  updateFetch(dt) {
+    const p = this.stage.player;
+    if (!this.fetch) {
+      if (this.carried || !['follow', 'sniff', 'sit', 'playful', 'territorial', 'scared'].includes(this.state)) return false;
+      const food = this.stage.foods.find((f) => f.fetchable && !f.removed && !f.carrier && f.z === 0 && !f.taken);
+      if (!food) return false;
+      food.taken = true;
+      this.fetch = { food, phase: 'go' };
+      this.stage.fx.text(this.x, this.y - 70, '¡GUAU!', '#7df9ff', 10);
+    }
+    const f = this.fetch.food;
+    // Si lo golpean o la comida desaparece (la recogió Faby), deja lo que estaba haciendo.
+    if (f.removed || ['hurt', 'knockdown', 'down', 'called', 'furious'].includes(this.state) || this.carried) {
+      if (f.carrier === this) f.carrier = null;
+      f.taken = false;
+      this.fetch = null;
+      return false;
+    }
+    const goal = this.fetch.phase === 'go' ? f : { x: p.x - p.facing * 46, y: p.y + 6 };
+    const dx = goal.x - this.x;
+    const dy = goal.y - this.y;
+    const step = RUN * 1.2 * dt;
+    this.x += Math.sign(dx) * Math.min(Math.abs(dx), step);
+    this.y += Math.sign(dy) * Math.min(Math.abs(dy), step * 0.6);
+    if (Math.abs(dx) > 2) this.facing = Math.sign(dx);
+    this.vx = 0;
+    this.anim.play(Math.abs(dx) > 4 || Math.abs(dy) > 4 ? 'run' : 'idle');
+    if (Math.abs(dx) < 8 && Math.abs(dy) < 8) {
+      if (this.fetch.phase === 'go') {
+        f.carrier = this;
+        this.fetch.phase = 'bring';
+        this.stage.sfx('pickup');
+      } else {
+        // La deja a los pies de Faby: se recoge sola.
+        f.carrier = null;
+        f.x = p.x;
+        f.y = p.y;
+        f.z = 0;
+        f.vz = 0;
+        this.stage.fx.text(this.x, this.y - 70, '¡Toma, Faby!', '#7df9ff', 10);
+        this.stage.sfx('heart');
+        this.fetch = null;
+      }
+    }
+    this.clampToCamera();
+    this.anim.update(dt);
+    return true;
   }
 
   nearestEnemy(range) {

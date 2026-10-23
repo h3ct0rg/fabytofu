@@ -91,6 +91,14 @@ export class Food {
 
   update(dt) {
     this.t += dt;
+    // En la boca de Tofu: va con él y no se recoge hasta que la suelta junto a Faby.
+    if (this.carrier) {
+      const c = this.carrier;
+      this.x = c.x + c.facing * 34;
+      this.y = c.y + 1;
+      this.z = 4;
+      return;
+    }
     if (this.z > 0 || this.vz > 0) {
       this.z = Math.max(0, this.z + this.vz * dt);
       this.vz -= 1200 * dt;

@@ -1,4 +1,5 @@
 import { Fighter } from './fighter.js';
+import { Food } from './breakable.js';
 import { Animator, drawSprite } from '../engine/sprite.js';
 import { worldBox, boxesHit } from '../engine/collision.js';
 import { PilatesBall, Shake, Bill, drawBall, drawStroller, drawPant } from './hazards.js';
@@ -90,6 +91,7 @@ export class BilletesBoss extends Fighter {
 
   update(dt) {
     this.tick(dt);
+    this.dropFood(dt);
     if (this.hitstop > 0) { this.hitstop -= dt; return; }
     if (this.cooldown > 0) this.cooldown -= dt;
     this.think(dt);
@@ -99,6 +101,28 @@ export class BilletesBoss extends Fighter {
       this.x = Math.max(cam.left + 40, Math.min(cam.right - 40, this.x));
     }
     this.anim.update(dt);
+  }
+
+  // Durante la pelea cae comida del cielo para que Faby recupere vida (más seguido si tiene poca).
+  // Tofu corre a buscarla y se la lleva.
+  dropFood(dt) {
+    const st = this.stage;
+    if (!this.alive || this.state === 'script' || !st.enemies.includes(this)) return;
+    this.foodTimer = (this.foodTimer ?? 10) - dt;
+    if (this.foodTimer > 0 || st.foods.some((f) => f.fetchable && !f.removed)) return;
+    const p = st.player;
+    this.foodTimer = p.hp < p.maxHp * 0.4 ? 9 : 16;
+    const r = Math.random();
+    const type = r < 0.55 ? 'saltena' : r < 0.85 ? 'api' : 'silpancho';
+    const a = st.arena();
+    const x = a.left + 60 + Math.random() * (a.right - a.left - 120);
+    const f = new Food(st, x, 410 + Math.random() * 100, type);
+    f.z = 420;
+    f.vz = 0;
+    f.fetchable = true;
+    st.foods.push(f);
+    st.fx.text(x, 140, '¡COMIDA!', '#ffd23f', 12);
+    st.sfx('select');
   }
 
   speed() {
@@ -222,7 +246,7 @@ export class BilletesBoss extends Fighter {
           this.stage.sfx('ring');
         }
         if (this.anim.done) {
-          this.stage.summon?.(this.calls === 1 ? 2 : 3);
+          this.stage.summon?.(2);
           this.recover(0.4);
         }
         break;
