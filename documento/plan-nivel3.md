@@ -12,7 +12,7 @@
 | **Lugar** | Carretera Cochabamba → Oruro: primero cerros y curvas, después el altiplano |
 | **Premisa** | Faby y Tofu viajan a Oruro en el Baleno de Faby. Corli y su dueño cumplen su amenaza: su pandilla bloquea la carretera. |
 | **Vista** | 2.5D desde atrás y un poco arriba (estilo *Top Gear* / *Spy Hunter*): el auto sube por la pantalla, la carretera baja |
-| **Duración** | ~3–4 minutos: 50 % cerros, 50 % altiplano |
+| **Duración** | ~2 minutos: 50 % cerros, 50 % altiplano |
 | **Jefe** | No hay. Final con la camioneta de Corli y la llegada al casco de Oruro |
 
 ---

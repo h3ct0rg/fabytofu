@@ -11,8 +11,8 @@ import { levelCode, prettyCode } from '../engine/codes.js';
 
 const CAR_Y = 420;
 const ROAD_W = 500;           // ancho del asfalto
-const LENGTH = 80000;         // largo total del viaje
-const CHECKPOINT = 40000;     // mitad: empieza el altiplano
+const LENGTH = 56000;         // largo total del viaje (~2 minutos)
+const CHECKPOINT = 28000;     // mitad: empieza el altiplano
 const SPEED0 = 330;
 const SPEED1 = 560;
 const STEER = 460;
@@ -22,9 +22,9 @@ const CAR_H = 104;
 
 const SECTIONS = [
   { at: 0, name: 'SALIENDO DE COCHABAMBA', sub: 'Rumbo a Oruro' },
-  { at: 12000, name: 'LOS CERROS', sub: '¡Cuidado con las piedras!' },
+  { at: 8400, name: 'LOS CERROS', sub: '¡Cuidado con las piedras!' },
   { at: CHECKPOINT, name: 'EL ALTIPLANO', sub: 'Pajas bravas y llamas' },
-  { at: 60000, name: 'EL BLOQUEO', sub: 'Busca los huecos' },
+  { at: 42000, name: 'EL BLOQUEO', sub: 'Busca los huecos' },
 ];
 
 function rng(seed) {
@@ -63,6 +63,7 @@ export class Drive {
     this.next = { rock: 1.5, pothole: 1.2, pickup: 9, llama: 3, barrier: 2.5, thrower: 2 };
     this.r = rng(this.resume ? 99 : 7);
     this.section = -1;
+    this.blocks = 0;          // barreras de "El bloqueo" (cada 2, una llave)
     this.hornCool = 0;
     this.player = { state: 'drive', x: 0, y: 0 };   // para el texto de depuración
     this.smoke = [];
@@ -210,7 +211,7 @@ export class Drive {
     }
     // Cerros: derrumbes al principio; desde "Los cerros", la pandilla tira piedras.
     if (s <= 1 && n.rock <= 0) {
-      n.rock = s === 0 ? 3.2 + r() * 2 : 1.3 + r() * 1.4 - Math.min(0.6, (this.d - 12000) / 50000);
+      n.rock = s === 0 ? 3.2 + r() * 2 : 1.3 + r() * 1.4 - Math.min(0.6, (this.d - 8400) / 35000);
       const side = r() < 0.5 ? -1 : 1;
       // Apunta cerca de donde va el auto, para que haya que esquivar.
       const target = Math.max(-ROAD_W / 2 + 34, Math.min(ROAD_W / 2 - 34, this.carX - roadX(this.d) + (r() * 2 - 1) * 70));
@@ -232,6 +233,8 @@ export class Drive {
     if (s >= 2 && n.barrier <= 0) {
       n.barrier = s === 2 ? 4 + r() * 2 : 2.8 + r() * 1.5;
       this.objs.push(new Barrier(ahead + 60, r, s === 3));
+      // En "El bloqueo", después de cada 2 barreras aparece sí o sí una llave para reparar el auto.
+      if (s === 3 && ++this.blocks % 2 === 0) this.objs.push(new Pickup(ahead + 330, lane(), 'wrench'));
     }
   }
 
