@@ -1,0 +1,6 @@
+[
+  {"name": "car_topdown", "tool": "create_image_pixen", "width": 64, "height": 96, "no_background": true,
+   "description": "pixel art game sprite for a vertical scrolling road game, strict top-down view from directly above: a modern small hatchback car in granite dark gray metallic, facing up, roof, windshield and rear window visible, red tail lights at the bottom edge, a small apricot curly poodle dog head sticking out of the rear side window, single color black outline, no logos, no text"},
+  {"name": "car_25d", "tool": "create_image_pixen", "width": 80, "height": 80, "no_background": true,
+   "description": "pixel art game sprite for a 16-bit SNES racing game, three-quarter view from behind and above, chase camera: a modern small hatchback car in granite dark gray metallic driving away from the viewer, visible roof, rear window, rear bumper and red wide tail lights, black alloy wheels, a small apricot curly poodle dog head sticking out of the side window, single color black outline, no logos, no text"}
+]

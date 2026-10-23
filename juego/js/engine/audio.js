@@ -310,6 +310,13 @@ const SFX = {
   ring: (a, t) => [0, 0.12, 0.36, 0.48].forEach((d) => a.tone(t + d, 1320, 0.09, { wave: 'p50', vol: 0.12 })),
   // Batido que se revienta en el suelo.
   splash: (a, t) => a.noiseHit(t, 0.25, { vol: 0.3, freq: 1200, type: 'bandpass', sweepTo: 400 }),
+  // Nivel 3: bocina del Baleno, choque y piedra que cae.
+  horn: (a, t) => { a.tone(t, 440, 0.18, { wave: 'p50', vol: 0.18 }); a.tone(t, 554, 0.18, { wave: 'p50', vol: 0.14 }); },
+  crash: (a, t) => {
+    a.noiseHit(t, 0.3, { vol: 0.5, freq: 700, type: 'lowpass' });
+    a.tone(t, 110, 0.2, { wave: 'triangle', vol: 0.35, slide: 0.5 });
+  },
+  rock: (a, t) => a.noiseHit(t, 0.18, { vol: 0.35, freq: 400, type: 'lowpass' }),
   // Aullido de Morita: sube, se sostiene temblando y cae.
   howl: (a, t) => {
     a.tone(t, 560, 0.3, { wave: 'triangle', vol: 0.22, slide: 1.45, attack: 0.06 });

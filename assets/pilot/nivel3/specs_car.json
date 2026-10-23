@@ -1,0 +1,7 @@
+[
+  {"name": "car_pro", "tool": "create_image_pro", "width": 128, "height": 128, "no_background": true,
+   "description": "pixel art sprite for a 16-bit SNES road game like Top Gear: a granite dark gray metallic Suzuki Baleno style hatchback seen perfectly straight from behind and slightly above, chase camera centered behind the car, driving straight up the screen, symmetrical, not rotated. Visible roof, small roof spoiler, rear window, a thin chrome strip across the tailgate, two wide red tail lights that wrap around the corners, rear bumper, two black tires. Through the rear window the dark silhouette of the driver (a woman with big curly hair and a magenta bow) on the LEFT seat. A small apricot curly toy poodle dog sticking its head out of the RIGHT side window with ears flapping in the wind. Clean black outline, no logos, no text, no license plate text, transparent background.",
+   "refs": [{"usage": "the real car: shape, granite gray color, tail lights and chrome strip (rear three-quarter photo)", "path": "assets/pilot/nivel3/refs/baleno.png"},
+            {"usage": "camera angle and composition to keep: straight rear chase view", "path": "assets/pilot/nivel3/car_25d_back/c0.png"},
+            {"usage": "the dog Tofu that looks out of the right window", "path": "assets/pilot/tofu/base_stand_112.png"}]}
+]

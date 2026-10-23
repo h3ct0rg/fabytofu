@@ -32,7 +32,7 @@
     const audio = new AudioEngine();
     audio.songs = SONGS;
     audio.muted = false;
-    const labels = { title: 'Título', level: 'Nivel · Parque Lincoln', boss: 'Jefe · Corli', ending: 'Final', prado: 'Nivel 2 · El Prado', boss2: 'Jefa · Doña Billetes', morita: 'Morita feliz (jingle)', victory: 'Victoria (jingle)', gameover: 'Game over (jingle)' };
+    const labels = { title: 'Título', level: 'Nivel · Parque Lincoln', boss: 'Jefe · Corli', ending: 'Final', prado: 'Nivel 2 · El Prado', boss2: 'Jefa · Doña Billetes', morita: 'Morita feliz (jingle)', road: 'Nivel 3 · Carretera a Oruro', oruro: 'Llegada a Oruro (jingle)', victory: 'Victoria (jingle)', gameover: 'Game over (jingle)' };
     for (const name of Object.keys(SONGS)) {
       const b = document.createElement('button');
       b.textContent = '▶ ' + (labels[name] ?? name);
@@ -41,7 +41,7 @@
     }
     document.getElementById('stop').onclick = () => audio.stopMusic();
     const fx = ['swing', 'hit', 'hitStrong', 'hurt', 'jump', 'land', 'fall', 'special', 'pickup', 'throw', 'break', 'eat', 'heart',
-      'bark', 'dogBark', 'growl', 'bigBark', 'whistle', 'zoom', 'go', 'alert', 'select', 'lifeLost', 'stomp', 'howl', 'coins', 'ring', 'splash'];
+      'bark', 'dogBark', 'growl', 'bigBark', 'whistle', 'zoom', 'go', 'alert', 'select', 'lifeLost', 'stomp', 'howl', 'coins', 'ring', 'splash', 'horn', 'crash', 'rock'];
     for (const name of fx) {
       const b = document.createElement('button');
       b.textContent = name;

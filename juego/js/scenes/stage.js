@@ -18,6 +18,7 @@ import { Chihuahua } from '../entities/chihuahua.js';
 import { drawBag } from '../entities/items.js';
 import { levelCode, prettyCode } from '../engine/codes.js';
 import { LEVEL2 } from './level2.js';
+import { Drive } from './drive.js';
 
 const WORLD_W = 3400;
 const MAX_ATTACKERS = 2;
@@ -72,8 +73,10 @@ const LEVEL1 = {
   startBoss: (s, z) => s.startBoss(z),
   onBossDefeated: (s) => s.onBossDefeatedL1(),
 };
-const LEVELS = { 1: LEVEL1, 2: LEVEL2 };
-export const LAST_LEVEL = 2;
+// Nivel 3: Carretera a Oruro, otro modo de juego (manejo con scroll vertical, ver drive.js).
+const LEVEL3 = { num: 3, drive: true };
+const LEVELS = { 1: LEVEL1, 2: LEVEL2, 3: LEVEL3 };
+export const LAST_LEVEL = 3;
 
 // Un nivel en curso: zonas de pelea, escenas, objetos y HUD. Los datos salen de LEVELS.
 export class Stage {
@@ -88,7 +91,21 @@ export class Stage {
     this.save = save;
     this.levelNum = LEVELS[save?.level] ? save.level : 1;
     this.L = LEVELS[this.levelNum];
-    this.camera = new Camera(this.L.worldW);
+    this.lastLevel = LAST_LEVEL;
+    this.drive = null;
+    this.camera = new Camera(this.L.worldW ?? VIEW_W);
+    this.camera.noShake = this.game.settings && !this.game.settings.shake;
+    if (this.L.drive) {
+      // Nivel de manejo: la escena Drive se encarga de todo (el menú sigue usando el fondo del parque).
+      this.fx = new FX();
+      this.bgs ??= {};
+      this.bg = this.bgs[1] ??= LEVEL1.makeBg(this.game.bgImages);
+      this.cutscene = null;
+      this.boss = null;
+      this.drive = new Drive(this, save);
+      this.player = this.drive.player;
+      return;
+    }
     this.camera.noShake = this.game.settings && !this.game.settings.shake;
     this.fx = new FX();
     this.bgs ??= {};
@@ -168,6 +185,11 @@ export class Stage {
   }
 
   update(dt, input) {
+    if (this.drive) {
+      this.fx.update(dt);
+      this.camera.follow(0, dt);
+      return this.drive.update(dt, input);
+    }
     this.modeTime += dt;
     this.time += dt;
     if (this.mode === 'gameover') {
@@ -465,6 +487,7 @@ export class Stage {
   }
 
   draw(ctx, debug) {
+    if (this.drive) return this.drive.draw(ctx, debug);
     const cam = this.camera;
     const camX = Math.round(cam.x + cam.offsetX);
     ctx.save();
@@ -641,7 +664,9 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
     const msg = n >= 6 ? '¡Morita quedó feliz y gordita!' : n >= 3 ? '¡Morita quedó contenta!' : 'Morita comió un poquito… ¡la próxima le traemos más!';
     text(ctx, msg, 640, 384, 9, '#ffb3d9', 'center');
     if (this.croquettesLost) text(ctx, `(el chihuahua se llevó ${this.croquettesLost})`, 640, 404, 8, '#ffffff', 'center');
-    if (Math.floor(t * 2) % 2 === 0) text(ctx, 'CONTINUARÁ… · J / ENTER PARA VOLVER AL INICIO', 640, 448, 9, '#ffd23f', 'center');
+    if (Math.floor(t * 2) % 2 === 0) {
+      text(ctx, last ? 'CONTINUARÁ… · J / ENTER PARA VOLVER AL INICIO' : `J / ENTER: ¡AL NIVEL ${this.levelNum + 1}! · K: MENÚ`, 640, last ? 448 : 486, 9, '#ffd23f', 'center');
+    }
     return;
   }
   // Lo que comió Faby en el paseo: ícono, nombre y cantidad.

@@ -198,6 +198,51 @@ export const SONGS = {
     },
   },
 
+  // Nivel 3: Carretera a Oruro. Rápida y con empuje, de juego de manejo (Mi mayor).
+  road: {
+    bpm: 152,
+    loop: true,
+    inst: { lead: { wave: 'p25', vol: 0.14 }, harm: { wave: 'p12', vol: 0.06, gate: 0.45 }, bass: { wave: 'sawtooth', wave2: 'triangle', vol: 0.15, gate: 0.55 } },
+    parts: {
+      lead: [
+        'E5 - - . B4 - E5 - G#5 - - . F#5 - E5 -',
+        'C#5 - - . E5 - F#5 - G#5 - B5 - A5 - G#5 -',
+        'A5 - - . G#5 - F#5 - E5 - - . C#5 - E5 -',
+        'F#5 - - - D#5 - - - B4 - - - . . B4 -',
+        'E5 - G#5 - B5 - - . C#6 - B5 - G#5 - E5 -',
+        'F#5 - A5 - C#6 - - . B5 - A5 - F#5 - D#5 -',
+        'E5 - - . G#5 - B5 . E6 - D#6 - C#6 - B5 -',
+        'B5 - - - - - . . F#5 - G#5 - A5 - B5 -',
+      ],
+      harm: [arp('E4', 'G#4', 'B4'), arp('C#4', 'E4', 'G#4'), arp('A3', 'C#4', 'E4'), arp('B3', 'D#4', 'F#4'),
+        arp('E4', 'G#4', 'B4'), arp('F#4', 'A4', 'C#5'), arp('E4', 'G#4', 'B4'), arp('B3', 'D#4', 'F#4')],
+      bass: [
+        'E2 E2 E3 E2 E2 E2 E3 E2 E2 E2 E3 E2 E2 E2 E3 E2',
+        'C#2 C#2 C#3 C#2 C#2 C#2 C#3 C#2 C#2 C#2 C#3 C#2 C#2 C#2 C#3 C#2',
+        'A1 A1 A2 A1 A1 A1 A2 A1 A1 A1 A2 A1 A1 A1 A2 A1',
+        'B1 B1 B2 B1 B1 B1 B2 B1 B1 B1 B2 B1 B1 B1 B2 B1',
+        'E2 E2 E3 E2 E2 E2 E3 E2 E2 E2 E3 E2 E2 E2 E3 E2',
+        'F#2 F#2 F#3 F#2 F#2 F#2 F#3 F#2 F#2 F#2 F#3 F#2 F#2 F#2 F#3 F#2',
+        'E2 E2 E3 E2 E2 E2 E3 E2 E2 E2 E3 E2 E2 E2 E3 E2',
+        'B1 B1 B2 B1 B1 B1 B2 B1 B1 B1 B2 B1 B1 B1 B2 B1',
+      ],
+      drums: [...rep('K . H K S . H . K . H K S . H H', 7), 'K . H K S . S . S S S S KC . . .'],
+    },
+  },
+
+  // Llegada a Oruro: jingle de banda de Carnaval (Sol mayor, marcha alegre).
+  oruro: {
+    bpm: 132,
+    loop: false,
+    inst: { lead: { wave: 'p25', vol: 0.18 }, harm: { wave: 'p12', vol: 0.08, gate: 0.5 }, bass: BASS },
+    parts: {
+      lead: ['G5 - G5 A5 B5 - G5 - D6 - - - B5 - G5 -', 'C6 - B5 - A5 - F#5 - G5 - - - - - . .'],
+      harm: ['B4 - B4 C5 D5 - B4 - F#5 - - - D5 - B4 -', 'E5 - D5 - C5 - A4 - B4 - - - - - . .'],
+      bass: ['G2 - D3 - G2 - D3 - G2 - D3 - G2 - D3 -', 'C3 - G2 - D3 - D2 - G2 - - - - - . .'],
+      drums: ['K . S . K . S . K . S . K S S S', 'K . S . K . S . KC . . . . . . .'],
+    },
+  },
+
   // Jingles (no se repiten)
   victory: {
     bpm: 160,
