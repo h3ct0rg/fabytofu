@@ -1,6 +1,6 @@
 # Faby & Tofu — Plan del Nivel 3: Carretera a Oruro
 
-> Estado: **jugable** ✅ (22-oct-2026). Nivel de transición, de manejo, sin jefe. Costo real: **~115 generaciones**.
+> Estado: **jugable** ✅ (22-oct-2026). Nivel de transición, de manejo, sin jefe. Costo real: **~190 generaciones** (según el saldo de PixelLab).
 > Reutiliza menú, HUD, música, guardado y códigos de nivel. Lo nuevo es un **modo de juego**: manejo con scroll vertical.
 
 ---
