@@ -53,9 +53,15 @@ export function prettyCode(code) {
   return `${code.slice(0, 3)}-${code.slice(3)}`;
 }
 
+// Códigos fijos para quienes prueban el juego: sirven en cualquier dispositivo.
+// Solo se guarda la huella (hash) de cada código, no el texto, para que no aparezcan en el código fuente.
+// Para cambiarlos: calcular hash('tester|CODIGO', 0x51a7).toString(36) y reemplazar aquí.
+const TESTER = { '1nyk9sz': 2, '17vwjfo': 3 };
+
 // Devuelve el nivel al que lleva el código, o null si no es válido para este jugador.
 export function checkCode(code, lastLevel) {
   const c = code.toUpperCase().replace(/[^A-Z0-9]/g, '');
   for (let lv = 2; lv <= lastLevel; lv++) if (levelCode(lv) === c) return lv;
-  return null;
+  const test = TESTER[hash(`tester|${c}`, 0x51a7).toString(36)];
+  return test && test <= lastLevel ? test : null;
 }
