@@ -1,0 +1,14 @@
+[
+  {"name": "arch", "tool": "create_image_pro", "width": 170, "height": 170, "no_background": true,
+   "description": "pixel art set piece, side view: a festive carnival street arch of Oruro Bolivia completely decorated with shiny silver plates, silver trays and silverware hanging in rows, colorful paper flowers and ribbons, standing over a street, isolated, fully inside the canvas, transparent space on all sides, no ground, vibrant, crisp pixels",
+   "style": "assets/pilot/prado/monument/c1.png"},
+  {"name": "socavon", "tool": "create_image_pro", "width": 170, "height": 170, "no_background": true,
+   "description": "pixel art set piece, side view: the facade of a white colonial Andean church sanctuary in Oruro Bolivia, a single bell tower with a cross, arched wooden door, small arched windows, whitewashed walls with stone details, a small plaza in front, sunny, isolated, fully inside the canvas, transparent space on all sides, no ground, vibrant, crisp pixels",
+   "style": "assets/pilot/prado/monument/c1.png"},
+  {"name": "dancers", "tool": "create_image_pro", "width": 170, "height": 128, "no_background": true,
+   "description": "pixel art background group for a 16-bit beat em up, side view: three joyful Bolivian carnival folk dancers dancing in a parade, a diablada dancer with a colorful devil mask and red cape, a caporales dancer with a hat and bells, a morenada dancer with a silver costume, festive and respectful, isolated, fully inside the canvas, transparent background, vibrant, crisp pixels",
+   "style": "assets/pilot/nivel4/caporal_pro/c2.png"},
+  {"name": "corli_devil", "tool": "create_image_pro", "width": 64, "height": 64, "no_background": true,
+   "description": "the pug dog from the reference wearing a tiny cute Bolivian Diablada devil carnival costume: small red and gold embroidered cape and a tiny devil mask with little horns on his head, angry face, standing in side view facing right, pixel art, clean black outline, transparent background, single character, no text",
+   "refs": [{"usage": "this exact pug dog (Corli)", "path": "assets/pilot/pug/pug_base_112.png"}]}
+]

@@ -248,3 +248,44 @@ export class Bill {
     ctx.fillRect(x - 2, y - 2, 4, 4);
   }
 }
+
+// Serpentina del jefe del Carnaval: cae sobre Faby (la sombra avisa) y suelta confeti.
+const STREAMER = { damage: 6, push: 70, hitstop: 0.05 };
+const STREAMER_COLORS = ['#ff2fa8', '#ffd23f', '#7df9ff', '#7dff8a', '#ff6b3d'];
+
+export class Streamer extends Bill {
+  constructor(stage, x, y, delay) {
+    super(stage, x, y, delay);
+    this.color = STREAMER_COLORS[Math.floor(Math.random() * STREAMER_COLORS.length)];
+  }
+
+  update(dt) {
+    this.t += dt;
+    if (this.t < this.delay) return;
+    this.z -= 520 * dt;
+    const p = this.stage.player;
+    if (this.z < 160 && Math.abs(p.x - this.x) < 22 && Math.abs(p.y - this.y) < 14 && p.takeHit(STREAMER, this)) this.removed = true;
+    if (this.z <= 0) {
+      this.removed = true;
+      this.stage.fx.dust(this.x, this.y, 2);
+    }
+  }
+
+  draw(ctx, camX) {
+    if (this.t < this.delay) return;
+    const x = Math.round(this.x - camX);
+    const y = Math.round(this.y - this.z);
+    // Cinta en espiral y algunos papelitos de confeti
+    for (let i = 0; i < 6; i++) {
+      const ox = Math.round(Math.sin(this.t * 10 + i) * 6);
+      ctx.fillStyle = '#140c1c';
+      ctx.fillRect(x + ox - 3, y - i * 6 - 3, 6, 6);
+      ctx.fillStyle = this.color;
+      ctx.fillRect(x + ox - 2, y - i * 6 - 2, 4, 4);
+    }
+    for (let i = 0; i < 4; i++) {
+      ctx.fillStyle = STREAMER_COLORS[(i + 1) % STREAMER_COLORS.length];
+      ctx.fillRect(x + Math.round(Math.cos(this.t * 6 + i * 2) * 14), y - 10 - i * 8, 3, 3);
+    }
+  }
+}

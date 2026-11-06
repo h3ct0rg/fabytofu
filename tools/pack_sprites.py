@@ -289,6 +289,75 @@ SHEETS["coach"] = {
     },
 }
 
+# Nivel 4: la pandilla de Corli disfrazada de danzantes del Carnaval y el jefe con careta gigante.
+N4 = ROOT / "assets" / "pilot" / "nivel4"
+SHEETS["caporal"] = {
+    "src": N4,
+    "clean": True,
+    "anims": {
+        "idle":      {"dir": "caporal_idle", "frames": [0, 1, 2, 1], "ms": [160] * 4, "loop": True},
+        "walk":      {"dir": "caporal_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100] * 8, "loop": True, "perFrame": True},
+        "kick":     {"dir": "caporal_atk", "frames": [2, 3, 4, 3], "ms": [80, 70, 150, 80], "loop": False, "active": [2], "perFrame": True},
+        "hurt":      {"dir": "caporal_hurt", "frames": [3, 4, 3], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+        "grabbed":   {"dir": "caporal_hurt", "frames": [4], "ms": [100], "loop": True, "perFrame": True},
+        "knockdown": {"dir": "caporal_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True},
+        "down":      {"dir": "caporal_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+    },
+}
+SHEETS["moreno"] = {
+    "src": N4,
+    "clean": True,
+    "anims": {
+        "idle":      {"dir": "moreno_idle", "frames": [0, 1, 2, 1], "ms": [160] * 4, "loop": True},
+        "walk":      {"dir": "moreno_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100] * 8, "loop": True, "perFrame": True},
+        "swing":     {"dir": "moreno_atk", "frames": [1, 2, 3, 4], "ms": [120, 100, 170, 120], "loop": False, "active": [2, 3], "perFrame": True},
+        "hurt":      {"dir": "moreno_hurt", "frames": [1, 2, 1], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+        "grabbed":   {"dir": "moreno_hurt", "frames": [2], "ms": [100], "loop": True, "perFrame": True},
+        "knockdown": {"dir": "moreno_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True},
+        "down":      {"dir": "moreno_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+    },
+}
+SHEETS["diablo"] = {
+    "src": N4,
+    "clean": True,
+    "anims": {
+        "idle":      {"dir": "diablo_idle", "frames": [0, 1, 2, 1], "ms": [160] * 4, "loop": True},
+        "walk":      {"dir": "diablo_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100] * 8, "loop": True, "perFrame": True},
+        "whip":     {"dir": "diablo_atk", "frames": [0, 2, 3, 4], "ms": [120, 70, 150, 110], "loop": False, "active": [1, 2], "perFrame": True},
+        "hurt":      {"dir": "diablo_hurt", "frames": [0, 4, 0], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+        "grabbed":   {"dir": "diablo_hurt", "frames": [4], "ms": [100], "loop": True, "perFrame": True},
+        "knockdown": {"dir": "diablo_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True},
+        "down":      {"dir": "diablo_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+    },
+}
+SHEETS["china"] = {
+    "src": N4,
+    "clean": True,
+    "anims": {
+        "idle":      {"dir": "china_idle", "frames": [0, 3, 4, 3], "ms": [160] * 4, "loop": True},
+        "walk":      {"dir": "china_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100] * 8, "loop": True, "perFrame": True},
+        "spin":     {"dir": "china_atk", "frames": [2, 3, 4, 3], "ms": [70, 70, 140, 80], "loop": False, "active": [1, 2], "perFrame": True},
+        "hurt":      {"dir": "china_hurt", "frames": [3, 4, 3], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+        "grabbed":   {"dir": "china_hurt", "frames": [4], "ms": [100], "loop": True, "perFrame": True},
+        "knockdown": {"dir": "china_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True},
+        "down":      {"dir": "china_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+    },
+}
+SHEETS["diablo4"] = {
+    "src": N4,
+    "clean": True,
+    "anims": {
+        "idle":   {"dir": "boss_idle", "frames": [0, 1, 2, 3], "ms": [180] * 4, "loop": True, "perFrame": True},
+        "walk":   {"dir": "boss_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [110] * 8, "loop": True, "perFrame": True},
+        "punch":  {"dir": "boss_punch", "frames": [1, 2, 3, 2], "ms": [120, 90, 180, 110], "loop": False, "active": [2], "perFrame": True},
+        "stomp":  {"dir": "boss_stomp", "frames": [1, 2, 3, 4, 3], "ms": [100, 120, 120, 200, 100], "loop": False, "perFrame": True},
+        "throw":  {"dir": "boss_throw", "frames": [1, 2, 3, 4], "ms": [100, 140, 160, 200], "loop": False, "perFrame": True},
+        "charge": {"dir": "boss_charge", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [60] * 8, "loop": True, "perFrame": True},
+        "hurt":   {"dir": "boss_hurt", "frames": [1, 2, 3, 2], "ms": [70, 160, 120, 90], "loop": False, "perFrame": True},
+        "ko":     {"dir": "boss_ko", "frames": [1, 2, 3, 4, 5, 6], "ms": [110, 120, 140, 200, 220, 300], "loop": False, "perFrame": True, "clean": False},  # la careta que cae va separada
+    },
+}
+
 def pack(name, sheet):
     frames, meta = [], {}
     for anim, cfg in sheet["anims"].items():
@@ -327,7 +396,7 @@ def pack(name, sheet):
                             if not any(c[3] and not dark(c) for c in near):
                                 px[x, y] = (0, 0, 0, 0)
                                 changed = True
-        if cfg.get("clean") or sheet.get("clean"):
+        if cfg.get("clean", sheet.get("clean")):
             imgs = [keep_largest(im) for im in imgs]
         if sheet.get("scale"):
             # Personajes más chicos que su lienzo de generación (Morita es 2/3 de Tofu).

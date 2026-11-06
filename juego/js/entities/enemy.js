@@ -66,6 +66,56 @@ const TYPES = {
     targetsTofu: true,
     armor: true,
   },
+  // ---- Nivel 4: la pandilla de Corli disfrazada de danzantes del Carnaval ----
+  // (al recibir el primer golpe fuerte se les cae la careta o el sombrero: son impostores)
+  caporal: {
+    name: 'CAPORAL (DISFRAZADO)',
+    hp: 42,
+    speedX: 150,
+    speedY: 90,
+    windup: 0.35,
+    range: 74,
+    attack: { anim: 'kick', damage: 9, push: 140, hitstop: 0.08, box: { x: 14, w: 66, z: 30, h: 60 } },
+    targetsTofu: true,
+    mask: 'SE LE CAYÓ EL SOMBRERO',
+  },
+  moreno: {
+    name: 'MORENO (DISFRAZADO)',
+    hp: 72,
+    speedX: 90,
+    speedY: 70,
+    windup: 0.55,
+    range: 76,
+    // La matraca: el ruido aturde.
+    attack: { anim: 'swing', damage: 10, stun: 0.9, hitstop: 0.09, box: { x: 10, w: 80, z: 50, h: 60 } },
+    targetsTofu: false,
+    armor: true,
+    mask: 'SE LE CAYÓ LA CORONA',
+  },
+  diablo: {
+    name: 'DIABLO (DISFRAZADO)',
+    hp: 46,
+    speedX: 120,
+    speedY: 80,
+    windup: 0.45,
+    range: 140,
+    // Latigazo de alcance largo.
+    attack: { anim: 'whip', damage: 9, push: 120, hitstop: 0.08, box: { x: 20, w: 150, z: 60, h: 40 } },
+    targetsTofu: false,
+    mask: 'SE LE CAYÓ LA CARETA',
+  },
+  china: {
+    name: 'CHINA SUPAY (DISFRAZADA)',
+    hp: 38,
+    speedX: 170,
+    speedY: 100,
+    windup: 0.3,
+    range: 64,
+    // Giro con la falda y la capa: empuja lejos.
+    attack: { anim: 'spin', damage: 8, push: 180, hitstop: 0.07, box: { x: -30, w: 100, z: 30, h: 90 } },
+    targetsTofu: true,
+    mask: 'SE LE CAYÓ LA CARETA',
+  },
 };
 
 const TOFU_CHANCE = 0.3;
@@ -279,6 +329,11 @@ export class Enemy extends Fighter {
   }
 
   setState(s) {
+    // Impostores del Carnaval: al primer derribo se les cae parte del disfraz.
+    if (s === 'knockdown' && this.cfg?.mask && !this.unmasked) {
+      this.unmasked = true;
+      this.stage.fx.text(this.x, this.y - 170, `¡${this.cfg.mask}!`, '#ffd23f', 10);
+    }
     super.setState(s);
     const once = { hurt: 'hurt', knockdown: 'knockdown', getup: 'getup' };
     if (once[s] && this.anim.sheet.anims[once[s]]) this.anim.play(once[s], true);

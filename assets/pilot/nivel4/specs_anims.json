@@ -1,0 +1,170 @@
+[
+ {
+  "name": "caporal_idle",
+  "base": "assets/pilot/nivel4/caporal_base_144.png",
+  "frames": 4,
+  "action": "cocky fighting stance idle, light bounce, staying in place, no visual effects"
+ },
+ {
+  "name": "caporal_walk",
+  "base": "assets/pilot/nivel4/caporal_base_144.png",
+  "frames": 8,
+  "action": "walk cycle in place facing right in guard, staying in the same spot, loopable, no visual effects"
+ },
+ {
+  "name": "caporal_atk",
+  "base": "assets/pilot/nivel4/caporal_base_144L.png",
+  "frames": 4,
+  "action": "fast jump front kick to the right with his booted leg fully extended, golden bells jingling, then lands back in guard, staying in place, no visual effects"
+ },
+ {
+  "name": "caporal_hurt",
+  "base": "assets/pilot/nivel4/caporal_base_144.png",
+  "frames": 4,
+  "action": "gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"
+ },
+ {
+  "name": "caporal_knock",
+  "base": "assets/pilot/nivel4/caporal_base_192R.png",
+  "frames": 8,
+  "action": "knocked off his feet by a heavy hit, flies backward to the left and falls, landing lying flat on his back on the ground, no visual effects"
+ },
+ {
+  "name": "moreno_idle",
+  "base": "assets/pilot/nivel4/moreno_base_144.png",
+  "frames": 4,
+  "action": "cocky fighting stance idle, light bounce, staying in place, no visual effects"
+ },
+ {
+  "name": "moreno_walk",
+  "base": "assets/pilot/nivel4/moreno_base_144.png",
+  "frames": 8,
+  "action": "walk cycle in place facing right in guard, staying in the same spot, loopable, no visual effects"
+ },
+ {
+  "name": "moreno_atk",
+  "base": "assets/pilot/nivel4/moreno_base_144L.png",
+  "frames": 4,
+  "action": "swings the wooden matraca rattle forward to the right in a wide heavy arc, whole bulky costume swaying, then recovers, staying in place, no visual effects"
+ },
+ {
+  "name": "moreno_hurt",
+  "base": "assets/pilot/nivel4/moreno_base_144.png",
+  "frames": 4,
+  "action": "gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"
+ },
+ {
+  "name": "moreno_knock",
+  "base": "assets/pilot/nivel4/moreno_base_192R.png",
+  "frames": 8,
+  "action": "knocked off his feet by a heavy hit, flies backward to the left and falls, landing lying flat on his back on the ground, no visual effects"
+ },
+ {
+  "name": "diablo_idle",
+  "base": "assets/pilot/nivel4/diablo_base_144.png",
+  "frames": 4,
+  "action": "cocky fighting stance idle, light bounce, staying in place, no visual effects"
+ },
+ {
+  "name": "diablo_walk",
+  "base": "assets/pilot/nivel4/diablo_base_144.png",
+  "frames": 8,
+  "action": "walk cycle in place facing right in guard, staying in the same spot, loopable, no visual effects"
+ },
+ {
+  "name": "diablo_atk",
+  "base": "assets/pilot/nivel4/diablo_base_144L.png",
+  "frames": 4,
+  "action": "cracks the whip forward to the right, the whip lashing out long and straight, then pulls it back, staying in place, no visual effects"
+ },
+ {
+  "name": "diablo_hurt",
+  "base": "assets/pilot/nivel4/diablo_base_144.png",
+  "frames": 4,
+  "action": "gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"
+ },
+ {
+  "name": "diablo_knock",
+  "base": "assets/pilot/nivel4/diablo_base_192R.png",
+  "frames": 8,
+  "action": "knocked off his feet by a heavy hit, flies backward to the left and falls, landing lying flat on his back on the ground, no visual effects"
+ },
+ {
+  "name": "china_idle",
+  "base": "assets/pilot/nivel4/china_base_144.png",
+  "frames": 4,
+  "action": "cocky fighting stance idle, light bounce, staying in place, no visual effects"
+ },
+ {
+  "name": "china_walk",
+  "base": "assets/pilot/nivel4/china_base_144.png",
+  "frames": 8,
+  "action": "walk cycle in place facing right in guard, staying in the same spot, loopable, no visual effects"
+ },
+ {
+  "name": "china_atk",
+  "base": "assets/pilot/nivel4/china_base_144L.png",
+  "frames": 4,
+  "action": "spins around fast on one boot with the skirt and cape flaring out and strikes forward to the right with a backhand, then recovers, staying in place, no visual effects"
+ },
+ {
+  "name": "china_hurt",
+  "base": "assets/pilot/nivel4/china_base_144.png",
+  "frames": 4,
+  "action": "gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"
+ },
+ {
+  "name": "china_knock",
+  "base": "assets/pilot/nivel4/china_base_192R.png",
+  "frames": 8,
+  "action": "knocked off her feet by a heavy hit, flies backward to the left and falls, landing lying flat on her back on the ground, no visual effects"
+ },
+ {
+  "name": "boss_idle",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 4,
+  "action": "menacing fighting stance idle, heavy breathing, cape swaying, staying in place, no visual effects"
+ },
+ {
+  "name": "boss_walk",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 8,
+  "action": "heavy stomping walk cycle in place facing right, cape swaying, staying in the same spot, loopable, no visual effects"
+ },
+ {
+  "name": "boss_punch",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 4,
+  "action": "throws a huge heavy hammer punch forward to the right with both fists, then recovers, staying in place, no visual effects"
+ },
+ {
+  "name": "boss_stomp",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 4,
+  "action": "raises one leg high and stomps the ground hard, body shaking, staying in place, no dust, no visual effects"
+ },
+ {
+  "name": "boss_throw",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 4,
+  "action": "raises both arms up high and throws something into the air above, staying in place, empty hands, no confetti, no visual effects"
+ },
+ {
+  "name": "boss_charge",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 8,
+  "action": "charging run cycle in place facing right, body leaning far forward with the horned mask lowered like a bull, staying in the same spot, loopable, no visual effects"
+ },
+ {
+  "name": "boss_hurt",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 4,
+  "action": "gets hit hard, giant mask head snaps back, staggers backward to the left, then recovers, staying in place, no visual effects"
+ },
+ {
+  "name": "boss_ko",
+  "base": "assets/pilot/nivel4/boss_base.png",
+  "frames": 6,
+  "action": "totally defeated, staggers dizzily and falls to sit on the ground, the giant devil mask falling off his head revealing his bald angry face, staying in place, no visual effects"
+ }
+]

@@ -19,6 +19,7 @@ import { drawBag } from '../entities/items.js';
 import { levelCode, prettyCode } from '../engine/codes.js';
 import { LEVEL2 } from './level2.js';
 import { Drive } from './drive.js';
+import { LEVEL4 } from './level4.js';
 
 const WORLD_W = 3400;
 const MAX_ATTACKERS = 2;
@@ -75,8 +76,8 @@ const LEVEL1 = {
 };
 // Nivel 3: Carretera a Oruro, otro modo de juego (manejo con scroll vertical, ver drive.js).
 const LEVEL3 = { num: 3, drive: true };
-const LEVELS = { 1: LEVEL1, 2: LEVEL2, 3: LEVEL3 };
-export const LAST_LEVEL = 3;
+const LEVELS = { 1: LEVEL1, 2: LEVEL2, 3: LEVEL3, 4: LEVEL4 };
+export const LAST_LEVEL = 4;
 
 // Un nivel en curso: zonas de pelea, escenas, objetos y HUD. Los datos salen de LEVELS.
 export class Stage {
@@ -683,7 +684,8 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
   }
   text(ctx, last ? '¡GRACIAS POR JUGAR!' : `¡NIVEL ${this.levelNum} COMPLETADO!`, 640, 150, last ? 22 : 20, '#ff2fa8', 'center');
   text(ctx, 'FABY & TOFU', 640, 200, 16, '#7df9ff', 'center');
-  text(ctx, this.levelNum === 2 ? 'El Prado · Cochabamba' : 'Parque Lincoln · Cochabamba', 640, 228, 10, '#ffffff', 'center');
+  const place = { 1: 'Parque Lincoln · Cochabamba', 2: 'El Prado · Cochabamba', 4: 'El Carnaval de Oruro' }[this.levelNum] ?? '';
+  text(ctx, place, 640, 228, 10, '#ffffff', 'center');
   text(ctx, `PUNTAJE  ${String(this.player.score).padStart(6, '0')}`, 640, 270, 14, '#ffd23f', 'center');
   if (this.levelNum === 2) {
     // Lo que juntaron para Morita.
