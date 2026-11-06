@@ -25,6 +25,8 @@ function canvas(w, h) {
 
 const STREET = [372, 525];
 const ARCHES = [300, 900, 1500, 2100, 2700];
+// Danzantes de verdad bailando de fondo (no pelean: son la fiesta).
+const DANCERS = [620, 1180, 1760, 2330, 2780];
 const CROWD_COLORS = ['#ff2fa8', '#ffd23f', '#7df9ff', '#7dff8a', '#ff6b3d', '#c38bff', '#ffffff', '#e83a3a'];
 
 export class CarnavalBackground extends Background {
@@ -145,8 +147,24 @@ export class CarnavalBackground extends Background {
     const off = ((camX % fw) + fw) % fw;
     ctx.drawImage(this.floor, -off, 0);
     if (fw - off < VIEW_W) ctx.drawImage(this.floor, fw - off, 0);
+    this.drawDancers(ctx, camX);
     this.drawArches(ctx, camX);
     this.drawSocavon(ctx, camX);
+  }
+
+  drawDancers(ctx, camX) {
+    const img = this.img.c_dancers;
+    if (!img) return;
+    DANCERS.forEach((dx, i) => {
+      const x = Math.round(dx - camX);
+      if (x < -150 || x > VIEW_W + 150) return;
+      const hop = Math.round(Math.abs(Math.sin(this.t * 5 + i)) * 6);
+      ctx.save();
+      ctx.translate(x, 374 - hop);
+      if (i % 2) ctx.scale(-1, 1);
+      ctx.drawImage(img, -img.width / 2, -img.height);
+      ctx.restore();
+    });
   }
 
   // Arcos de plata (en Oruro se adornan con vajilla de plata).

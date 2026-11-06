@@ -339,7 +339,17 @@ export class DiabloBoss extends Fighter {
     const x = this.x - camX;
     const y = this.y - this.z;
     // Corli, detrás de su dueño
-    if (this.corli && this.state !== 'ko') drawSprite(ctx, this.corli, x - this.facing * 70, this.y + 4, this.facing);
+    const corliImg = this.stage.game.bgImages.c_corli;
+    if (this.state !== 'ko' && corliImg) {
+      // Corli con su mini traje de diablo
+      const cx = Math.round(x - this.facing * 70), bob = Math.round(Math.abs(Math.sin(this.stage.time * 8)) * 3);
+      ctx.save();
+      ctx.translate(cx, Math.round(this.y + 4 - bob));
+      if (this.facing < 0) ctx.scale(-1, 1);
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(corliImg, -corliImg.width * 0.75, -corliImg.height * 1.5, corliImg.width * 1.5, corliImg.height * 1.5);
+      ctx.restore();
+    } else if (this.corli && this.state !== 'ko') drawSprite(ctx, this.corli, x - this.facing * 70, this.y + 4, this.facing);
     // Onda del pisotón
     if (this.quake > 0) {
       ctx.strokeStyle = `rgba(255, 210, 63, ${Math.max(0, 1 - this.quake / 420)})`;

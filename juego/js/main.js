@@ -120,7 +120,9 @@ async function boot() {
       'o_bag', 'o_cup', 'o_ball', 'o_stroller', 'o_bill', 'o_bowl',
       // Nivel 3: Carretera a Oruro.
       'd_car', 'd_car_side', 'd_truck', 'd_thrower', 'd_blocker', 'd_blocker2', 'd_llama', 'd_llama1', 'd_llama2', 'd_llama3', 'd_llama4',
-      'd_hill', 'd_hill2', 'd_oruro', 'o_rock', 'o_tires', 'o_cone', 'o_pothole', 'o_wrench', 'o_fuel'];
+      'd_hill', 'd_hill2', 'd_oruro', 'o_rock', 'o_tires', 'o_cone', 'o_pothole', 'o_wrench', 'o_fuel',
+      // Nivel 4: Carnaval de Oruro.
+      'c_arch', 'c_socavon', 'c_dancers', 'c_corli'];
     game.bgImages = {};
     await Promise.all(BG.map((n) => loadImage(`assets/bg/${n}.png`).then((im) => { game.bgImages[n] = im; }).catch(() => {})));
     game.stage = new Stage(game);
