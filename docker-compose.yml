@@ -10,6 +10,8 @@ networks:
 
 services:
   faby-tofu:
+    mem_limit: 64m
+    cpus: 0.25
     build:
       context: .
       dockerfile: Dockerfile
