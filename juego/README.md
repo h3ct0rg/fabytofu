@@ -27,6 +27,8 @@ Luego abrir http://localhost:8137. La rocola con todas las pistas y efectos est�
 
 3. **Carretera a Oruro** (modo de manejo, `scenes/drive.js`): el Baleno acelera solo; se esquiva con izquierda/derecha y la bocina (J / A) aparta a las llamas. Cerros con tirapiedras y derrumbes, luego el altiplano con llamas y barreras de llantas con huecos. Llaves y gasolina reparan el auto. Punto de control a la mitad. Sin jefe: al final pasa la camioneta de Corli y Faby llega al casco de Oruro.
 
+4. **El Carnaval de Oruro** (`scenes/level4.js`, `carnaval.js`): la pandilla de Corli disfrazada (caporal, moreno con matraca que aturde, diablo con látigo, china supay); jefe: el dueño de Corli con careta de diablo gigante (pisotón con onda que se salta, lluvia de serpentina, embestida; Corli ladra). Final con los danzantes de verdad.
+
 Al ganar un nivel se pasa al siguiente con el mismo puntaje y vidas; la ranura recuerda el nivel.
 
 **Códigos de nivel** (como en los juegos de SNES): al terminar un nivel, la pantalla de resultados muestra un código de 6 caracteres para empezar directo en el siguiente. Se escribe en **CÓDIGO DE NIVEL**, en el menú de cada partida (teclado en pantalla, mando, toque o teclado de la PC). Los códigos son **personales**: salen de un identificador de jugador secreto guardado en el navegador (`faby-tofu-id`), así que solo sirven en el dispositivo de quien los ganó. Si se borran los datos del navegador, se generan otros (`js/engine/codes.js`).

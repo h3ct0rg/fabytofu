@@ -1,6 +1,6 @@
 # Faby & Tofu — Plan del Nivel 4: El Carnaval de Oruro
 
-> Estado: **jugable** (6-nov-2026), con arte de PixelLab en personajes, arcos, danzantes y Socavón; las casas, graderías y público están dibujados por código. Costo hasta ahora: **~224 generaciones**.
+> Estado: **terminado** ✅ (7-nov-2026). Todo el arte es de PixelLab (personajes, jefe, casas, graderías, arcos, danzantes, Socavón, baile final). Costo total: **~288 generaciones**.
 > Reutiliza el motor de peleas, el HUD, las escenas, el guardado y los códigos de nivel.
 
 ---
@@ -74,8 +74,8 @@ El Carnaval de Oruro es Patrimonio de la Humanidad y una fiesta de **devoción a
 | A. Enemigos | 4 disfrazados con animaciones (idle, caminar, ataque, golpe, caída) |
 | B. Jefe | Dueño con careta gigante: base y animaciones |
 | C. IA | Tipos nuevos de enemigo y jefe de 3 fases |
-| D. Fondo | Arcos de plata, danzantes de verdad, Socavón ✅ · Pendiente: graderías y casas con arte de PixelLab (desde el 7-nov) |
-| E. Escenas y música | Intro, final con baile, música de Carnaval |
+| D. Fondo ✅ | Casas de Oruro, graderías con público, arcos de plata, danzantes de verdad (caporal, diablo, cholita) y Socavón |
+| E. Escenas y música ✅ | Intro, final: llegan los danzantes y Faby y Tofu bailan; marcha de Carnaval y tema del jefe |
 | F. Integración | Paso del nivel 3 al 4, código de nivel, pruebas en celular |
 
 

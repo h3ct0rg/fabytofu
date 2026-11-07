@@ -32,8 +32,10 @@ const CROWD_COLORS = ['#ff2fa8', '#ffd23f', '#7df9ff', '#7dff8a', '#ff6b3d', '#c
 export class CarnavalBackground extends Background {
   constructor(worldWidth, images = {}) {
     super(worldWidth, images);
-    this.houses = this.makeHouses();
+    // Si hay arte de PixelLab (c_houses, c_stands) se usa; si no, el dibujado por código.
+    this.houses = images.c_houses ? this.mirror(images.c_houses) : this.makeHouses();
     this.stands = this.makeStands();
+    this.standsArt = images.c_stands ? this.mirror(images.c_stands) : null;
     this.t = 0;
   }
 
@@ -63,6 +65,16 @@ export class CarnavalBackground extends Background {
     }
     px(0, STREET[1], W, VIEW_H - STREET[1], '#7d7468');
     px(0, STREET[1], W, 3, '#c4b8a6');
+    return c;
+  }
+
+  mirror(img) {
+    const c = canvas(img.width * 2, img.height);
+    const g = c.getContext('2d');
+    g.drawImage(img, 0, 0);
+    g.translate(img.width * 2, 0);
+    g.scale(-1, 1);
+    g.drawImage(img, 0, 0);
     return c;
   }
 
@@ -127,7 +139,21 @@ export class CarnavalBackground extends Background {
       }
     }
     this.drawTiled(ctx, this.houses, camX, 0.35, 120);
-    // Graderías con público que se mueve
+    // Graderías con público
+    if (this.standsArt) {
+      this.drawTiled(ctx, this.standsArt, camX, 0.7, 372 - this.standsArt.height);
+    } else this.drawCodeStands(ctx, camX);
+    const fw = this.floor.width;
+    const off = ((camX % fw) + fw) % fw;
+    ctx.drawImage(this.floor, -off, 0);
+    if (fw - off < VIEW_W) ctx.drawImage(this.floor, fw - off, 0);
+    this.drawDancers(ctx, camX);
+    this.drawArches(ctx, camX);
+    this.drawSocavon(ctx, camX);
+  }
+
+  // Graderías con público que se mueve (respaldo dibujado por código)
+  drawCodeStands(ctx, camX) {
     const sx = -(((camX * 0.7) % 960) + 960) % 960;
     for (let ox = sx - 960; ox < VIEW_W; ox += 960) {
       ctx.drawImage(this.stands, Math.round(ox), 250);
@@ -143,19 +169,12 @@ export class CarnavalBackground extends Background {
         }
       }
     }
-    const fw = this.floor.width;
-    const off = ((camX % fw) + fw) % fw;
-    ctx.drawImage(this.floor, -off, 0);
-    if (fw - off < VIEW_W) ctx.drawImage(this.floor, fw - off, 0);
-    this.drawDancers(ctx, camX);
-    this.drawArches(ctx, camX);
-    this.drawSocavon(ctx, camX);
   }
 
   drawDancers(ctx, camX) {
-    const img = this.img.c_dancers;
-    if (!img) return;
     DANCERS.forEach((dx, i) => {
+      const img = (i % 2 && this.img.c_cholita) || this.img.c_dancers;
+      if (!img) return;
       const x = Math.round(dx - camX);
       if (x < -150 || x > VIEW_W + 150) return;
       const hop = Math.round(Math.abs(Math.sin(this.t * 5 + i)) * 6);

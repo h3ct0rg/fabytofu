@@ -1,0 +1,11 @@
+[
+  {"name": "stands", "tool": "create_image_pro", "width": 688, "height": 150, "no_background": true,
+   "description": "pixel art mid background layer for a 16-bit side scrolling beat em up, side view: long carnival grandstands (graderias) along a parade avenue in Oruro Bolivia, several rows of wooden and metal bleachers packed with a cheerful colorful crowd of spectators clapping, waving, wearing hats and colorful clothes, some holding small Bolivian flags and water balloons, festive, vibrant saturated colors, sunny, crisp pixels, transparent background above the stands, no ground, no street",
+   "style": "assets/pilot/prado/buildings/c0.png"},
+  {"name": "houses", "tool": "create_image_pro", "width": 688, "height": 220, "no_background": true,
+   "description": "pixel art far background layer for a 16-bit side scrolling beat em up, side view: a row of colonial houses and buildings of Oruro Bolivia during carnival, two and three stories, colorful facades in yellow, blue, terracotta, pink and white with wooden balconies, arched windows, tiled roofs, colorful bunting and Bolivian flags hanging between them, a hill with houses behind, sunny, vibrant saturated colors, crisp pixels, transparent background, no ground, no street",
+   "style": "assets/pilot/prado/buildings/c0.png"},
+  {"name": "cholita", "tool": "create_image_pro", "width": 96, "height": 128, "no_background": true,
+   "description": "pixel art background character for a 16-bit beat em up, side view: a joyful Bolivian carnival folk dancer woman of the Morenada (china morena): wide colorful layered pollera skirt, embroidered shawl, a small bowler hat, long black braids, holding a small matraca, dancing happily, festive and respectful, full body, transparent background, crisp pixels",
+   "style": "assets/pilot/nivel4/dancers/c1.png"}
+]

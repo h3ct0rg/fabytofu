@@ -56,6 +56,8 @@ SHEETS = {
             # Huyendo del Pug (pantalla de inicio)
             "panic":     {"dir": "faby_v3/panic", "frames": [2, 3, 4, 5, 6, 7, 8], "ms": [70] * 7, "loop": True, "perFrame": True},
             "front":     {"dir": "faby_v2/idle", "frames": [1, 2, 3, 4], "ms": [180] * 4, "loop": True, "faces": -1},
+            # Final del nivel 4: baila con los danzantes del Carnaval
+            "dance":     {"dir": "nivel4/faby_dance", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [95] * 8, "loop": True, "perFrame": True, "optional": True, "clean": True},
         },
     },
     "tofu": {
