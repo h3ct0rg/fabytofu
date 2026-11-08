@@ -1,6 +1,6 @@
 # Faby & Tofu — Plan del Nivel 5: La Mina del Socavón
 
-> Estado: **planificado** (7-nov-2026). Todo el arte de personajes y fondos es de PixelLab; velas, círculo de fuego, oscuridad y brillos se dibujan en código.
+> Estado: **jugable** ✅ (7-nov-2026). Todo el arte es de PixelLab: diablitos, murciélago, señor de la chistera, Diablo, piezas de la mina, cerros de Oruro, velas, círculo de fuego con runas y piso de basalto. En código: oscuridad y luces, humo, bolas de fuego, goteras y temblor. Costo real: **~335 generaciones** (quedan 1 600 hasta el 7-dic).
 > Reutiliza el motor de peleas, el HUD, las escenas, el guardado y los códigos de nivel.
 
 ---
@@ -123,3 +123,11 @@ Los murciélagos no son enemigos: no tienen vida y no se pueden golpear.
 | E. Fondos | Boca de la mina, 4 pisos y cámara del Diablo; velas y círculo en código |
 | F. Escenas y música | Entrada, contrato y transformación, final con temblor; tema de la mina y tema del Diablo |
 | G. Integración | Paso del nivel 4 al 5, código de nivel y de prueba, pruebas en celular |
+
+## 9. Notas de producción
+- Faby cargando a Tofu ya existía (animaciones carryIdle/carryWalk/carryKick): no hubo que generarla.
+- Los pisos se recorren en zigzag con `floors` en los datos del nivel y `stage.enterFloor()`; la cámara tiene `bounds` y `dir`.
+- La primera entrada de la mina salió en perspectiva diagonal (con el borde del suelo cortado) y se regeneró de frente.
+- Velas, círculo y piso de la cámara del Diablo se hicieron primero en código y se reemplazaron por arte de PixelLab a pedido.
+- Afuera de la mina: cielo de amanecer, sol y nubes en código; cerros de Oruro con la Virgen (nuevo), casas del nivel 4, Socavón, boca de la mina, carrito y rocas del nivel 3.
+- Corrección general: los enemigos entran a la pantalla antes de atacar (el del tridente pegaba desde afuera).

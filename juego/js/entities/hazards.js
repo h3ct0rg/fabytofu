@@ -289,3 +289,170 @@ export class Streamer extends Bill {
     }
   }
 }
+
+// Nivel 5: piedrita encendida que lanza el diablito minero (vuela en arco y se apaga al caer).
+const EMBER = { damage: 6, push: 90, hitstop: 0.05 };
+
+export class Ember extends Shake {
+  update(dt) {
+    this.t = (this.t ?? 0) + dt;
+    this.x += this.vx * dt;
+    this.y += this.vy * dt;
+    this.z += this.vz * dt;
+    this.vz -= 1200 * dt;
+    for (const target of [this.stage.player, this.stage.tofu]) {
+      if (!target || this.removed || !target.hurtWorld) continue;
+      const tall = target === this.stage.player ? 90 : 30;
+      if (Math.abs(target.x - this.x) < 24 && Math.abs(target.y - this.y) < 16 && Math.abs((target.z ?? 0) + tall - this.z) < 60 && target.takeHit(EMBER, this)) {
+        this.removed = true;
+        this.stage.fx.text(target.x, target.y - 150, '¡AY, QUEMA!', '#ff6b3d', 11);
+      }
+    }
+    if (this.z <= 0) {
+      this.removed = true;
+      this.stage.fx.dust(this.x, this.y, 2);
+    }
+  }
+
+  draw(ctx, camX) {
+    const x = Math.round(this.x - camX);
+    const y = Math.round(this.y - this.z);
+    const f = Math.floor((this.t ?? 0) * 20) % 2;
+    ctx.fillStyle = 'rgba(255, 120, 40, 0.35)';
+    ctx.fillRect(x - 10, y - 10, 20, 20);
+    ctx.fillStyle = '#140c1c';
+    ctx.fillRect(x - 7, y - 7, 14, 14);
+    ctx.fillStyle = '#5a4a48';
+    ctx.fillRect(x - 5, y - 5, 10, 10);
+    ctx.fillStyle = f ? '#ffd23f' : '#ff6b3d';
+    ctx.fillRect(x - 3, y - 3, 6, 6);
+    ctx.fillStyle = '#ff6b3d';
+    ctx.fillRect(x - 2 - Math.sign(this.vx) * 10, y - 1 + f, 4, 3);
+    ctx.fillRect(x - 1 - Math.sign(this.vx) * 16, y + 1 - f, 3, 2);
+  }
+}
+
+// Nivel 5: bola de fuego del Diablo. Vuela recta por el carril (hay que cambiar de carril o saltar).
+const FIREBALL = { damage: 11, knockdown: true, hitstop: 0.08 };
+
+export class Fireball {
+  constructor(stage, x, y, dir, speed = 420) {
+    this.stage = stage;
+    this.x = x;
+    this.y = y;
+    this.z = 70;
+    this.vx = dir * speed;
+    this.t = 0;
+    this.hit = new Set();
+    this.removed = false;
+  }
+
+  update(dt) {
+    this.t += dt;
+    this.x += this.vx * dt;
+    for (const target of [this.stage.player, this.stage.tofu]) {
+      if (!target || this.hit.has(target) || !target.hurtWorld) continue;
+      if (Math.abs(target.x - this.x) < 34 && Math.abs(target.y - this.y) < 18 && (target.z ?? 0) < 50 && target.takeHit(FIREBALL, this)) {
+        this.hit.add(target);
+        this.removed = true;
+        this.stage.fx.text(target.x, target.y - 150, '¡FUEGO!', '#ff6b3d', 12);
+        this.stage.fx.spark(target.x, target.y - 70, true);
+      }
+    }
+    const cam = this.stage.camera;
+    if (this.x < cam.left - 80 || this.x > cam.right + 80) this.removed = true;
+  }
+
+  drawShadow(ctx, camX) {
+    ctx.fillStyle = 'rgba(255, 90, 30, 0.35)';
+    ctx.beginPath();
+    ctx.ellipse(Math.round(this.x - camX), Math.round(this.y), 30, 7, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  draw(ctx, camX) {
+    drawFireball(ctx, this.x - camX, this.y - this.z, Math.sign(this.vx), this.t);
+  }
+}
+
+export function drawFireball(ctx, x, y, dir, t, k = 1) {
+  x = Math.round(x);
+  y = Math.round(y);
+  const f = Math.floor(t * 16) % 2;
+  const s = (n) => Math.round(n * k);
+  // Estela
+  for (let i = 1; i <= 4; i++) {
+    ctx.fillStyle = i % 2 ? '#ff6b3d' : '#ffd23f';
+    const r = s(10 - i * 2);
+    ctx.fillRect(x - dir * s(i * 12) - r, y - r + ((i + f) % 2 ? 2 : -2), r * 2, r * 2);
+  }
+  ctx.fillStyle = 'rgba(255, 80, 20, 0.35)';
+  ctx.fillRect(x - s(22), y - s(22), s(44), s(44));
+  ctx.fillStyle = '#140c1c';
+  ctx.fillRect(x - s(16), y - s(16), s(32), s(32));
+  ctx.fillStyle = '#e8331f';
+  ctx.fillRect(x - s(14), y - s(14), s(28), s(28));
+  ctx.fillStyle = '#ff6b3d';
+  ctx.fillRect(x - s(10), y - s(10), s(20), s(20));
+  ctx.fillStyle = f ? '#ffd23f' : '#fff3a0';
+  ctx.fillRect(x - s(5) + dir * s(3), y - s(5), s(10), s(10));
+}
+
+// Nivel 5: fuego que cae del techo sobre Faby (fase 3 del Diablo); la sombra avisa dónde cae.
+const FIRE_RAIN = { damage: 9, knockdown: true, hitstop: 0.06 };
+
+export class FireRain extends Bill {
+  update(dt) {
+    this.t += dt;
+    if (this.t < this.delay) return;
+    this.z -= 600 * dt;
+    const p = this.stage.player;
+    if (this.z < 150 && Math.abs(p.x - this.x) < 26 && Math.abs(p.y - this.y) < 16 && p.takeHit(FIRE_RAIN, this)) this.removed = true;
+    if (this.z <= 0) {
+      this.removed = true;
+      this.stage.fx.spark(this.x, this.y - 10, false);
+    }
+  }
+
+  drawShadow(ctx, camX) {
+    if (this.t < this.delay * 0.4) return;
+    const k = Math.max(0.3, 1 - this.z / 520);
+    ctx.fillStyle = 'rgba(255, 60, 30, 0.45)';
+    ctx.beginPath();
+    ctx.ellipse(Math.round(this.x - camX), Math.round(this.y), 22 * k, 7 * k, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  draw(ctx, camX) {
+    if (this.t < this.delay) return;
+    ctx.save();
+    ctx.translate(Math.round(this.x - camX), Math.round(this.y - this.z));
+    ctx.rotate(Math.PI / 2);
+    drawFireball(ctx, 0, 0, 1, this.t, 0.7);
+    ctx.restore();
+  }
+}
+
+// Nivel 5: piedra que cae del techo cuando la mina tiembla (final del nivel).
+export class FallingRock extends Bill {
+  update(dt) {
+    this.t += dt;
+    if (this.t < this.delay) return;
+    this.z -= 700 * dt;
+    if (this.z <= 0) {
+      this.removed = true;
+      this.stage.fx.dust(this.x, this.y, 3);
+    }
+  }
+
+  draw(ctx, camX) {
+    if (this.t < this.delay) return;
+    const x = Math.round(this.x - camX), y = Math.round(this.y - this.z);
+    ctx.fillStyle = '#140c1c';
+    ctx.fillRect(x - 11, y - 9, 22, 18);
+    ctx.fillStyle = '#6b5a52';
+    ctx.fillRect(x - 9, y - 7, 18, 14);
+    ctx.fillStyle = '#8f7d72';
+    ctx.fillRect(x - 7, y - 7, 8, 5);
+  }
+}

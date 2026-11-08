@@ -111,6 +111,8 @@ async function boot() {
   try {
     await document.fonts.load(`16px ${FONT}`).catch(() => {});
     for (const n of ['faby', 'tofu', 'jogger', 'skater', 'dog', 'pug', 'morita', 'billetes', 'shake', 'influ', 'chihuahua', 'coach', 'caporal', 'moreno', 'diablo', 'china', 'diablo4']) game.sheets[n] = await loadSheet(n);
+    // Nivel 5 (la mina): si alguna hoja falta, el juego usa su respaldo dibujado por código.
+    for (const n of ['imp', 'impFork', 'impThrow', 'devil', 'gent', 'bat']) game.sheets[n] = await loadSheet(n).catch(() => null);
     // Ilustraciones del parque (si alguna falta, el escenario la omite).
     const BG = ['tunari', 'city', 'street', 'treeline', 'canchas', 'glorieta', 'pergola', 'pond',
       'lamp', 'bench', 'flag', 'bush', 'flowerbed',
@@ -122,7 +124,10 @@ async function boot() {
       'd_car', 'd_car_side', 'd_truck', 'd_thrower', 'd_blocker', 'd_blocker2', 'd_llama', 'd_llama1', 'd_llama2', 'd_llama3', 'd_llama4',
       'd_hill', 'd_hill2', 'd_oruro', 'o_rock', 'o_tires', 'o_cone', 'o_pothole', 'o_wrench', 'o_fuel',
       // Nivel 4: Carnaval de Oruro.
-      'c_arch', 'c_socavon', 'c_dancers', 'c_corli', 'c_houses', 'c_stands', 'c_cholita'];
+      'c_arch', 'c_socavon', 'c_dancers', 'c_corli', 'c_houses', 'c_stands', 'c_cholita',
+      // Nivel 5: la mina del Socavón.
+      'm_entrance', 'm_wall', 'm_beam', 'm_cart', 'm_cave', 'm_vein', 'm_ladder', 'm_tio', 'm_pillar',
+      'm_candle', 'm_candle_off', 'm_circle', 'm_cfloor', 'm_cerros'];
     game.bgImages = {};
     await Promise.all(BG.map((n) => loadImage(`assets/bg/${n}.png`).then((im) => { game.bgImages[n] = im; }).catch(() => {})));
     game.stage = new Stage(game);

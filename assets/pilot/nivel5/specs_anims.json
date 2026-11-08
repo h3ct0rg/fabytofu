@@ -1,0 +1,140 @@
+[
+ {
+  "name": "imp_idle",
+  "base": "assets/pilot/nivel5/imp_base.png",
+  "frames": 4,
+  "action": "mischievous idle, bouncing lightly on its feet, tail swishing, staying in place, no visual effects"
+ },
+ {
+  "name": "imp_walk",
+  "base": "assets/pilot/nivel5/imp_base.png",
+  "frames": 8,
+  "action": "sneaky quick walk cycle in place facing right, tail swishing, loopable, staying in place, no visual effects"
+ },
+ {
+  "name": "imp_atk",
+  "base": "assets/pilot/nivel5/imp_baseL.png",
+  "frames": 4,
+  "action": "leaps forward to the right and slashes with both claws in a quick pounce, then lands back crouched, staying in place, no visual effects"
+ },
+ {
+  "name": "imp_hurt",
+  "base": "assets/pilot/nivel5/imp_base.png",
+  "frames": 4,
+  "action": "gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"
+ },
+ {
+  "name": "imp_knock",
+  "base": "assets/pilot/nivel5/imp_baseR.png",
+  "frames": 8,
+  "action": "knocked off its feet by a heavy hit, flies backward to the left and falls, landing lying flat on its back on the ground, no visual effects"
+ },
+ {
+  "name": "fork_idle",
+  "base": "assets/pilot/nivel5/fork_base.png",
+  "frames": 4,
+  "action": "mischievous idle, bouncing lightly on its feet, tail swishing, staying in place, no visual effects"
+ },
+ {
+  "name": "fork_walk",
+  "base": "assets/pilot/nivel5/fork_base.png",
+  "frames": 8,
+  "action": "sneaky quick walk cycle in place facing right, tail swishing, loopable, staying in place, no visual effects"
+ },
+ {
+  "name": "fork_atk",
+  "base": "assets/pilot/nivel5/fork_baseL.png",
+  "frames": 4,
+  "action": "thrusts the long pitchfork trident forward to the right in a fast long stab with both hands, then pulls it back, staying in place, no visual effects"
+ },
+ {
+  "name": "fork_hurt",
+  "base": "assets/pilot/nivel5/fork_base.png",
+  "frames": 4,
+  "action": "gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"
+ },
+ {
+  "name": "fork_knock",
+  "base": "assets/pilot/nivel5/fork_baseR.png",
+  "frames": 8,
+  "action": "knocked off its feet by a heavy hit, flies backward to the left and falls, landing lying flat on its back on the ground, no visual effects"
+ },
+ {
+  "name": "thrower_idle",
+  "base": "assets/pilot/nivel5/thrower_base.png",
+  "frames": 4,
+  "action": "mischievous idle, bouncing lightly on its feet, tail swishing, staying in place, no visual effects"
+ },
+ {
+  "name": "thrower_walk",
+  "base": "assets/pilot/nivel5/thrower_base.png",
+  "frames": 8,
+  "action": "sneaky quick walk cycle in place facing right, tail swishing, loopable, staying in place, no visual effects"
+ },
+ {
+  "name": "thrower_atk",
+  "base": "assets/pilot/nivel5/thrower_baseL.png",
+  "frames": 4,
+  "action": "winds up and throws the glowing ember rock forward to the right with an overhand throw, hand ends empty, staying in place, no visual effects"
+ },
+ {
+  "name": "thrower_hurt",
+  "base": "assets/pilot/nivel5/thrower_base.png",
+  "frames": 4,
+  "action": "gets punched in the face, head snaps back, recoils backward to the left with a pained face, no visual effects"
+ },
+ {
+  "name": "thrower_knock",
+  "base": "assets/pilot/nivel5/thrower_baseR.png",
+  "frames": 8,
+  "action": "knocked off its feet by a heavy hit, flies backward to the left and falls, landing lying flat on its back on the ground, no visual effects"
+ },
+ {
+  "name": "devil_idle",
+  "base": "assets/pilot/nivel5/devil_base.png",
+  "frames": 4,
+  "action": "menacing breathing idle, shoulders heaving, wings twitching, tail swaying, staying in place, no visual effects"
+ },
+ {
+  "name": "devil_walk",
+  "base": "assets/pilot/nivel5/devil_base.png",
+  "frames": 8,
+  "action": "heavy stomping walk cycle in place facing right, wings slightly moving, loopable, staying in place, no visual effects"
+ },
+ {
+  "name": "devil_punch",
+  "base": "assets/pilot/nivel5/devil_baseL.png",
+  "frames": 4,
+  "action": "huge clawed hook punch forward to the right with the whole body, then recovers, staying in place, no visual effects"
+ },
+ {
+  "name": "devil_fire",
+  "base": "assets/pilot/nivel5/devil_baseL.png",
+  "frames": 4,
+  "action": "pulls back one clawed hand then thrusts it forward to the right with an open palm as if hurling a fireball, then recovers, staying in place, no visual effects"
+ },
+ {
+  "name": "devil_charge",
+  "base": "assets/pilot/nivel5/devil_base.png",
+  "frames": 8,
+  "action": "bull charge run in place facing right, head lowered with horns forward, hooves pounding, wings back, loopable, staying in place, no visual effects"
+ },
+ {
+  "name": "devil_hurt",
+  "base": "assets/pilot/nivel5/devil_base.png",
+  "frames": 4,
+  "action": "gets hit hard, recoils backward to the left with a pained roar, then recovers, staying in place, no visual effects"
+ },
+ {
+  "name": "devil_ko",
+  "base": "assets/pilot/nivel5/devil_base.png",
+  "frames": 8,
+  "action": "defeated, staggers and collapses down onto one knee and then onto both knees, head down exhausted, no visual effects"
+ },
+ {
+  "name": "bat_fly",
+  "base": "assets/pilot/nivel5/bat_base.png",
+  "frames": 4,
+  "action": "flapping its wings up and down while flying in place, loopable, no visual effects"
+ }
+]

@@ -13,6 +13,9 @@ bloqueos de la pandilla de Corli, hasta llegar a Oruro justo para el Carnaval.
 En el **nivel 4, El Carnaval de Oruro**, la pandilla de Corli se mete al Carnaval disfrazada de danzantes;
 Faby y Tofu pelean hasta el Socavón contra el dueño de Corli con una careta de diablo gigante, y terminan bailando con los danzantes de verdad.
 
+En el **nivel 5, La Mina del Socavón**, bajan en zigzag por 4 pisos de túneles entre murciélagos que asustan a Tofu
+y diablitos que salen de las cuevas, hasta encontrar a un señor elegante con chistera que le ofrece un contrato a Faby… y es el Diablo.
+
 ## Jugar
 
 - **Docker:** `docker compose up -d --build` y abrir `http://localhost:8099`
@@ -30,6 +33,6 @@ Controles, estructura del código y detalles en [juego/README.md](juego/README.m
 | `tools/` | Scripts para generar arte con PixelLab y empaquetar los sprites (`pack_sprites.py`) |
 | `assets/pilot/` | Cuadros originales generados con PixelLab, antes de empaquetar |
 | `design/` | Bocetos y guías de estilo |
-| `documento/` | Planes de diseño: MVP (nivel 1) y niveles 2, 3 y 4 |
+| `documento/` | Planes de diseño: MVP (nivel 1) y niveles 2, 3, 4 y 5 |
 
 Arte generado con [PixelLab](https://pixellab.ai). Música y efectos sintetizados en vivo con WebAudio.

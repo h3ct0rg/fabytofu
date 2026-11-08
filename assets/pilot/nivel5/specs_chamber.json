@@ -1,0 +1,14 @@
+[
+  {"name": "candle_lit", "tool": "create_image_pro", "width": 48, "height": 96, "no_background": true,
+   "description": "pixel art object, side view: a single tall thick dark red ritual wax candle with melted wax drips running down, standing on a small black iron candle holder, lit with a bright orange and yellow flame on top, isolated, fully inside the canvas, transparent background, crisp pixels",
+   "style": "juego/assets/bg/m_pillar.png"},
+  {"name": "candle_off", "tool": "create_image_pro", "width": 48, "height": 96, "no_background": true,
+   "description": "pixel art object, side view: a single tall thick dark red ritual wax candle with melted wax drips running down, standing on a small black iron candle holder, unlit with a black burnt wick and a thin wisp of grey smoke, isolated, fully inside the canvas, transparent background, crisp pixels",
+   "style": "juego/assets/bg/m_pillar.png"},
+  {"name": "circle", "tool": "create_image_pro", "width": 320, "height": 112, "no_background": true,
+   "description": "pixel art floor decal for a 16-bit beat em up, seen from a low side angle so it is a very wide flat ellipse: a large magic summoning circle burned into a dark stone cave floor, two concentric rings of glowing red-orange fire with mysterious ancient carved runes and symbols between the rings, small flames licking along the rings, no pentagram, no star, nothing in the center, isolated, fully inside the canvas, transparent background, crisp pixels",
+   "style": "juego/assets/bg/m_pillar.png"},
+  {"name": "cfloor", "tool": "create_image_pro", "width": 170, "height": 170, "no_background": false,
+   "description": "pixel art texture seen from above: dark volcanic basalt stone floor of a deep underground cavern, irregular flat stone slabs with thin glowing red lava cracks between some of them, a few small red crystals, dark and ominous, fills the whole canvas edge to edge, seamless, crisp pixels",
+   "style": "juego/assets/bg/m_pillar.png"}
+]

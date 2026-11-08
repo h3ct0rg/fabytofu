@@ -29,6 +29,8 @@ Luego abrir http://localhost:8137. La rocola con todas las pistas y efectos est�
 
 4. **El Carnaval de Oruro** (`scenes/level4.js`, `carnaval.js`): la pandilla de Corli disfrazada (caporal, moreno con matraca que aturde, diablo con látigo, china supay); jefe: el dueño de Corli con careta de diablo gigante (pisotón con onda que se salta, lluvia de serpentina, embestida; Corli ladra). Final con los danzantes de verdad.
 
+5. **La Mina del Socavón** (`scenes/level5.js`, `mina.js`): 4 pisos que se recorren en zigzag (los pares hacia la izquierda; al final de cada túnel una rampa baja al siguiente), murciélagos que asustan a Tofu (salta a los brazos de Faby, que solo puede patear), diablitos que salen de las cuevas (normal, con tridente, minero que lanza piedritas), charcos que resbalan en el piso 3. Jefe: el señor de la chistera ofrece un contrato y se transforma en el Diablo (golpes, embestidas, bolas de fuego y lluvia de fuego; las velas se encienden a medida que pierde vida; Tofu le ladra y lo aturde). Al final la mina empieza a temblar.
+
 Al ganar un nivel se pasa al siguiente con el mismo puntaje y vidas; la ranura recuerda el nivel.
 
 **Códigos de nivel** (como en los juegos de SNES): al terminar un nivel, la pantalla de resultados muestra un código de 6 caracteres para empezar directo en el siguiente. Se escribe en **CÓDIGO DE NIVEL**, en el menú de cada partida (teclado en pantalla, mando, toque o teclado de la PC). Los códigos son **personales**: salen de un identificador de jugador secreto guardado en el navegador (`faby-tofu-id`), así que solo sirven en el dispositivo de quien los ganó. Si se borran los datos del navegador, se generan otros (`js/engine/codes.js`).

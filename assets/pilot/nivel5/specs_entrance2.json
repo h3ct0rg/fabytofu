@@ -1,0 +1,5 @@
+[
+  {"name": "entrance2", "tool": "create_image_pro", "width": 170, "height": 170, "no_background": true,
+   "description": "pixel art set piece, flat straight front view (not isometric, not diagonal, no perspective): the mouth of an old Bolivian silver mine carved into a rocky hillside cliff, a dark rectangular tunnel opening framed by thick old wooden beams (two posts and a lintel), a hanging oil lantern on the side, rocks and dry grass around the edges of the cliff, the bottom edge is flat where it meets the ground, no ground platform, no rails, no visible base, isolated, fully inside the canvas, transparent background, crisp pixels",
+   "refs": [{"usage": "flat front view facade style to match (another set piece of the same game)", "path": "juego/assets/bg/c_socavon.png"}]}
+]

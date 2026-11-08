@@ -360,6 +360,70 @@ SHEETS["diablo4"] = {
     },
 }
 
+# Nivel 5: la mina del Socavón. Diablitos, el señor de la chistera, el Diablo y los murciélagos.
+N5 = ROOT / "assets" / "pilot" / "nivel5"
+
+
+def imp_sheet(k, atk_name, atk_frames, atk_ms, active):
+    return {
+        "src": N5,
+        "clean": True,
+        "anims": {
+            "idle":      {"dir": f"{k}_idle", "frames": [0, 1, 2, 3], "ms": [150] * 4, "loop": True, "perFrame": True},
+            "walk":      {"dir": f"{k}_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [85] * 8, "loop": True, "perFrame": True},
+            atk_name:    {"dir": f"{k}_atk", "frames": atk_frames, "ms": atk_ms, "loop": False, "active": active, "perFrame": True},
+            "hurt":      {"dir": f"{k}_hurt", "frames": [2, 3, 2], "ms": [60, 160, 100], "loop": False, "perFrame": True},
+            "grabbed":   {"dir": f"{k}_hurt", "frames": [3], "ms": [100], "loop": True, "perFrame": True},
+            "knockdown": {"dir": f"{k}_knock", "frames": [3, 4, 5, 6, 7], "ms": [70, 70, 80, 90, 100], "loop": False, "perFrame": True},
+            "down":      {"dir": f"{k}_knock", "frames": [8], "ms": [100], "loop": True, "perFrame": True},
+        },
+    }
+
+
+SHEETS["imp"] = imp_sheet("imp", "claw", [1, 2, 3, 4], [70, 70, 140, 90], [2])
+# Al diablito normal la IA le cambió la pose en la segunda mitad de la caminata y le puso un destello al recibir golpes.
+SHEETS["imp"]["anims"]["walk"].update(frames=[1, 2, 3, 4, 3, 2], ms=[85] * 6)
+SHEETS["imp"]["anims"]["hurt"].update(dir="imp_hurt", frames=[4, 4, 4])
+SHEETS["imp"]["anims"]["grabbed"].update(frames=[4])
+# Tridente: los cuadros 1-2 traen un arco de efecto pegado; se usa la estocada limpia (3-4).
+SHEETS["impFork"] = imp_sheet("fork", "stab", [0, 3, 4, 3], [140, 80, 170, 100], [1, 2])
+SHEETS["impFork"]["anims"]["hurt"].update(frames=[3, 4, 3])
+SHEETS["impFork"]["anims"]["grabbed"].update(frames=[4])
+# Minero: los cuadros 1-3 del lanzamiento traen una llamarada pegada; se usa "piedra en alto" -> "mano vacía".
+SHEETS["impThrow"] = imp_sheet("thrower", "throw", [0, 4, 4], [160, 200, 160], [1])
+SHEETS["impThrow"]["anims"]["hurt"].update(frames=[4, 4, 4])
+SHEETS["impThrow"]["anims"]["grabbed"].update(frames=[4])
+SHEETS["devil"] = {
+    "src": N5,
+    "clean": True,
+    "anims": {
+        "idle":   {"dir": "devil_idle", "frames": [0, 1, 2, 3], "ms": [180] * 4, "loop": True, "perFrame": True},
+        "walk":   {"dir": "devil_walk", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [110] * 8, "loop": True, "perFrame": True},
+        "punch":  {"dir": "devil_punch", "frames": [1, 2, 3, 4], "ms": [120, 90, 180, 110], "loop": False, "active": [2], "perFrame": True},
+        "fire":   {"dir": "devil_fire", "frames": [1, 2, 3, 4], "ms": [120, 140, 160, 200], "loop": False, "perFrame": True},
+        "charge": {"dir": "devil_charge", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [60] * 8, "loop": True, "perFrame": True},
+        "hurt":   {"dir": "devil_hurt", "frames": [3, 4, 3, 2], "ms": [70, 160, 120, 90], "loop": False, "perFrame": True},
+        "ko":     {"dir": "devil_ko", "frames": [1, 2, 3, 4, 5, 6, 7, 8], "ms": [100, 110, 120, 140, 160, 200, 240, 300], "loop": False, "perFrame": True},
+    },
+}
+SHEETS["gent"] = {
+    "src": N5,
+    "clean": True,
+    "anims": {
+        "idle":  {"dir": "gent_idle", "frames": [0, 1, 2, 3], "ms": [200] * 4, "loop": True, "perFrame": True},
+        "offer": {"dir": "gent_offer", "frames": [1, 2, 3, 4], "ms": [120, 120, 140, 400], "loop": False, "perFrame": True},
+        "angry": {"dir": "gent_angry", "frames": [3, 4, 3, 4], "ms": [90] * 4, "loop": True, "perFrame": True},
+    },
+}
+SHEETS["bat"] = {
+    "src": N5,
+    "clean": True,
+    "anims": {
+        "fly": {"dir": "bat_fly", "frames": [0, 1, 2, 3, 4], "ms": [60] * 5, "loop": True},
+    },
+}
+
+
 def pack(name, sheet):
     frames, meta = [], {}
     for anim, cfg in sheet["anims"].items():
@@ -436,5 +500,8 @@ def pack(name, sheet):
 
 
 if __name__ == "__main__":
+    import sys
+    only = sys.argv[1:]
     for n, s in SHEETS.items():
-        pack(n, s)
+        if not only or n in only:
+            pack(n, s)

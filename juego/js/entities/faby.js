@@ -125,6 +125,7 @@ export class Faby extends Fighter {
       return;
     }
     if (this.script) { this.runScript(dt, 'walk', 'idle'); return; }
+    this.updateBatScare(dt);
     if (this.comboTimer > 0) this.comboTimer -= dt;
     else this.combo = 0;
     this.updateStamina(dt);
@@ -316,7 +317,15 @@ export class Faby extends Fighter {
 
       case 'carry':
       case 'carryWalk': {
-        if (input.buffered('grab')) return this.stopCarry();
+        if (input.buffered('grab')) {
+          // Asustado por los murciélagos, Tofu no se quiere bajar.
+          if (this.batCarry > 0) {
+            if (this.tiredMsg <= 0) {
+              this.stage.fx.text(this.x, this.y - 180, '¡TOFU NO SE QUIERE BAJAR!', '#7df9ff', 10);
+              this.tiredMsg = 1;
+            }
+          } else return this.stopCarry();
+        }
         if (input.buffered('attack') && this.spend('kick')) {
           this.hitTargets.clear();
           this.currentHit = CARRY_KICK;
@@ -408,9 +417,40 @@ export class Faby extends Fighter {
     this.setState('carry');
   }
 
+  // Nivel 5: un murciélago asusta a Tofu y salta a los brazos de Faby. Si ella está ocupada
+  // (golpeando, saltando…), Tofu corre asustado y salta apenas ella quede libre.
+  batScare(tofu) {
+    if (!tofu || tofu.state === 'carried' || this.stage.cutscene || this.batCarry > 0) return;
+    this.stage.fx.text(tofu.x, tofu.y - 95, '¡IIIH!', '#7df9ff', 12);
+    this.stage.sfx('whine');
+    this.batPending = 2.5;
+    if (tofu.state !== 'scared') tofu.setState('scared');
+  }
+
+  updateBatScare(dt) {
+    if (this.batPending > 0) {
+      this.batPending -= dt;
+      const tofu = this.stage.tofu;
+      if (tofu && tofu.state !== 'carried' && !this.held && !this.grabbed && ['idle', 'walk', 'run', 'land'].includes(this.state) && this.grounded) {
+        this.batPending = 0;
+        this.startCarry(tofu);
+        this.batCarry = 4.5;
+        this.stage.fx.text(this.x, this.y - 185, '¡TOFU SALTÓ A TUS BRAZOS!', '#7df9ff', 10);
+      } else if (this.batPending <= 0 && tofu?.state === 'scared') tofu.setState('follow');
+    }
+    if (this.batCarry > 0 && ['carry', 'carryWalk', 'carryKick'].includes(this.state)) {
+      this.batCarry -= dt;
+      if (this.batCarry <= 0 && this.state !== 'carryKick') {
+        this.stage.fx.text(this.x, this.y - 180, 'Ya pasó, Tofu…', '#ffffff', 10);
+        this.stopCarry();
+      }
+    } else if (!this.carrying) this.batCarry = 0;
+  }
+
   stopCarry() {
     const tofu = this.carrying;
     this.carrying = null;
+    this.batCarry = 0;
     if (tofu) tofu.putDown(this);
     this.setState('idle');
   }
@@ -540,6 +580,7 @@ export class Faby extends Fighter {
       if (this.carrying) {
         const tofu = this.carrying;
         this.carrying = null;
+        this.batCarry = 0;
         tofu.putDown(this);
         tofu.setState('scared');
       }
@@ -571,7 +612,27 @@ export class Faby extends Fighter {
 
   draw(ctx, camX) {
     if (this.blinkHidden) return;
-    drawSprite(ctx, this.anim, this.x - camX, this.y - this.z, this.facing, { flash: this.flash > 0 });
+    // Tofu asustado en brazos: tiembla y le saltan gotitas de sudor.
+    const scared = this.batCarry > 0 && this.carrying;
+    const jx = scared ? (Math.floor(this.stage.time * 30) % 2 ? 1 : -1) : 0;
+    drawSprite(ctx, this.anim, this.x - camX + jx, this.y - this.z, this.facing, { flash: this.flash > 0 });
+    if (scared) {
+      const t = this.stage.time;
+      const hx = Math.round(this.x - camX + this.facing * 22), hy = Math.round(this.y - this.z - 118);
+      for (let i = 0; i < 3; i++) {
+        const k = (t * 1.6 + i / 3) % 1;
+        const dx = (i - 1) * 14 + Math.round((i - 1) * k * 10);
+        const dy = Math.round(-10 + k * 26);
+        ctx.globalAlpha = 1 - k;
+        ctx.fillStyle = '#140c1c';
+        ctx.fillRect(hx + dx - 3, hy + dy - 5, 6, 9);
+        ctx.fillStyle = '#9fe8ff';
+        ctx.fillRect(hx + dx - 2, hy + dy - 4, 4, 7);
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(hx + dx - 1, hy + dy - 3, 2, 2);
+      }
+      ctx.globalAlpha = 1;
+    }
     if (this.state === 'hurt' && (this.hurtTime ?? 0) > 0.5) drawDizzy(ctx, this.x - camX, this.y - this.z - 160, this.stateTime);
   }
 }

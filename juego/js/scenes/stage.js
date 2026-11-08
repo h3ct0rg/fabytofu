@@ -20,6 +20,7 @@ import { levelCode, prettyCode } from '../engine/codes.js';
 import { LEVEL2 } from './level2.js';
 import { Drive } from './drive.js';
 import { LEVEL4 } from './level4.js';
+import { LEVEL5 } from './level5.js';
 
 const WORLD_W = 3400;
 const MAX_ATTACKERS = 2;
@@ -76,8 +77,8 @@ const LEVEL1 = {
 };
 // Nivel 3: Carretera a Oruro, otro modo de juego (manejo con scroll vertical, ver drive.js).
 const LEVEL3 = { num: 3, drive: true };
-const LEVELS = { 1: LEVEL1, 2: LEVEL2, 3: LEVEL3, 4: LEVEL4 };
-export const LAST_LEVEL = 4;
+const LEVELS = { 1: LEVEL1, 2: LEVEL2, 3: LEVEL3, 4: LEVEL4, 5: LEVEL5 };
+export const LAST_LEVEL = 5;
 
 // Un nivel en curso: zonas de pelea, escenas, objetos y HUD. Los datos salen de LEVELS.
 export class Stage {
@@ -136,9 +137,16 @@ export class Stage {
     this.boss = null;
     this.owner = null;
     this.morita = null;
+    this.gent = null;
     this.bowl = null;
     this.croquettes = 0;
     this.eventsDone = new Set();
+    // Pisos (nivel 5): cada piso es un tramo horizontal; algunos se recorren hacia la izquierda.
+    this.floor = 0;
+    this.dir = 1;
+    this.shiftY = 0;           // desplazamiento vertical al bajar de piso
+    this.fade = 0;             // fundido a negro (0..1)
+    if (this.L.floors) this.enterFloor(0);
     this.cutscene = this.L.intro(this);
     this.music(this.L.music);
     if (save?.zone > 0) this.resumeFrom(save);
@@ -148,6 +156,35 @@ export class Stage {
       if (this.levelNum > 1) this.lives = save.lives ?? LIVES;
     }
     this.L.setup?.(this);
+  }
+
+  // ¿Ya llegó (o pasó) a "at" en el sentido en que avanza el escenario?
+  passed(x, at) {
+    return this.dir > 0 ? x >= at : x <= at;
+  }
+
+  // Pone la cámara en el piso i de la mina (nivel 5). Con place, Faby y Tofu aparecen al inicio del piso.
+  enterFloor(i, place = true) {
+    const f = this.L.floors[i];
+    this.floor = i;
+    this.dir = f.dir;
+    const cam = this.camera;
+    cam.dir = f.dir;
+    cam.bounds = { min: f.x0, max: f.x1 };
+    cam.lock = null;
+    cam.x = f.dir > 0 ? f.x0 : f.x1 - VIEW_W;
+    if (!place) return;
+    const p = this.player;
+    const sx = f.dir > 0 ? f.x0 + 150 : f.x1 - 150;
+    p.x = sx;
+    p.y = 450;
+    p.facing = f.dir;
+    const t = this.tofu;
+    if (t && t.state !== 'carried') {
+      t.x = sx - f.dir * 70;
+      t.y = 470;
+      t.facing = f.dir;
+    }
   }
 
   // Franja de pantalla donde deben quedarse los enemigos y perros mientras pelean: en el celular,
@@ -226,6 +263,7 @@ export class Stage {
     this.player.update(dt, actorInput);
     this.owner?.update(dt);
     this.morita?.update(dt);
+    this.gent?.update(dt);
     this.tofu?.update(dt);
     if (this.boss && !this.enemies.includes(this.boss)) this.boss.update(dt);
     this.updateButterfly(dt);
@@ -244,6 +282,7 @@ export class Stage {
 
     this.updateZones(dt);
     this.updateAreas(dt);
+    this.L.update?.(this, dt);
     this.camera.follow(this.player.x, dt);
     this.fx.update(dt);
     if (this.whiteout > 0) this.whiteout -= dt;
@@ -257,7 +296,7 @@ export class Stage {
 
   updateAreas(dt) {
     const next = this.L.areas[this.areaIndex + 1];
-    if (next && this.player.x >= next.x) {
+    if (next && (next.floor ?? 0) === this.floor && this.passed(this.player.x, next.x)) {
       this.areaIndex++;
       this.areaBanner = { ...next, time: 3 };
     }
@@ -281,19 +320,39 @@ export class Stage {
     const zones = this.L.zones;
     const z = Math.min(save.zone, zones.length - 1);
     this.zoneIndex = z;
-    const x = zones[z - 1].max - 360;
-    this.player.x = x;
-    if (this.tofu) this.tofu.x = x - 80;
-    this.camera.x = Math.max(0, x - 400);
+    let x = zones[z - 1].max - 360;
+    if (this.L.floors) {
+      // Nivel con pisos: aparece en el piso de la última pelea ganada, mirando hacia donde se avanza.
+      this.enterFloor(zones[z - 1].floor ?? 0, false);
+      if (this.dir < 0) x = zones[z - 1].min + 360;
+      this.player.x = x;
+      this.player.facing = this.dir;
+      if (this.tofu) this.tofu.x = x - 80 * this.dir;
+      this.camera.x = this.dir > 0 ? Math.max(this.camera.bounds.min, x - 400) : Math.min(this.camera.bounds.max - VIEW_W, x - 560);
+    } else {
+      this.player.x = x;
+      if (this.tofu) this.tofu.x = x - 80;
+      this.camera.x = Math.max(0, x - 400);
+    }
     this.player.score = save.score ?? 0;
     this.lives = save.lives ?? 3;
     this.cutscene = null;
-    this.areaIndex = this.L.areas.reduce((acc, a, i) => (a.x <= x ? i - 1 : acc), -1);
-    // Las escenas que quedaron atrás ya pasaron.
-    for (const ev of this.L.events) if (ev.x < x) this.eventsDone.add(ev);
-    // Los objetos y basureros que quedaron atrás ya no importan.
-    this.props = this.props.filter((p) => p.x > this.camera.x);
-    this.breakables = this.breakables.filter((b) => b.x > this.camera.x);
+    if (this.L.floors) {
+      // Lo que está en pisos anteriores o detrás de Faby ya pasó.
+      const behind = (o) => (o.floor ?? 0) < this.floor || ((o.floor ?? 0) === this.floor && this.passed(x, o.x));
+      this.areaIndex = this.L.areas.reduce((acc, a, i) => (behind(a) ? i : acc), -1);
+      for (const ev of this.L.events) if (behind(ev)) this.eventsDone.add(ev);
+      const ahead = (o) => o.x > this.camera.bounds.min && o.x < this.camera.bounds.max && !this.passed(o.x, x) || o.x > this.camera.bounds.max;
+      this.props = this.props.filter(ahead);
+      this.breakables = this.breakables.filter(ahead);
+    } else {
+      this.areaIndex = this.L.areas.reduce((acc, a, i) => (a.x <= x ? i - 1 : acc), -1);
+      // Las escenas que quedaron atrás ya pasaron.
+      for (const ev of this.L.events) if (ev.x < x) this.eventsDone.add(ev);
+      // Los objetos y basureros que quedaron atrás ya no importan.
+      this.props = this.props.filter((p) => p.x > this.camera.x);
+      this.breakables = this.breakables.filter((b) => b.x > this.camera.x);
+    }
   }
 
   // Guarda el avance al ganar cada pelea (punto de control).
@@ -488,7 +547,7 @@ export class Stage {
     // Escenas a mitad de camino (fuera de las peleas).
     if (!this.cutscene) {
       for (const ev of this.L.events) {
-        if (!this.eventsDone.has(ev) && this.player.x > ev.x) {
+        if (!this.eventsDone.has(ev) && (ev.floor ?? 0) === this.floor && this.passed(this.player.x, ev.x)) {
           this.eventsDone.add(ev);
           this.cutscene = ev.scene(this);
           return;
@@ -496,23 +555,33 @@ export class Stage {
       }
     }
     const z = this.L.zones[this.zoneIndex];
-    if (z && this.player.x > z.at) {
+    if (z && (z.floor ?? 0) === this.floor && this.passed(this.player.x, z.at)) {
       this.activeZone = z;
       this.zoneIndex++;
       this.zoneTime = 0;
-      this.camera.lock = { min: Math.max(this.camera.x, z.min), max: z.max };
+      this.camera.lock = this.dir > 0
+        ? { min: Math.max(this.camera.x, z.min), max: z.max }
+        : { min: z.min, max: Math.min(this.camera.x + VIEW_W, z.max) };
       if (z.boss) {
         this.L.startBoss(this, z);
         return;
       }
       const count = {};
       z.enemies.forEach((type, i) => {
-        const fromRight = i % 2 === 0;
-        const x = fromRight ? z.max + 40 + i * 30 : this.camera.lock.min - 40 - i * 30;
-        const y = FLOOR_TOP + 10 + Math.random() * (FLOOR_BOTTOM - FLOOR_TOP - 20);
+        const fromRight = (i % 2 === 0) === (this.dir > 0);
+        let x = fromRight ? this.camera.lock.max + 40 + i * 30 : this.camera.lock.min - 40 - i * 30;
+        let y = FLOOR_TOP + 10 + Math.random() * (FLOOR_BOTTOM - FLOOR_TOP - 20);
+        // Nivel 5: algunos salen de las cuevas de la pared.
+        const cave = z.caves && i % 2 === 1 ? z.caves[Math.floor(i / 2) % z.caves.length] : null;
+        if (cave !== null) { x = cave; y = FLOOR_TOP + 6; }
         count[type] = (count[type] ?? -1) + 1;
         const e = this.spawnEnemy(type, x, y, count[type]);
         e.cooldown += i * 0.5;
+        if (cave !== null) {
+          e.inArena = true;
+          this.fx.dust(x, y, 3);
+          this.fx.text(x, y - 110, '¡JI JI JI!', '#ff4040', 10);
+        }
       });
     }
   }
@@ -521,13 +590,17 @@ export class Stage {
     if (this.drive) return this.drive.draw(ctx, debug);
     const cam = this.camera;
     const camX = Math.round(cam.x + cam.offsetX);
+    if (this.shiftY) {
+      ctx.fillStyle = '#07040c';
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    }
     ctx.save();
-    ctx.translate(0, Math.round(cam.offsetY));
+    ctx.translate(0, Math.round(cam.offsetY + this.shiftY));
     this.bg.drawBack(ctx, camX);
 
     // Orden por profundidad: lo que está más abajo en pantalla se dibuja encima.
     const loneBoss = this.boss && !this.enemies.includes(this.boss) ? this.boss : null;
-    const extra = [this.tofu, this.butterfly, this.owner, this.morita, loneBoss].filter(Boolean);
+    const extra = [this.tofu, this.butterfly, this.owner, this.morita, this.gent, loneBoss].filter(Boolean);
     for (const h of this.hazards) if (h.floor) h.draw(ctx, camX);
     const shots = this.hazards.filter((h) => !h.floor);
     const actors = [this.player, ...extra, ...this.enemies, ...this.props, ...this.breakables, ...this.foods, ...shots].sort((a, b) => a.y - b.y || (a.z ?? 0) - (b.z ?? 0));
@@ -535,9 +608,14 @@ export class Stage {
     for (const a of actors) a.draw(ctx, camX);
 
     this.fx.draw(ctx, camX);
+    this.L.drawFx?.(this, ctx, camX);
     this.bg.drawFront(ctx, camX);
     if (debug) this.drawDebug(ctx, camX, actors);
     ctx.restore();
+    if (this.fade > 0) {
+      ctx.fillStyle = `rgba(7, 4, 12, ${Math.min(1, this.fade)})`;
+      ctx.fillRect(0, 0, VIEW_W, VIEW_H);
+    }
     // Destello blanco (flash de la influencer).
     if (this.whiteout > 0) {
       ctx.fillStyle = `rgba(255, 255, 255, ${Math.min(1, this.whiteout * 6)})`;
@@ -606,7 +684,8 @@ export class Stage {
     }
 
     if (this.goTimer > 0 && Math.floor(this.goTimer * 4) % 2 === 0) {
-      text(ctx, 'GO →', VIEW_W - 170, 200, 32, '#ffd23f');
+      if (this.dir < 0) text(ctx, '← GO', 40, 200, 32, '#ffd23f');
+      else text(ctx, 'GO →', VIEW_W - 170, 200, 32, '#ffd23f');
     }
 
     if (this.areaBanner && !this.banner && !this.cutscene) {
@@ -684,7 +763,7 @@ Stage.prototype.drawEnding = function drawEnding(ctx) {
   }
   text(ctx, last ? '¡GRACIAS POR JUGAR!' : `¡NIVEL ${this.levelNum} COMPLETADO!`, 640, 150, last ? 22 : 20, '#ff2fa8', 'center');
   text(ctx, 'FABY & TOFU', 640, 200, 16, '#7df9ff', 'center');
-  const place = { 1: 'Parque Lincoln · Cochabamba', 2: 'El Prado · Cochabamba', 4: 'El Carnaval de Oruro' }[this.levelNum] ?? '';
+  const place = { 1: 'Parque Lincoln · Cochabamba', 2: 'El Prado · Cochabamba', 4: 'El Carnaval de Oruro', 5: 'La Mina del Socavón · Oruro' }[this.levelNum] ?? '';
   text(ctx, place, 640, 228, 10, '#ffffff', 'center');
   text(ctx, `PUNTAJE  ${String(this.player.score).padStart(6, '0')}`, 640, 270, 14, '#ffd23f', 'center');
   if (this.levelNum === 2) {

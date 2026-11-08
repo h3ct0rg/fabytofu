@@ -323,4 +323,19 @@ const SFX = {
     [0, 1, 2, 3].forEach((i) => a.tone(t + 0.3 + i * 0.14, i % 2 ? 790 : 830, 0.14, { wave: 'triangle', vol: 0.2, release: 0.02 }));
     a.tone(t + 0.86, 810, 0.6, { wave: 'triangle', vol: 0.2, slide: 0.5, release: 0.25 });
   },
+  // Nivel 5: chillidos de murciélagos, gemido de Tofu asustado, fuego, humo y temblor.
+  bats: (a, t) => [0, 0.07, 0.15, 0.22, 0.31].forEach((d, i) => a.tone(t + d, 2600 + (i % 3) * 400, 0.04, { wave: 'p12', vol: 0.08, slide: 0.7 })),
+  whine: (a, t) => [0, 0.2].forEach((d) => a.tone(t + d, 900, 0.16, { wave: 'triangle', vol: 0.2, slide: 0.7 })),
+  fire: (a, t) => {
+    a.noiseHit(t, 0.45, { vol: 0.35, freq: 600, type: 'lowpass', sweepTo: 1800 });
+    a.tone(t, 160, 0.3, { wave: 'sawtooth', vol: 0.12, slide: 0.6 });
+  },
+  smoke: (a, t) => {
+    a.noiseHit(t, 1.2, { vol: 0.3, freq: 300, type: 'lowpass', sweepTo: 1200 });
+    a.tone(t, 70, 1, { wave: 'sawtooth', vol: 0.18, slide: 0.5 });
+  },
+  rumble: (a, t) => {
+    a.noiseHit(t, 0.9, { vol: 0.5, freq: 160, type: 'lowpass' });
+    a.tone(t, 50, 0.8, { wave: 'triangle', vol: 0.4, slide: 0.8 });
+  },
 };

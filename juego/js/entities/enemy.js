@@ -1,7 +1,7 @@
 import { Fighter } from './fighter.js';
 import { Animator, drawSprite } from '../engine/sprite.js';
 import { worldBox, boxesHit } from '../engine/collision.js';
-import { Shake } from './hazards.js';
+import { Shake, Ember } from './hazards.js';
 
 // Enemigos humanos del parque. Comparten la IA de grupo (solo 2 atacan a la vez),
 // el aviso "!" antes de golpear y el agarre/lanzamiento de Faby. Cada tipo cambia
@@ -116,6 +116,43 @@ const TYPES = {
     targetsTofu: true,
     mask: 'SE LE CAYÓ LA CARETA',
   },
+  // ---- Nivel 5: diablitos de la mina (salen de las cuevas de las paredes) ----
+  imp: {
+    name: 'DIABLITO',
+    hp: 26,
+    speedX: 175,
+    speedY: 105,
+    windup: 0.28,
+    range: 56,
+    h: 92,
+    // Salta y araña.
+    attack: { anim: 'claw', damage: 7, push: 110, hitstop: 0.07, box: { x: 8, w: 52, z: 20, h: 60 } },
+    targetsTofu: true,
+  },
+  impFork: {
+    name: 'DIABLITO DEL TRIDENTE',
+    hp: 34,
+    speedX: 130,
+    speedY: 85,
+    windup: 0.42,
+    range: 120,
+    h: 96,
+    // Pincha de lejos con el tridente.
+    attack: { anim: 'stab', damage: 9, push: 130, hitstop: 0.08, box: { x: 20, w: 120, z: 30, h: 36 } },
+    targetsTofu: true,
+  },
+  impThrow: {
+    name: 'DIABLITO MINERO',
+    hp: 30,
+    speedX: 120,
+    speedY: 80,
+    windup: 0.45,
+    range: 250,
+    h: 92,
+    // Se queda lejos y lanza piedritas encendidas.
+    attack: { anim: 'throw', projectile: 'ember' },
+    targetsTofu: false,
+  },
 };
 
 const TOFU_CHANCE = 0.3;
@@ -131,7 +168,8 @@ export class Enemy extends Fighter {
     this.getupTime = sheet.anims.getup ? sheet.anims.getup.ms.reduce((a, b) => a + b, 0) / 1000 : 0.35;
     this.maxHp = this.hp = this.cfg.hp;
     this.name = this.cfg.name;
-    this.hurtbox = { x: -22, w: 44, z: 0, h: 140 };
+    this.hurtbox = { x: -22, w: 44, z: 0, h: this.cfg.h ?? 140 };
+    this.headY = (this.cfg.h ?? 140) + 42;
     this.cooldown = 0.6 + Math.random() * 0.8;
     this.side = Math.random() < 0.5 ? -1 : 1;
     this.waitOffset = (Math.random() * 2 - 1) * 50;
@@ -159,6 +197,8 @@ export class Enemy extends Fighter {
     }
     if (this.updateDamageStates(dt)) {
       this.stage.releaseToken(this);
+    } else if (!this.inArena && ['idle', 'walk', 'windup'].includes(this.state)) {
+      this.enterArena();
     } else {
       this.think(dt);
     }
@@ -232,7 +272,8 @@ export class Enemy extends Fighter {
         this.vx = cfg.attack.projectile ? 0 : this.facing * 40;
         if (cfg.attack.projectile && !this.hasHit && this.anim.anim.active?.includes(this.anim.index)) {
           this.hasHit = true;
-          this.stage.hazards.push(new Shake(this.stage, this.x + this.facing * 30, this.y, p.x, p.y));
+          const Shot = cfg.attack.projectile === 'ember' ? Ember : Shake;
+          this.stage.hazards.push(new Shot(this.stage, this.x + this.facing * 30, this.y, p.x, p.y));
           this.stage.sfx('throw');
         }
         if (!this.hasHit && this.anim.anim.active?.includes(this.anim.index)) {
@@ -298,6 +339,16 @@ export class Enemy extends Fighter {
         break;
       }
     }
+  }
+
+  // Antes de atacar, entra caminando a la pantalla (si no, uno de alcance largo podría pegar desde afuera).
+  enterArena() {
+    const cam = this.stage.camera;
+    const a = this.stage.arena?.() ?? { left: cam.left + 30, right: cam.right - 30 };
+    const dir = this.x < a.left ? 1 : -1;
+    this.facing = dir;
+    this.vx = dir * this.cfg.speedX;
+    this.setStateIfChanged('walk');
   }
 
   // Entran caminando desde fuera; desde que pisan la pantalla, quedan dentro de ella.
@@ -428,8 +479,8 @@ export class Enemy extends Fighter {
     if (this.state === 'windup' || this.state === 'chargeWindup' || this.state === 'flashWindup') {
       // Aviso claro del ataque: "!" sobre la cabeza.
       ctx.fillStyle = this.state === 'chargeWindup' ? '#7df9ff' : '#ffd23f';
-      ctx.fillRect(Math.round(x) - 3, Math.round(y) - 182, 6, 18);
-      ctx.fillRect(Math.round(x) - 3, Math.round(y) - 160, 6, 6);
+      ctx.fillRect(Math.round(x) - 3, Math.round(y) - this.headY, 6, 18);
+      ctx.fillRect(Math.round(x) - 3, Math.round(y) - this.headY + 22, 6, 6);
     }
   }
 }

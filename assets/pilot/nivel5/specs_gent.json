@@ -1,0 +1,20 @@
+[
+ {
+  "name": "gent_idle",
+  "base": "assets/pilot/nivel5/gent_base.png",
+  "frames": 4,
+  "action": "polite charming idle, subtle breathing, slight smug smile, staying in place, no visual effects"
+ },
+ {
+  "name": "gent_offer",
+  "base": "assets/pilot/nivel5/gent_base.png",
+  "frames": 4,
+  "action": "leans forward and holds out the parchment contract toward the right with a sly persuasive smile, then holds it there, staying in place, no visual effects"
+ },
+ {
+  "name": "gent_angry",
+  "base": "assets/pilot/nivel5/gent_base.png",
+  "frames": 4,
+  "action": "becomes furious, clenches fists, trembling with rage, eyes glowing red, staying in place, no visual effects"
+ }
+]

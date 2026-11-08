@@ -6,6 +6,8 @@ export class Camera {
     this.x = 0;
     this.worldWidth = worldWidth;
     this.lock = null;        // { min, max } mientras hay una pelea
+    this.bounds = null;      // { min, max } tramo del mundo visible (pisos de la mina, nivel 5)
+    this.dir = 1;            // hacia dónde avanza el escenario: 1 = derecha, -1 = izquierda
     this.shakeTime = 0;
     this.shakePower = 0;
     this.offsetX = 0;
@@ -13,13 +15,13 @@ export class Camera {
   }
 
   follow(targetX, dt) {
-    // El jugador se mantiene un poco a la izquierda del centro, como en los beat 'em up clásicos.
-    let goal = targetX - VIEW_W * 0.42;
-    const min = this.lock ? this.lock.min : 0;
-    const max = this.lock ? this.lock.max - VIEW_W : this.worldWidth - VIEW_W;
+    // El jugador se mantiene un poco atrás del centro, como en los beat 'em up clásicos.
+    let goal = targetX - VIEW_W * (this.dir > 0 ? 0.42 : 0.58);
+    const min = this.lock ? this.lock.min : this.bounds?.min ?? 0;
+    const max = this.lock ? this.lock.max - VIEW_W : (this.bounds?.max ?? this.worldWidth) - VIEW_W;
     goal = Math.max(min, Math.min(max, goal));
-    // La cámara nunca retrocede fuera de una pelea (el escenario avanza hacia la derecha).
-    if (!this.lock) goal = Math.max(goal, this.x);
+    // La cámara nunca retrocede fuera de una pelea (el escenario avanza hacia un solo lado).
+    if (!this.lock) goal = this.dir > 0 ? Math.max(goal, this.x) : Math.min(goal, this.x);
     this.x += (goal - this.x) * Math.min(1, dt * 8);
 
     if (this.shakeTime > 0) {

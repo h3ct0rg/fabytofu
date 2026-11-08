@@ -1,0 +1,5 @@
+[
+  {"name": "cerros", "tool": "create_image_pro", "width": 688, "height": 200, "no_background": true,
+   "description": "pixel art background panorama layer for a 16-bit side scroller, side view: the brown and ochre hills of Oruro Bolivia on the altiplano at sunrise, the Santa Barbara hill with a giant white statue of the Virgin Mary standing on its top in the middle, rocky slopes with dry ichu grass, old mine tailings and tiny mining sheds on the slopes, warm pink and orange dawn light on the hilltops, no sky, transparent background above the hills, crisp pixels",
+   "refs": [{"usage": "art style and layer format to match (a background panorama layer of the same game)", "path": "juego/assets/bg/tunari.png"}]}
+]

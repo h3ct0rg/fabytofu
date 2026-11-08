@@ -293,6 +293,56 @@ export const SONGS = {
     },
   },
 
+  // Nivel 5: la mina del Socavón. Misteriosa, con goteras en el arpegio (Re menor).
+  mina: {
+    bpm: 112,
+    loop: true,
+    inst: { lead: { wave: 'p25', vol: 0.12 }, harm: { wave: 'p12', vol: 0.05, gate: 0.4 }, bass: { wave: 'triangle', vol: 0.24, gate: 0.7 } },
+    parts: {
+      lead: [
+        'D5 - - - F5 - - - E5 - - - A4 - - -',
+        'D5 - - - F5 - A5 - G#5 - - - - - . .',
+        'A#4 - - - D5 - - - C5 - - - F4 - - -',
+        'A4 - - - C#5 - E5 - A5 - - - - - . .',
+        'D5 - F5 - A5 - - - G5 - F5 - E5 - - -',
+        'F5 - E5 - D5 - - - C#5 - - - A4 - - -',
+        'A#4 - D5 - F5 - - - E5 - D5 - C#5 - - -',
+        'D5 - - - - - - - . . A4 - D5 - . .',
+      ],
+      harm: [arp('D4', 'F4', 'A4'), arp('D4', 'F4', 'G#4'), arp('A#3', 'D4', 'F4'), arp('A3', 'C#4', 'E4'),
+        arp('D4', 'F4', 'A4'), arp('A3', 'D4', 'F4'), arp('A#3', 'D4', 'F4'), arp('A3', 'C#4', 'E4')],
+      bass: [
+        'D2 - - . D2 - A1 - D2 - - . D2 - A1 -', 'D2 - - . D2 - A1 - E2 - - . E2 - G#1 -',
+        'A#1 - - . A#1 - F2 - A#1 - - . A#1 - F2 -', 'A1 - - . A1 - E2 - A1 - - . A1 - C#2 -',
+        'D2 - - . D2 - A1 - D2 - - . D2 - A1 -', 'F2 - - . F2 - C2 - A1 - - . A1 - E2 -',
+        'A#1 - - . A#1 - F2 - G1 - - . G1 - D2 -', 'A1 - - . A1 - E2 - D2 - - - . . . .',
+      ],
+      drums: rep('K . . H . . S . K . H . . . S H', 8),
+    },
+  },
+
+  // Jefe del nivel 5: el Diablo. Rápido y oscuro (Mi frigio).
+  boss5: {
+    bpm: 168,
+    loop: true,
+    inst: { lead: { wave: 'sawtooth', vol: 0.09 }, harm: { wave: 'p12', vol: 0.07, gate: 0.3 }, bass: { wave: 'sawtooth', wave2: 'triangle', vol: 0.16, gate: 0.45 } },
+    parts: {
+      lead: [
+        'E5 - F5 - E5 - - . B4 - C5 - B4 - - .',
+        'E5 - G5 - F5 - E5 - D5 - C5 - B4 - - -',
+        'E5 - F5 - E5 - - . A5 - G5 - F5 - - .',
+        'G5 - F5 - E5 - D5 - E5 - - - - - . .',
+        'B5 - - . A5 - - . G5 - F5 - E5 - - .',
+        'C6 - - . B5 - - . A5 - G5 - F5 - - .',
+        'E5 - F5 - G5 - A5 - B5 - C6 - B5 - A5 -',
+        'E6 - - - F5 - - - E5 - - - . . . .',
+      ],
+      harm: [stab('B4'), stab('C5'), stab('B4'), stab('A4'), stab('B4'), stab('C5'), stab('B4'), stab('B4')],
+      bass: rep('E2 . E3 E2 . E2 F2 . E2 . E3 E2 . F2 E2 .', 8),
+      drums: [...rep('K . H K S . H K K . H K S . S H', 7), 'KC . . . S S S S S S S S KC . . .'],
+    },
+  },
+
   // Jingles (no se repiten)
   victory: {
     bpm: 160,
